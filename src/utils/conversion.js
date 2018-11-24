@@ -52,7 +52,7 @@ export function getModelAttributes( templateElement, modelElement ) {
 	return Object.keys( templateElement.attributes )
 		.map( attr => ( { [ attr ]: modelElement.getAttribute( attr ) } ) )
 		.concat( [ { class: templateElement.classes } ] )
-		.reduce( ( acc, val ) => Object.assign( acc, val ), {} )
+		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
 }
 
 /**
@@ -63,9 +63,9 @@ export function getModelAttributes( templateElement, modelElement ) {
  *
  * @returns {Object}
  */
-export function getViewAttributes( templateElement, viewElement) {
+export function getViewAttributes( templateElement, viewElement ) {
 	return Object.keys( templateElement.attributes )
 		.map( key => ( { [ key ]: viewElement.getAttribute( key ) } ) )
 		.filter( val => Object.values( val )[ 0 ] !== undefined )
-		.reduce( ( acc, val ) => Object.assign( acc, val ), {} )
+		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
 }

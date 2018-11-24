@@ -82,7 +82,13 @@ describe( 'TemplateEditing', () => {
 
 	it( 'upcasts double nested', () => {
 		editor.setData( '<div class="grandma"><div class="ma"><div class="me"></div></div></div>' );
-		expect( getModelData( model ) ).to.equal( '[<ck__double_nested><ck__double_nested__child0><ck__double_nested__child0__child0></ck__double_nested__child0__child0></ck__double_nested__child0></ck__double_nested>]' );
+		expect( getModelData( model ) ).to.equal( '[' +
+			'<ck__double_nested>' +
+              '<ck__double_nested__child0>' +
+                '<ck__double_nested__child0__child0></ck__double_nested__child0__child0>' +
+              '</ck__double_nested__child0>' +
+			'</ck__double_nested>' +
+			']' );
 	} );
 
 	it( 'upcasts attributes', () => {
@@ -116,8 +122,14 @@ describe( 'TemplateEditing', () => {
 	} );
 
 	it( 'fixes missing grandchildren', () => {
-        editor.setData( '<div class="grandma"></div>' );
-        expect( getModelData( model ) ).to.equal( '[<ck__double_nested><ck__double_nested__child0><ck__double_nested__child0__child0></ck__double_nested__child0__child0></ck__double_nested__child0></ck__double_nested>]' );
+		editor.setData( '<div class="grandma"></div>' );
+		expect( getModelData( model ) ).to.equal( '[' +
+            '<ck__double_nested>' +
+              '<ck__double_nested__child0>' +
+                '<ck__double_nested__child0__child0></ck__double_nested__child0__child0>' +
+              '</ck__double_nested__child0>' +
+            '</ck__double_nested>' +
+			']' );
 	} );
 
 	it( 'fixes invalid children ', () => {
