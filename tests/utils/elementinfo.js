@@ -1,5 +1,5 @@
 import Elementinfo from '../../src/utils/elementinfo';
-import global from '../../../ckeditor5-utils/src/dom/global';
+import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 
 describe( 'Elementinfo', () => {
 	it( 'returns its type', () => {
