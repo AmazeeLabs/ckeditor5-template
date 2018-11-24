@@ -4,6 +4,9 @@ import Templateediting from '../src/templateediting';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 
+import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
+import global from '@ckeditor/ckeditor5-utils/src/dom/global';
+
 import TemplateUI from '../src/templateui';
 import DropdownView from '@ckeditor/ckeditor5-ui/src/dropdown/dropdownview';
 
@@ -75,6 +78,5 @@ describe( 'TemplateUI', () => {
 
 		command.isEnabled = true;
 		expect( dropdown.buttonView.isEnabled ).to.be.true;
-
 	} );
 } );

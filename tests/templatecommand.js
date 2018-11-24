@@ -6,7 +6,6 @@ import TemplateEditing from '../src/templateediting';
 import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import { downcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
-
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
 
