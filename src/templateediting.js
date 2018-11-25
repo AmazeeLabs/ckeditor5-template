@@ -72,6 +72,16 @@ export default class TemplateEditing extends Plugin {
 	}
 
 	/**
+	 * Retrieve all tempate elements with a given type.
+	 *
+	 * @param {String} type
+	 * @return {module:template/utils/elementinfo~ElementInfo[]}
+	 */
+	getElementsByType( type ) {
+		return Object.values( this._elements ).filter( el => el.type === type );
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	init() {
@@ -125,9 +135,9 @@ export default class TemplateEditing extends Plugin {
 			}
 		} ), { priority: 'low ' } );
 
-		// Default editing downcast conversions for template elements.
+		// Default editing downcast conversions for template container elements without functionality.
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
-			types: this._elementTypes,
+			types: [ 'element' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const el = viewWriter.createContainerElement(
 					templateElement.tagName,

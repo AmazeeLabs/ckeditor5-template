@@ -1,5 +1,4 @@
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-import Templateediting from '../src/templateediting';
 
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
@@ -21,7 +20,7 @@ describe( 'TemplateUI', () => {
 
 		return ClassicTestEditor
 			.create( editorElement, {
-				plugins: [ Templateediting, TemplateUI, Paragraph ],
+				plugins: [ TemplateUI, Paragraph ],
 				templates: {
 					a: {
 						label: 'Simple',
