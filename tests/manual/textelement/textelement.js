@@ -15,8 +15,28 @@ ClassicEditor
 		templates: {
 			simple: {
 				label: 'Simple',
-				template: '<div class="simple"><p ck-type="text">Simple text widget</p></div>',
+				template: '<p class="simple" ck-type="text"></p>',
 			},
+			placeholder: {
+				label: 'Placeholder',
+				template: '<p class="placeholder" ck-type="text">Placeholder!</p>',
+			},
+			container: {
+				label: 'Container',
+				template: '<div class="container" ck-type="text">Tralala</div>'
+			},
+			fakeContainer: {
+				label: 'Fake Container',
+				template: '<p class="fake-container" ck-type="text" ck-multiline="true"></p>'
+			},
+			fakeBlock: {
+				label: 'Fake Block',
+				template: '<div class="fake-block" ck-type="text" ck-multiline="false"></div>'
+			},
+			nested: {
+				label: 'Nested',
+				template: '<div class="parent"><p class="simple" ck-type="text"></p></div>'
+			}
 		}
 	} )
 	.then( editor => {
