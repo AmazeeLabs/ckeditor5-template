@@ -94,6 +94,15 @@ export default class ElementInfo {
 	}
 
 	/**
+	 * Retrieve the dom elements inner text.
+	 *
+	 * @returns {Element}
+	 */
+	get text() {
+		return this._node.textContent;
+	}
+
+	/**
 	 * The class attribute.
 	 *
 	 * @returns {String}

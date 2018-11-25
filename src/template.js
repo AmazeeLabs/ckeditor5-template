@@ -5,6 +5,8 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import TemplateEditing from './templateediting';
 import TemplateUI from './templateui';
+import MasterTemplate from './mastertemplate';
+import TextElement from './elements/textelement';
 
 /**
  * Root template plugin, requiring all auxiliary plugins to enable template functionality.
@@ -30,7 +32,7 @@ export default class Template extends Plugin {
 	 * @inheritDoc
 	 */
 	static get requires() {
-		return [ TemplateEditing, TemplateUI ];
+		return [ TemplateEditing, TemplateUI, MasterTemplate, TextElement ];
 	}
 
 	/**
