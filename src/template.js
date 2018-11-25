@@ -32,4 +32,11 @@ export default class Template extends Plugin {
 	static get requires() {
 		return [ TemplateEditing, TemplateUI ];
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	static get pluginName() {
+		return 'Template';
+	}
 }
