@@ -1,10 +1,9 @@
-import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
+import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 
 import Template from '../src/template';
-import TemplateUI from '../src/templateui';
+import TemplateUI from '../src/ui/templateui';
 import TemplateEditing from '../src/templateediting';
 
 describe( 'Template', () => {

@@ -1,12 +1,13 @@
-import Elementinfo from '../../src/utils/elementinfo';
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 
-describe( 'Elementinfo', () => {
+import ElementInfo from '../../src/utils/elementinfo';
+
+describe( 'ElementInfo', () => {
 	it( 'returns its type', () => {
 		const node = global.document.createElement( 'div' );
 		node.setAttribute( 'ck-type', 'test' );
 
-		const element = new Elementinfo( node );
+		const element = new ElementInfo( node );
 		expect( element.type ).to.equal( 'test' );
 	} );
 
@@ -14,7 +15,7 @@ describe( 'Elementinfo', () => {
 		const node = global.document.createElement( 'div' );
 		node.setAttribute( 'ck-name', 'test' );
 
-		const element = new Elementinfo( node );
+		const element = new ElementInfo( node );
 		expect( element.name ).to.equal( 'ck__test' );
 	} );
 
@@ -27,7 +28,7 @@ describe( 'Elementinfo', () => {
 
 		parent.appendChild( child );
 
-		const element = new Elementinfo( child, new Elementinfo( parent ) );
+		const element = new ElementInfo( child, new ElementInfo( parent ) );
 		expect( element.name ).to.equal( 'ck__foo__bar' );
 	} );
 
@@ -39,7 +40,7 @@ describe( 'Elementinfo', () => {
 
 		parent.appendChild( child );
 
-		const element = new Elementinfo( child, new Elementinfo( parent ) );
+		const element = new ElementInfo( child, new ElementInfo( parent ) );
 		expect( element.name ).to.equal( 'ck__foo__child0' );
 	} );
 
@@ -51,8 +52,8 @@ describe( 'Elementinfo', () => {
 
 		parent.appendChild( child );
 
-		const parentElement = new Elementinfo( parent );
-		const childElement = new Elementinfo( child, parentElement );
+		const parentElement = new ElementInfo( parent );
+		const childElement = new ElementInfo( child, parentElement );
 		expect( childElement.parent ).to.equal( parentElement );
 	} );
 
@@ -62,7 +63,7 @@ describe( 'Elementinfo', () => {
 		node.setAttribute( 'ck-type', 'bar' );
 		node.setAttribute( 'foo', 'bar' );
 
-		const element = new Elementinfo( node );
+		const element = new ElementInfo( node );
 		expect( element.configuration ).to.deep.equal( {
 			name: 'foo',
 			type: 'bar',
@@ -75,7 +76,7 @@ describe( 'Elementinfo', () => {
 		node.setAttribute( 'ck-type', 'bar' );
 		node.setAttribute( 'foo', 'bar' );
 
-		const element = new Elementinfo( node );
+		const element = new ElementInfo( node );
 		expect( element.attributes ).to.deep.equal( {
 			foo: 'bar',
 		} );
@@ -89,8 +90,8 @@ describe( 'Elementinfo', () => {
 
 		parent.appendChild( child );
 
-		const parentElement = new Elementinfo( parent );
-		const childElement = new Elementinfo( child, parentElement );
+		const parentElement = new ElementInfo( parent );
+		const childElement = new ElementInfo( child, parentElement );
 		expect( parentElement.children ).to.deep.equal( [ childElement ] );
 	} );
 } );

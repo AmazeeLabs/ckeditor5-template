@@ -1,12 +1,13 @@
 /**
- * @module template/templateui
+ * @module template/ui/templateui
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import Collection from '@ckeditor/ckeditor5-utils/src/collection';
 import Model from '@ckeditor/ckeditor5-ui/src/model';
 import { addListToDropdown, createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
-import TemplateEditing from './templateediting';
+
+import TemplateEditing from '../templateediting';
 
 /**
  * Template user interface features.
