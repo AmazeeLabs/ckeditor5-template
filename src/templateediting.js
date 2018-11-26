@@ -6,16 +6,16 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
+import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 
-import Elementinfo from './utils/elementinfo';
-import TemplateCommand from './templatecommand';
+import ElementInfo from './utils/elementinfo';
+import TemplateCommand from './commands/templatecommand';
 import {
 	downcastTemplateElement,
 	getModelAttributes,
 	getViewAttributes,
 	upcastTemplateElement
 } from './utils/conversion';
-import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 import { postfixTemplateElement, prepareTemplateElementPostfixer } from './utils/integrity';
 
 /**
@@ -203,11 +203,11 @@ export default class TemplateEditing extends Plugin {
 	 * Register a dom element as an editor element.
 	 *
 	 * @param {Element} dom
-	 * @param {Elementinfo} parent
+	 * @param {ElementInfo} parent
 	 * @private
 	 */
 	_registerElement( dom, parent = null ) {
-		const element = new Elementinfo( dom, parent );
+		const element = new ElementInfo( dom, parent );
 		this._elements[ element.name ] = element;
 		this._typeMap[ element.type ] = element.name;
 

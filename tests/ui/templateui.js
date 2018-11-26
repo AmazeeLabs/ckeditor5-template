@@ -1,13 +1,11 @@
+import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
+import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-
+import DropdownView from '@ckeditor/ckeditor5-ui/src/dropdown/dropdownview';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 
-import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
-import global from '@ckeditor/ckeditor5-utils/src/dom/global';
-
-import TemplateUI from '../src/templateui';
-import DropdownView from '@ckeditor/ckeditor5-ui/src/dropdown/dropdownview';
+import TemplateUI from '../../src/ui/templateui';
 
 describe( 'TemplateUI', () => {
 	let editorElement, editor;

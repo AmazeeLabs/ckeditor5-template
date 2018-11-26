@@ -1,4 +1,8 @@
 /**
+ * @module template/utils/integrity
+ */
+
+/**
  * Prepare a postfixer callback for selected template element types.
  *
  *     const postfixer = prepareTemplateElementPostfixer( this.editor, {

@@ -2,10 +2,11 @@
  * @module templates/elements/textelement
  */
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
 import { toWidget, toWidgetEditable } from '@ckeditor/ckeditor5-widget/src/utils';
 import { attachPlaceholder } from '@ckeditor/ckeditor5-engine/src/view/placeholder';
+
 import TemplateEditing from '../templateediting';
+import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
 import { prepareTemplateElementPostfixer } from '../utils/integrity';
 
 /**

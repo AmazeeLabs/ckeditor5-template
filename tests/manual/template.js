@@ -4,7 +4,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
 import EnterPlugin from '@ckeditor/ckeditor5-enter/src/enter';
 import TypingPlugin from '@ckeditor/ckeditor5-typing/src/typing';
 import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import TemplateUI from '../../src/templateui';
+
+import TemplateUI from '../../src/ui/templateui';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {

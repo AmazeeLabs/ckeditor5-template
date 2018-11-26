@@ -1,9 +1,9 @@
-import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
+import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import { getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import MasterTemplate from '../src/mastertemplate';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+
+import MasterTemplate from '../src/mastertemplate';
 
 describe( 'MasterTemplate', () => {
 	let editorElement, editor, model;

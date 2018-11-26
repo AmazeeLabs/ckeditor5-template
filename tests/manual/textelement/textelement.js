@@ -5,8 +5,9 @@ import EnterPlugin from '@ckeditor/ckeditor5-enter/src/enter';
 import TypingPlugin from '@ckeditor/ckeditor5-typing/src/typing';
 import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import HeadingPlugin from '@ckeditor/ckeditor5-heading/src/heading';
-import TemplatePlugin from '../../../src/template';
 import UndoPlugin from '@ckeditor/ckeditor5-undo/src/undo';
+
+import TemplatePlugin from '../../../src/template';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {

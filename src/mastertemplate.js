@@ -1,8 +1,9 @@
 /**
- * @module template/layouttemplate
+ * @module template/mastertemplate
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+
 import TemplateEditing from './templateediting';
 
 /**

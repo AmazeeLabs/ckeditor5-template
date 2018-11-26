@@ -1,11 +1,11 @@
-import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-import TemplateEditing from '../src/templateediting';
-
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
+import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
+
+import TemplateEditing from '../src/templateediting';
 
 describe( 'TemplateEditing', () => {
 	let editorElement, model, view, editor;

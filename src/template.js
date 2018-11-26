@@ -3,10 +3,11 @@
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+
 import TemplateEditing from './templateediting';
-import TemplateUI from './templateui';
 import MasterTemplate from './mastertemplate';
 import TextElement from './elements/textelement';
+import TemplateUI from './ui/templateui';
 
 /**
  * Root template plugin, requiring all auxiliary plugins to enable template functionality.
