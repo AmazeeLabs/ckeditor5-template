@@ -58,16 +58,16 @@ describe( 'TemplateUI', () => {
 		const executeSpy = testUtils.sinon.spy( editor, 'execute' );
 		const dropdown = editor.ui.componentFactory.create( 'template' );
 
-		dropdown.commandName = 'template';
+		dropdown.commandName = 'insertTemplate';
 		dropdown.commandValue = 'ck__a';
 		dropdown.fire( 'execute' );
 
 		sinon.assert.calledOnce( executeSpy );
-		sinon.assert.calledWithExactly( executeSpy, 'template', { value: 'ck__a' } );
+		sinon.assert.calledWithExactly( executeSpy, 'insertTemplate', { value: 'ck__a' } );
 	} );
 
 	it( 'should be enabled based on the command status', () => {
-		const command = editor.commands.get( 'template' );
+		const command = editor.commands.get( 'insertTemplate' );
 		const dropdown = editor.ui.componentFactory.create( 'template' );
 
 		command.isEnabled = false;

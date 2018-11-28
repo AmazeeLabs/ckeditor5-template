@@ -5,10 +5,10 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 import { downcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
-import TemplateCommand from '../../src/commands/templatecommand';
+import InsertTemplateCommand from '../../src/commands/inserttemplatecommand';
 import TemplateEditing from '../../src/templateediting';
 
-describe( 'TemplateCommand', () => {
+describe( 'InsertTemplateCommand', () => {
 	let editorElement, editor, command, model;
 
 	testUtils.createSinonSandbox();
@@ -29,7 +29,7 @@ describe( 'TemplateCommand', () => {
 			.then( newEditor => {
 				editor = newEditor;
 				model = editor.model;
-				command = new TemplateCommand( editor );
+				command = new InsertTemplateCommand( editor );
 			} );
 	} );
 

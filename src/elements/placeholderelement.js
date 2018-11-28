@@ -4,10 +4,10 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ViewPosition from '@ckeditor/ckeditor5-engine/src/view/position';
-import {toWidget} from "@ckeditor/ckeditor5-widget/src/utils";
+import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
-import {downcastTemplateElement, getModelAttributes} from '../utils/conversion';
-import TemplateEditing from "../templateediting";
+import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
+import TemplateEditing from '../templateediting';
 import PlaceholderView from '../ui/placeholderview';
 
 /**
@@ -25,12 +25,14 @@ export default class PlaceholderElement extends Plugin {
 	 * @inheritDoc
 	 */
 	init() {
+		const templateEditing = this.editor.plugins.get( 'TemplateEditing' );
+
 		// Placeholders should not appear in the result document, therefore they downcast to an empty string.
 		// That's also the reason why they have no upcast.
 		this.editor.conversion.for( 'dataDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'placeholder' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
-				return viewWriter.createText('');
+				return viewWriter.createText( '' );
 			},
 		} ) );
 
@@ -39,18 +41,22 @@ export default class PlaceholderElement extends Plugin {
 			types: [ 'placeholder' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const editor = this.editor;
+				const element = viewWriter.createUIElement( 'div', { class: 'ck-placeholder-ui' }, function( domDocument ) {
+					const domElement = this.toDomElement( domDocument );
 
-				const element = viewWriter.createUIElement('div', getModelAttributes( templateElement, modelElement ), function (domDocument) {
-					const domElement = this.toDomElement(domDocument);
-					const view = new PlaceholderView(modelElement, editor, templateElement.configuration.allowed.split(' ') || []);
+					const options = templateElement.conversions.map( name => {
+						return { [ name ]: templateEditing.getElementInfo( name ).label };
+					} ).reduce( ( acc, val ) => Object.assign( acc, val ) );
+
+					const view = new PlaceholderView( modelElement, editor, options );
 					view.render();
-					domElement.appendChild(view.element);
+					domElement.appendChild( view.element );
 					return domElement;
-				});
+				} );
 
-				const cont = viewWriter.createContainerElement('div', { class: 'ck-placeholder-widget-wrapper'});
-				viewWriter.insert( ViewPosition.createAt( cont , 0), element );
-				return toWidget(cont, viewWriter);
+				const cont = viewWriter.createContainerElement( 'div', getModelAttributes( templateElement, modelElement ) );
+				viewWriter.insert( new ViewPosition( cont, 0 ), element );
+				return toWidget( cont, viewWriter );
 			},
 		} ) );
 
@@ -59,8 +65,7 @@ export default class PlaceholderElement extends Plugin {
 
 		// All allowed elements need to be configured to be positionable in place of the placeholder.
 		for ( const templateElement of placeholderElements ) {
-			const replacements = templateElement.configuration.allowed.split(' ').map( el => `ck__${el}` );
-			for ( const el of replacements ) {
+			for ( const el of templateElement.conversions ) {
 				this.editor.model.schema.extend( el, {
 					allowWhere: templateElement.name,
 				} );

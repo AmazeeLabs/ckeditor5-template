@@ -54,9 +54,8 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 	const childSeats = templateElement.children.map( child => ( { [ child.name ]: false } ) )
 		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
 
-	// TODO: Handle differently for placeholders? Get applicable elements from schema?
 	// Build the list of matching elements for each seat.
-	const childOptions = templateElement.children.map( child => ( { [ child.name ]: [ child.name ] } ) )
+	const childOptions = templateElement.children.map( child => ( { [ child.name ]: child.conversions } ) )
 		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
 
 	// Iterate through existing children, check if they apply to a seat and in case seat them there.
@@ -65,6 +64,7 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 		if ( childSeats.hasOwnProperty( child.name ) && !childSeats[ child.name ] ) {
 			childSeats[ child.name ] = child;
 		}
+
 		// Check for an indirect name match (e.g. allow placeholder in element spots).
 		for ( const name of Object.keys( childSeats ) ) {
 			if ( childOptions[ name ].includes( child.name ) ) {
@@ -73,13 +73,16 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 		}
 	}
 
+	const inserted = {};
 	// Re-insert in order of their seats. This fixes wrong element order, unknown elements and adds missing ones.
 	for ( const name of Object.keys( childSeats ) ) {
 		if ( childSeats[ name ] ) {
 			writer.insert( childSeats[ name ], item, 'end' );
 		}
 		else {
-			writer.insertElement( name, item, 'end' );
+			const el = writer.createElement( name );
+			writer.insert( el, item, 'end' );
+			inserted[ name ] = el;
 			changed = true;
 		}
 	}
@@ -89,8 +92,8 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
 
 	// Postfix all child elements.
-	for ( const child of item.getChildren() ) {
-		changed = postfixTemplateElement( childMap[ child.name ], child, writer ) || changed;
+	for ( const name of Object.keys( inserted ) ) {
+		changed = postfixTemplateElement( childMap[ name ], inserted[ name ], writer ) || changed;
 	}
 
 	return changed;
