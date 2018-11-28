@@ -18,6 +18,7 @@ export default class ElementInfo {
 		this._node = node;
 		this._parent = parent;
 		this._children = [];
+		this._label = node.getAttribute( 'ck-label' );
 
 		if ( parent ) {
 			parent.addChild( this );
@@ -50,6 +51,14 @@ export default class ElementInfo {
 		this._name = parent ?
 			`${ parent.name }__${ name }` :
 			`ck__${ name }`;
+
+		const classAttribute = node.getAttribute( 'class' );
+		this._classes = classAttribute ? classAttribute.split( ' ' ).sort() : [];
+
+		// Calculate the possible conversions for an element.
+		this._conversions = this._configuration.conversions ?
+			this._configuration.conversions.split( ' ' ).map( el => `ck__${ el }` ) :
+			[];
 	}
 
 	/**
@@ -72,25 +81,22 @@ export default class ElementInfo {
 	 * @returns {boolean}
 	 */
 	matches( viewElement ) {
-		// Tag name has to be the same.
-		if ( viewElement.name !== this._node.tagName ) {
-			return false;
-		}
+		return viewElement &&
+			// Match the tag name.
+			viewElement.name === this._node.tagName &&
+			// Match all classes.
+			this.classes.join( ' ' ) === Array.from( viewElement.getClassNames() ).sort().join( ' ' ) &&
+			// If there is a parent, match the parent.
+			( !this.parent || this.parent.matches( viewElement.parent ) );
+	}
 
-		// The view has to contain all classes of the template element.
-		for ( const cls of this._node.classList ) {
-			if ( !viewElement.hasClass( cls ) ) {
-				return false;
-			}
-		}
-
-		// If this is not a template root, also check if there is a view parent and if it matches the template parent.
-		if ( this.parent ) {
-			return !!viewElement.parent && this.parent.matches( viewElement.parent );
-		}
-
-		// If there is no parent, we know it matches by now.
-		return true;
+	/**
+	 * Retrieve the human readable name for this element.
+	 *
+	 * @returns {String}
+	 */
+	get label() {
+		return this._label;
 	}
 
 	/**
@@ -105,10 +111,10 @@ export default class ElementInfo {
 	/**
 	 * The class attribute.
 	 *
-	 * @returns {String}
+	 * @returns {String[]}
 	 */
 	get classes() {
-		return this._node.getAttribute( 'class' );
+		return this._classes;
 	}
 
 	/**
@@ -125,7 +131,7 @@ export default class ElementInfo {
 	 * @returns {string}
 	 */
 	get type() {
-		return this._configuration.type || 'element';
+		return this._configuration.type || ( this.parent ? 'element' : 'template' );
 	}
 
 	/**
@@ -171,5 +177,14 @@ export default class ElementInfo {
 	 */
 	get attributes() {
 		return this._attributes;
+	}
+
+	/**
+	 * Get possible conversions for a given element.
+	 *
+	 * @returns {String[]}
+	 */
+	get conversions() {
+		return this._conversions;
 	}
 }

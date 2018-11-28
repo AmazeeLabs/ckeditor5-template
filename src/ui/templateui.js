@@ -40,7 +40,7 @@ export default class TemplateUI extends Plugin {
 					model: new Model( {
 						label: templates[ template ].label,
 						withText: true,
-						commandName: 'template',
+						commandName: 'insertTemplate',
 						commandValue: 'ck__' + template,
 					} )
 				} );
@@ -57,7 +57,7 @@ export default class TemplateUI extends Plugin {
 			} );
 
 			// Only enable the dropdown if a template element is applicable at this point.
-			dropdownView.bind( 'isEnabled' ).to( this.editor.commands.get( 'template' ), 'isEnabled' );
+			dropdownView.bind( 'isEnabled' ).to( this.editor.commands.get( 'insertTemplate' ), 'isEnabled' );
 
 			// Listen to dropdown selection, execute the element command and set focus back to the editing view.
 			this.listenTo( dropdownView, 'execute', evt => {

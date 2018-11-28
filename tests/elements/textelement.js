@@ -45,7 +45,7 @@ describe( 'TextElement', () => {
 					nested: {
 						label: 'Nested',
 						template: '<div class="parent"><p class="simple" ck-type="text"></p></div>'
-					}
+					},
 				}
 			} )
 			.then( newEditor => {
@@ -65,6 +65,13 @@ describe( 'TextElement', () => {
 		expect( getViewData( view ) ).to.equal( '[' +
 			'<p class="' + editableClasses + ' simple" contenteditable="true"></p>' +
 			']' );
+	} );
+
+	it( 'simple text field with content', () => {
+		setModelData( model, '<ck__simple>F[o]o</ck__simple>' );
+		expect( getViewData( view ) ).to.equal(
+			'<p class="ck-editor__editable ck-editor__nested-editable ck-widget simple" contenteditable="true">F{o}o</p>'
+		);
 	} );
 
 	it( 'simple text field with placeholder', () => {
@@ -110,5 +117,12 @@ describe( 'TextElement', () => {
 		expect( getViewData( view ) ).to.equal( '[<div class="ck-widget ck-widget_selected parent" contenteditable="false">' +
 			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true"></p>' +
 			'</div>]' );
+	} );
+
+	it( 'nested text element with content', () => {
+		setModelData( model, '<ck__nested><ck__nested__child0>F[o]o</ck__nested__child0></ck__nested>' );
+		expect( getViewData( view ) ).to.equal( '<div class="ck-widget parent" contenteditable="false">' +
+			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true">F{o}o</p>' +
+			'</div>' );
 	} );
 } );

@@ -9,7 +9,7 @@ import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 
 import ElementInfo from './utils/elementinfo';
-import TemplateCommand from './commands/templatecommand';
+import InsertTemplateCommand from './commands/inserttemplatecommand';
 import {
 	downcastTemplateElement,
 	getModelAttributes,
@@ -17,6 +17,7 @@ import {
 	upcastTemplateElement
 } from './utils/conversion';
 import { postfixTemplateElement, prepareTemplateElementPostfixer } from './utils/integrity';
+import ReplaceTemplateCommand from './commands/replacetemplatecommand';
 
 /**
  * The template engine feature.
@@ -85,8 +86,11 @@ export default class TemplateEditing extends Plugin {
 	 * @inheritDoc
 	 */
 	init() {
-		// Add a command for inserting a template object.
-		this.editor.commands.add( 'template', new TemplateCommand( this.editor ) );
+		// Add a command for inserting a template element.
+		this.editor.commands.add( 'insertTemplate', new InsertTemplateCommand( this.editor ) );
+
+		// Add a command for replacing a template element.
+		this.editor.commands.add( 'replaceTemplate', new ReplaceTemplateCommand( this.editor ) );
 
 		const templates = this.editor.config.get( 'templates' );
 
@@ -97,12 +101,13 @@ export default class TemplateEditing extends Plugin {
 			const parser = new DOMParser();
 			const dom = parser.parseFromString( templates[ name ].template, 'text/xml' ).documentElement;
 			dom.setAttribute( 'ck-name', name );
+			dom.setAttribute( 'ck-label', templates[ name ].label );
 			this._registerElement( dom );
 		} );
 
 		// Postfix elements to make sure a templates structure is always correct.
 		this.editor.model.document.registerPostFixer( prepareTemplateElementPostfixer( this.editor, {
-			types: [ 'element' ],
+			types: [ 'element', 'template' ],
 			postfix: postfixTemplateElement,
 		} ) );
 
@@ -137,7 +142,7 @@ export default class TemplateEditing extends Plugin {
 
 		// Default editing downcast conversions for template container elements without functionality.
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
-			types: [ 'element' ],
+			types: [ 'element', 'template' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const el = viewWriter.createContainerElement(
 					templateElement.tagName,

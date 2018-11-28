@@ -8,7 +8,7 @@ import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget/src/uti
 /**
  * Command for inserting a template into the document.
  */
-export default class TemplateCommand extends Command {
+export default class InsertTemplateCommand extends Command {
 	/**
 	 * @inheritDoc
 	 */
