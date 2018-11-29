@@ -32,7 +32,6 @@ export default class ReplaceTemplateCommand extends TemplateCommandBase {
 	 */
 	execute( options ) {
 		const editor = this.editor;
-
 		editor.model.change( writer => {
 			writer.rename( this._currentElement, options.template );
 		} );

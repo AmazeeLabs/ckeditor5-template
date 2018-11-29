@@ -7,7 +7,6 @@ import { attachPlaceholder } from '@ckeditor/ckeditor5-engine/src/view/placehold
 
 import TemplateEditing from '../templateediting';
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
-import { prepareTemplateElementPostfixer } from '../utils/integrity';
 
 /**
  * Element names that are considered multiline containers by default.
@@ -89,22 +88,19 @@ export default class TextElement extends Plugin {
 		} ), { priority: 'low ' } );
 
 		// Add an empty paragraph if a container text element is empty.
-		this.editor.model.document.registerPostFixer( prepareTemplateElementPostfixer( this.editor, {
-			types: [ 'text' ],
-			postfix: ( templateElement, modelElement, modelWriter ) => {
-				if (
-					isContainerElement( templateElement ) &&
-					modelElement.childCount === 0 &&
-					this.editor.model.schema.checkChild( modelElement, 'paragraph' )
-				) {
-					const paragraph = modelWriter.createElement( 'paragraph' );
-					modelWriter.insert( paragraph, modelElement, 'end' );
-					if ( templateElement.text ) {
-						modelWriter.insert( modelWriter.createText( templateElement.text ), paragraph );
-					}
-					return true;
+		this.editor.templates.registerPostFixer( [ 'text' ], ( templateElement, modelElement, modelWriter ) => {
+			if (
+				isContainerElement( templateElement ) &&
+				modelElement.childCount === 0 &&
+				this.editor.model.schema.checkChild( modelElement, 'paragraph' )
+			) {
+				const paragraph = modelWriter.createElement( 'paragraph' );
+				modelWriter.insert( paragraph, modelElement, 'end' );
+				if ( templateElement.text ) {
+					modelWriter.insert( modelWriter.createText( templateElement.text ), paragraph );
 				}
-			},
-		} ) );
+				return true;
+			}
+		} );
 	}
 }
