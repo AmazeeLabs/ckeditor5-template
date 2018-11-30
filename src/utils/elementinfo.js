@@ -130,12 +130,21 @@ export default class ElementInfo {
 	}
 
 	/**
+	 * Check if this element is the root of a template object.
+	 *
+	 * @returns {boolean}
+	 */
+	get isTemplateRoot() {
+		return !this._parent;
+	}
+
+	/**
 	 * The element type. Defaults to "element".
 	 *
 	 * @returns {string}
 	 */
 	get type() {
-		return this._configuration.type || ( this.parent ? 'element' : 'template' );
+		return this._configuration.type || 'element';
 	}
 
 	/**

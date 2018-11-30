@@ -10,6 +10,8 @@ describe( 'ElementInfo', () => {
 
 		const element = new ElementInfo( node );
 		expect( element.type ).to.equal( 'test' );
+
+		expect( element.isTemplateRoot ).to.be.true;
 	} );
 
 	it( 'has a prefixed name', () => {
@@ -56,6 +58,8 @@ describe( 'ElementInfo', () => {
 		const parentElement = new ElementInfo( parent );
 		const childElement = new ElementInfo( child, parentElement );
 		expect( childElement.parent ).to.equal( parentElement );
+
+		expect( childElement.isTemplateRoot ).to.be.false;
 	} );
 
 	it( 'exposes prefixed attributes as configuration', () => {

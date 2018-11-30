@@ -138,7 +138,7 @@ export default class TemplateEditing extends Plugin {
 		} );
 
 		// Postfix elements to make sure a templates structure is always correct.
-		this.registerPostFixer( [ 'element', 'template' ], postfixTemplateElement );
+		this.registerPostFixer( [ 'element' ], postfixTemplateElement );
 
 		// Register one global postfixer that will postfix all template elements.
 		this.editor.model.document.registerPostFixer( writer => {
@@ -186,7 +186,7 @@ export default class TemplateEditing extends Plugin {
 
 		// Default editing downcast conversions for template container elements without functionality.
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
-			types: [ 'element', 'template' ],
+			types: [ 'element' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const el = viewWriter.createContainerElement(
 					templateElement.tagName,

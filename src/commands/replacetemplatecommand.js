@@ -25,7 +25,8 @@ export default class ReplaceTemplateCommand extends TemplateCommandBase {
 	 */
 	get _currentElement() {
 		return this.getCurrentlySelectedElement( templateElement => {
-			return [ 'template', 'placeholder' ].includes( templateElement.type ) && templateElement.conversions.length > 0;
+			return ( templateElement.type === 'placeholder' || templateElement.isTemplateRoot ) &&
+				templateElement.conversions.length > 0;
 		} );
 	}
 

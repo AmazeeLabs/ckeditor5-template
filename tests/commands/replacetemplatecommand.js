@@ -7,7 +7,7 @@ import { setData as setModelData, getData as getModelData } from '@ckeditor/cked
 import ReplaceTemplateCommand from '../../src/commands/replacetemplatecommand';
 import TextElement from '../../src/elements/textelement';
 
-describe( 'InsertTemplateCommand', () => {
+describe( 'ReplaceTemplateCommand', () => {
 	let editorElement, editor, command, model;
 
 	testUtils.createSinonSandbox();
