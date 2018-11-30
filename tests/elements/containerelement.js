@@ -1,11 +1,13 @@
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
+import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 
 import ContainerElement from '../../src/elements/containerelement';
+import ReplaceTemplateCommand from '../../src/commands/replacetemplatecommand';
 
 describe( 'Container', () => {
-	let editorElement, editor, model;
+	let editorElement, editor, model, view;
 
 	beforeEach( () => {
 		editorElement = global.document.createElement( 'div' );
@@ -32,6 +34,7 @@ describe( 'Container', () => {
 			.then( newEditor => {
 				editor = newEditor;
 				model = editor.model;
+				view = editor.editing.view;
 			} );
 	} );
 
@@ -111,5 +114,60 @@ describe( 'Container', () => {
 			'</ck__container__child0>',
 			'</ck__container>',
 			']' ].join( '' ) );
+	} );
+
+	it( 'allows to select placeholders', () => {
+		setModelData( model, [
+			'<ck__container>',
+			'<ck__container__child0>',
+			'[<ck__container__child0__placeholder></ck__container__child0__placeholder>]',
+			'</ck__container__child0>',
+			'</ck__container>'
+		].join( '' ) );
+
+		expect( getModelData( model ) ).to.equal( [
+			'<ck__container>',
+			'<ck__container__child0>',
+			'[<ck__container__child0__placeholder></ck__container__child0__placeholder>]',
+			'</ck__container__child0>',
+			'</ck__container>',
+		].join( '' ) );
+
+		expect( getViewData( view ) ).to.equal( [
+			'<div class="ck-widget wrapper" contenteditable="false">',
+			'<div ck-container-layout="vertical" class="container">',
+			'[<div class=" ck-widget ck-widget_selected" contenteditable="false">',
+			'<div class="ck-placeholder-ui"></div>',
+			'</div>]',
+			'</div>',
+			'</div>',
+		].join( '' ) );
+
+		expect( model.document.selection.getSelectedElement().name ).to.equal( 'ck__container__child0__placeholder' );
+	} );
+
+	it( 'allows to insert elements at a placeholder position', () => {
+		const command = new ReplaceTemplateCommand( editor );
+
+		setModelData( model, [
+			'<ck__container>',
+			'<ck__container__child0>',
+			'[<ck__container__child0__placeholder></ck__container__child0__placeholder>]',
+			'</ck__container__child0>',
+			'</ck__container>'
+		].join( '' ) );
+
+		expect( command.isEnabled ).to.be.true;
+		command.execute( { template: 'ck__a' } );
+
+		expect( getModelData( model ) ).to.equal( [
+			'<ck__container>',
+			'<ck__container__child0>',
+			'<ck__container__child0__placeholder></ck__container__child0__placeholder>',
+			'[<ck__a></ck__a>]',
+			'<ck__container__child0__placeholder></ck__container__child0__placeholder>',
+			'</ck__container__child0>',
+			'</ck__container>',
+		].join( '' ) );
 	} );
 } );

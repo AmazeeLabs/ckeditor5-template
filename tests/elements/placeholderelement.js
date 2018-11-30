@@ -75,4 +75,24 @@ describe( 'Placeholder', () => {
 			'</div>' +
 			'</div>]' );
 	} );
+
+	it( 'is selectable', () => {
+		setModelData( model, [
+			'<ck__placeholder>',
+			'[<ck__placeholder__child0></ck__placeholder__child0>]',
+			'</ck__placeholder>',
+		].join( '' ) );
+
+		expect( getModelData( model ) ).to.equal( [
+			'<ck__placeholder>',
+			'[<ck__placeholder__child0></ck__placeholder__child0>]',
+			'</ck__placeholder>',
+		].join( '' ) );
+
+		expect( getViewData( view ) ).to.equal( [
+			'<div class="ck-widget placeholder" contenteditable="false">',
+			'[<div class=" ck-widget ck-widget_selected" contenteditable="false"><div class="ck-placeholder-ui"></div></div>]',
+			'</div>'
+		].join( '' ) );
+	} );
 } );

@@ -6,6 +6,8 @@ import TemplateCommandBase from './templatecommandbase';
 
 /**
  * Command for replacing a template with another one.
+ *
+ * Only enabled if the current selection is on or within a template.
  */
 export default class ReplaceTemplateCommand extends TemplateCommandBase {
 	/**
@@ -33,7 +35,9 @@ export default class ReplaceTemplateCommand extends TemplateCommandBase {
 	execute( options ) {
 		const editor = this.editor;
 		editor.model.change( writer => {
-			writer.rename( this._currentElement, options.template );
+			const element = this._currentElement;
+			writer.rename( element, options.template );
+			writer.setSelection( element, 'on' );
 		} );
 	}
 }

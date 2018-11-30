@@ -48,7 +48,7 @@ export default class TextElement extends Plugin {
 	 * @inheritDoc
 	 */
 	init() {
-		const textElements = this.editor.plugins.get( 'TemplateEditing' ).getElementsByType( 'text' );
+		const textElements = this.editor.templates.getElementsByType( 'text' );
 
 		// If the current element is a container, allow bock elements inside it.
 		this.editor.model.schema.extend( '$block', {

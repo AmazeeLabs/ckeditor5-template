@@ -26,9 +26,8 @@ export default class ContainerElement extends Plugin {
 	 * @inheritDoc
 	 */
 	init() {
-		const templateEditing = this.editor.plugins.get( 'TemplateEditing' );
 		// Get all configured placeholder elements.
-		const containerElements = templateEditing.getElementsByType( 'container' );
+		const containerElements = this.editor.templates.getElementsByType( 'container' );
 
 		for ( const containerElement of containerElements ) {
 			// Extend the schema so that the contained elements can be placed in the container.
@@ -43,8 +42,15 @@ export default class ContainerElement extends Plugin {
 			dom.setAttribute( 'ck-type', 'placeholder' );
 			dom.setAttribute( 'ck-name', 'placeholder' );
 			dom.setAttribute( 'ck-conversions', containerElement.contains.join( ' ' ) );
-			templateEditing.registerElement( dom, containerElement );
+			this.editor.templates.registerElement( dom, containerElement );
 		}
+
+		// Allow `$text` within all elements.
+		// Required until https://github.com/ckeditor/ckeditor5-engine/issues/1593 is fixed.
+		// TODO: Remove this once the issue is resolved.
+		this.editor.model.schema.extend( '$text', {
+			allowIn: containerElements.map( el => `${ el.name }__placeholder` ),
+		} );
 
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'container' ],
@@ -62,36 +68,41 @@ export default class ContainerElement extends Plugin {
 		// Postfix elements to make sure a templates structure is always correct.
 		this.editor.templates.registerPostFixer( [ 'container' ], ( templateElement, item, writer ) => {
 			// Remove any double-placeholders by finding placeholders that are followed by placeholders.
-			Array.from( item.getChildren() )
+			let changed = Array.from( item.getChildren() )
 				.filter( child =>
-					templateEditing.getElementInfo( child.name ).type === 'placeholder' &&
-					( !child.nextSibling || templateEditing.getElementInfo( child.nextSibling.name ).type === 'placeholder' )
+					this.editor.templates.getElementInfo( child.name ).type === 'placeholder' &&
+					child.nextSibling && this.editor.templates.getElementInfo( child.nextSibling.name ).type === 'placeholder'
 				).map( child => {
 					writer.remove( child );
-				} );
+				} ).length > 0;
 
 			// Intersperse children with placeholders.
 			// Filter for all children that are not placeholders themselves and are not
 			// directly followed by a placeholder.
-			Array.from( item.getChildren() )
+			changed = changed || Array.from( item.getChildren() )
 				.filter( child =>
-					templateEditing.getElementInfo( child.name ).type !== 'placeholder' &&
-					( !child.nextSibling || templateEditing.getElementInfo( child.nextSibling.name ).type !== 'placeholder' )
+					this.editor.templates.getElementInfo( child.name ).type !== 'placeholder' &&
+					( !child.nextSibling || this.editor.templates.getElementInfo( child.nextSibling.name ).type !== 'placeholder' )
 				).map( slot => {
 					writer.insertElement( templateElement.name + '__placeholder', slot, 'after' );
-				} );
+				} ).length > 0;
 
 			if ( item.childCount > 0 ) {
 				// If there are children, make sure the first one is a placeholder.
 				const firstChild = item.getChild( 0 );
-				if ( templateEditing.getElementInfo( firstChild.name ).type !== 'placeholder' ) {
+				if ( this.editor.templates.getElementInfo( firstChild.name ).type !== 'placeholder' ) {
 					writer.insertElement( templateElement.name + '__placeholder', item.getChild( 0 ), 'before' );
+					changed = true;
 				}
 			}
 			else {
 				// If there are no children, inject at least one placeholder.
 				writer.insertElement( templateElement.name + '__placeholder', item, 'end' );
+				changed = true;
 			}
+
+			return changed;
 		} );
 	}
 }
+
