@@ -1,5 +1,5 @@
 /**
- * @module template/commands/templatecommand
+ * @module template/commands/templatecommandbase
  */
 
 import Command from '@ckeditor/ckeditor5-core/src/command';
@@ -8,6 +8,32 @@ import Command from '@ckeditor/ckeditor5-core/src/command';
  * Base class for template commands. Allows to find the currently selected templates, containers or placeholders.
  */
 export default class TemplateCommandBase extends Command {
+	/**
+	 * @inheritDoc
+	 */
+	constructor( editor ) {
+		super( editor );
+		this.set( 'currentTemplateLabel', null );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	refresh() {
+		const currentElement = this.currentElement;
+		this.isEnabled = !!currentElement;
+		if ( currentElement ) {
+			this.currentTemplateLabel = this.editor.templates.getElementInfo( currentElement.name ).label;
+		}
+	}
+
+	/**
+	 * Retrieve the currently relevant element for this command.
+	 */
+	currentElement() {
+		// To be overridden by command implementations.
+	}
+
 	/**
 	 * Find the first currently selected element matching given conditions.
 	 *

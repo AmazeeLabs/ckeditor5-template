@@ -5,11 +5,11 @@ import EnterPlugin from '@ckeditor/ckeditor5-enter/src/enter';
 import TypingPlugin from '@ckeditor/ckeditor5-typing/src/typing';
 import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
-import TemplateUI from '../../src/ui/templateui';
+import TemplatePlugin from '../../src/template';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ EnterPlugin, TypingPlugin, ParagraphPlugin, TemplateUI ],
+		plugins: [ EnterPlugin, TypingPlugin, ParagraphPlugin, TemplatePlugin ],
 		toolbar: [ 'template' ],
 		templates: {
 			simple: {

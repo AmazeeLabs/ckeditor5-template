@@ -1,5 +1,5 @@
 /**
- * @module template/commands/templatecommand
+ * @module template/commands/replacetemplatecommand
  */
 
 import TemplateCommandBase from './templatecommandbase';
@@ -11,19 +11,12 @@ import TemplateCommandBase from './templatecommandbase';
  */
 export default class ReplaceTemplateCommand extends TemplateCommandBase {
 	/**
-	 * @inheritDoc
-	 */
-	refresh() {
-		this.isEnabled = !!this._currentElement;
-	}
-
-	/**
 	 * Retrieve the currently selected template or placeholder element.
 	 *
 	 * @returns {module:engine/view/element~Element|*}
 	 * @private
 	 */
-	get _currentElement() {
+	get currentElement() {
 		return this.getCurrentlySelectedElement( templateElement => {
 			return ( templateElement.type === 'placeholder' || templateElement.isTemplateRoot ) &&
 				templateElement.conversions.length > 0;
@@ -36,7 +29,7 @@ export default class ReplaceTemplateCommand extends TemplateCommandBase {
 	execute( options ) {
 		const editor = this.editor;
 		editor.model.change( writer => {
-			const element = this._currentElement;
+			const element = this.currentElement;
 			writer.rename( element, options.template );
 			writer.setSelection( element, 'on' );
 		} );

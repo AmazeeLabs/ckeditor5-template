@@ -27,7 +27,7 @@ describe( 'Container', () => {
 					},
 					container: {
 						label: 'Container',
-						template: '<div class="container" ck-type="container" ck-contains="a"></div>',
+						template: '<div class="container" ck-type="container" ck-contains="a b"></div>',
 					}
 				}
 			} )

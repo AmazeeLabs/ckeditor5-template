@@ -1,5 +1,5 @@
 /**
- * @module template/commands/templatecommand
+ * @module template/commands/inserttemplatecommand
  */
 
 import Command from '@ckeditor/ckeditor5-core/src/command';
