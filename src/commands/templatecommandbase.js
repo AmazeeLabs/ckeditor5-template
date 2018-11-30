@@ -9,14 +9,6 @@ import Command from '@ckeditor/ckeditor5-core/src/command';
  */
 export default class TemplateCommandBase extends Command {
 	/**
-	 * @inheritDoc
-	 */
-	constructor( editor ) {
-		super( editor );
-		this._templateEditing = editor.plugins.get( 'TemplateEditing' );
-	}
-
-	/**
 	 * Find the first currently selected element matching given conditions.
 	 *
 	 * Will start from the current selection/anchor and move up in the document tree, to check if one of the parents
@@ -31,7 +23,7 @@ export default class TemplateCommandBase extends Command {
 	getCurrentlySelectedElement( matcher ) {
 		let element = this.editor.model.document.selection.getSelectedElement() || this.editor.model.document.selection.anchor.parent;
 		while ( element ) {
-			const info = this._templateEditing.getElementInfo( element.name );
+			const info = this.editor.templates.getElementInfo( element.name );
 			if ( info && matcher( info, element ) ) {
 				return element;
 			}

@@ -3,39 +3,6 @@
  */
 
 /**
- * Prepare a postfixer callback for selected template element types.
- *
- *     const postfixer = prepareTemplateElementPostfixer( this.editor, {
- *       types: [ 'element', 'text' ],
- *       postfix: (templateElement, modelElement, modelWriter) => {
- *       	...
- *       }
- *     } );
- *
- * @param {module:core/editor/editor~Editor} editor
- * @param {Object} config
- * @returns {Function}
- */
-export function prepareTemplateElementPostfixer( editor, config ) {
-	return writer => {
-		for ( const entry of editor.model.document.differ.getChanges() ) {
-			// Run the postfixer on newly inserted elements and on parents of removed elements.
-			if ( [ 'insert', 'remove' ].includes( entry.type ) ) {
-				const item = entry.type === 'insert' ? entry.position.nodeAfter : entry.position.getAncestors().pop();
-				if ( item ) {
-					const templateElement = editor.plugins.get( 'TemplateEditing' ).getElementInfo( item.name );
-					if ( templateElement && config.types.includes( templateElement.type ) ) {
-						if ( config.postfix( templateElement, item, writer ) ) {
-							return true;
-						}
-					}
-				}
-			}
-		}
-	};
-}
-
-/**
  * Recursively check and fix template element integrity.
  *
  * Will add missing, remove unregistered and reorder shuffled child elements to maintain the
@@ -45,7 +12,7 @@ export function prepareTemplateElementPostfixer( editor, config ) {
  * @param {module:engine/model/element~Element} item
  * @param {module:engine/model/writer~Writer} writer
  *
- * @returns {boolean} - True, if an actual change was made.
+ * @returns {boolean} - The list of inserted elements.
  */
 export function postfixTemplateElement( templateElement, item, writer ) {
 	let changed = false;
@@ -73,7 +40,6 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 		}
 	}
 
-	const inserted = {};
 	// Re-insert in order of their seats. This fixes wrong element order, unknown elements and adds missing ones.
 	for ( const name of Object.keys( childSeats ) ) {
 		if ( childSeats[ name ] ) {
@@ -82,18 +48,8 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 		else {
 			const el = writer.createElement( name );
 			writer.insert( el, item, 'end' );
-			inserted[ name ] = el;
 			changed = true;
 		}
-	}
-
-	// Build a list of "seats" for each child.
-	const childMap = templateElement.children.map( child => ( { [ child.name ]: child } ) )
-		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
-
-	// Postfix all child elements.
-	for ( const name of Object.keys( inserted ) ) {
-		changed = postfixTemplateElement( childMap[ name ], inserted[ name ], writer ) || changed;
 	}
 
 	return changed;

@@ -7,6 +7,7 @@ import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 export default class PlaceholderView extends View {
 	constructor( modelElement, editor, allowed ) {
 		super();
+
 		const buttons = Object.keys( allowed ).map( template => {
 			const view = new ButtonView();
 

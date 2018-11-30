@@ -16,7 +16,7 @@ import {
 	getViewAttributes,
 	upcastTemplateElement
 } from './utils/conversion';
-import { postfixTemplateElement, prepareTemplateElementPostfixer } from './utils/integrity';
+import { postfixTemplateElement } from './utils/integrity';
 import ReplaceTemplateCommand from './commands/replacetemplatecommand';
 
 /**
@@ -60,6 +60,14 @@ export default class TemplateEditing extends Plugin {
 		 * @private
 		 */
 		this._typeMap = {};
+
+		/**
+		 * Per element postfixer registry.
+		 *
+		 * @type {Object}
+		 * @private
+		 */
+		this._postfixers = {};
 	}
 
 	/**
@@ -83,9 +91,33 @@ export default class TemplateEditing extends Plugin {
 	}
 
 	/**
+	 * Register a new postfixer
+	 *
+	 *     this.editor.templates.registerPostFixer(
+	 *         [ 'element', 'placeholder' ],
+	 *         ( templateElement, modelElement, modelWriter ) => {
+	 *             ...
+	 *         }
+	 *     );
+	 *
+	 * @param {String[]} types
+	 * @param {Function} callback
+	 */
+	registerPostFixer( types, callback ) {
+		for ( const type of types ) {
+			if ( !this._postfixers[ type ] ) {
+				this._postfixers[ type ] = [];
+			}
+			this._postfixers[ type ].push( callback );
+		}
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	init() {
+		this.editor.templates = this;
+
 		// Add a command for inserting a template element.
 		this.editor.commands.add( 'insertTemplate', new InsertTemplateCommand( this.editor ) );
 
@@ -102,20 +134,32 @@ export default class TemplateEditing extends Plugin {
 			const dom = parser.parseFromString( templates[ name ].template, 'text/xml' ).documentElement;
 			dom.setAttribute( 'ck-name', name );
 			dom.setAttribute( 'ck-label', templates[ name ].label );
-			this._registerElement( dom );
+			this.registerElement( dom );
 		} );
 
 		// Postfix elements to make sure a templates structure is always correct.
-		this.editor.model.document.registerPostFixer( prepareTemplateElementPostfixer( this.editor, {
-			types: [ 'element', 'template' ],
-			postfix: postfixTemplateElement,
-		} ) );
+		this.registerPostFixer( [ 'element', 'template' ], postfixTemplateElement );
+
+		// Register one global postfixer that will postfix all template elements.
+		this.editor.model.document.registerPostFixer( writer => {
+			for ( const entry of this.editor.model.document.differ.getChanges() ) {
+				// Run the postfixer on newly inserted elements and on parents of removed elements.
+				if ( [ 'insert', 'remove' ].includes( entry.type ) ) {
+					const item = entry.type === 'insert' ? entry.position.nodeAfter : entry.position.getAncestors().pop();
+					if ( item ) {
+						if ( this._postfixElement( item, writer ) ) {
+							return true;
+						}
+					}
+				}
+			}
+		} );
 
 		// Allow `$text` within all elements.
 		// Required until https://github.com/ckeditor/ckeditor5-engine/issues/1593 is fixed.
 		// TODO: Remove this once the issue is resolved.
 		this.editor.model.schema.extend( '$text', {
-			allowIn: Object.keys( templates ).map( key => `ck__${ key }` ),
+			allowIn: Object.keys( this._elements ),
 		} );
 
 		// Default upcast conversion for template elements.
@@ -151,6 +195,20 @@ export default class TemplateEditing extends Plugin {
 				return templateElement.parent ? el : toWidget( el, viewWriter );
 			}
 		} ), { priority: 'low ' } );
+	}
+
+	_postfixElement( item, writer ) {
+		const templateElement = this.getElementInfo( item.name );
+		let changed = false;
+		if ( templateElement && this._postfixers.hasOwnProperty( templateElement.type ) ) {
+			for ( const postfixer of this._postfixers[ templateElement.type ] ) {
+				changed = changed || postfixer( templateElement, item, writer );
+				for ( const child of item.getChildren() ) {
+					this._postfixElement( child, writer );
+				}
+			}
+		}
+		return changed;
 	}
 
 	/**
@@ -209,16 +267,15 @@ export default class TemplateEditing extends Plugin {
 	 *
 	 * @param {Element} dom
 	 * @param {ElementInfo} parent
-	 * @private
 	 */
-	_registerElement( dom, parent = null ) {
+	registerElement( dom, parent = null ) {
 		const element = new ElementInfo( dom, parent );
 		this._elements[ element.name ] = element;
 		this._typeMap[ element.type ] = element.name;
 
 		// Register the element itself.
 		this.editor.model.schema.register( element.name, {
-			isObject: true,
+			isObject: !parent,
 			isBlock: true,
 			// If this is the root element of a template, allow it in root. Else allow it only in its parent.
 			allowIn: parent ? parent.name : '$root',
@@ -228,6 +285,6 @@ export default class TemplateEditing extends Plugin {
 
 		// Register all child elements.
 		Array.from( dom.childNodes ).filter( node => node.nodeType === 1 )
-			.map( child => this._registerElement( child, element ) );
+			.map( child => this.registerElement( child, element ) );
 	}
 }

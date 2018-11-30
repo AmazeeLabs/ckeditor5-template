@@ -9,6 +9,7 @@ import MasterTemplate from './mastertemplate';
 import TemplateUI from './ui/templateui';
 import TextElement from './elements/textelement';
 import PlaceholderElement from './elements/placeholderelement';
+import ContainerElement from './elements/containerelement';
 
 /**
  * Root template plugin, requiring all auxiliary plugins to enable template functionality.
@@ -34,7 +35,7 @@ export default class Template extends Plugin {
 	 * @inheritDoc
 	 */
 	static get requires() {
-		return [ TemplateEditing, TemplateUI, MasterTemplate, TextElement, PlaceholderElement ];
+		return [ TemplateEditing, TemplateUI, MasterTemplate, TextElement, PlaceholderElement, ContainerElement ];
 	}
 
 	/**

@@ -25,8 +25,6 @@ export default class PlaceholderElement extends Plugin {
 	 * @inheritDoc
 	 */
 	init() {
-		const templateEditing = this.editor.plugins.get( 'TemplateEditing' );
-
 		// Placeholders should not appear in the result document, therefore they downcast to an empty string.
 		// That's also the reason why they have no upcast.
 		this.editor.conversion.for( 'dataDowncast' ).add( downcastTemplateElement( this.editor, {
@@ -41,22 +39,23 @@ export default class PlaceholderElement extends Plugin {
 			types: [ 'placeholder' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const editor = this.editor;
+
+				// Prepare selection options as a key value pair.
+				const options = templateElement.conversions.map( name => {
+					return { [ name ]: this.editor.templates.getElementInfo( name ).label };
+				} ).reduce( ( acc, val ) => Object.assign( acc, val ) );
+
 				const element = viewWriter.createUIElement( 'div', { class: 'ck-placeholder-ui' }, function( domDocument ) {
 					const domElement = this.toDomElement( domDocument );
-
-					const options = templateElement.conversions.map( name => {
-						return { [ name ]: templateEditing.getElementInfo( name ).label };
-					} ).reduce( ( acc, val ) => Object.assign( acc, val ) );
-
 					const view = new PlaceholderView( modelElement, editor, options );
 					view.render();
 					domElement.appendChild( view.element );
 					return domElement;
 				} );
 
-				const cont = viewWriter.createContainerElement( 'div', getModelAttributes( templateElement, modelElement ) );
-				viewWriter.insert( new ViewPosition( cont, 0 ), element );
-				return toWidget( cont, viewWriter );
+				const wrapper = viewWriter.createContainerElement( 'div', getModelAttributes( templateElement, modelElement ) );
+				viewWriter.insert( new ViewPosition( wrapper, 0 ), element );
+				return toWidget( wrapper, viewWriter );
 			},
 		} ) );
 

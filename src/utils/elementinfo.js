@@ -59,6 +59,10 @@ export default class ElementInfo {
 		this._conversions = this._configuration.conversions ?
 			this._configuration.conversions.split( ' ' ).map( el => `ck__${ el }` ) :
 			[];
+
+		this._contains = this._configuration.contains ?
+			this._configuration.contains.split( ' ' ).map( el => el ) :
+			[];
 	}
 
 	/**
@@ -186,5 +190,14 @@ export default class ElementInfo {
 	 */
 	get conversions() {
 		return this._conversions;
+	}
+
+	/**
+	 * Retrieve the list of elements this element can contain.
+	 *
+	 * @returns {String[]}
+	 */
+	get contains() {
+		return this._contains;
 	}
 }
