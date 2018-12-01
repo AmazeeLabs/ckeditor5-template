@@ -47,7 +47,10 @@ export default class PlaceholderElement extends Plugin {
 
 				const element = viewWriter.createUIElement( 'div', { class: 'ck-placeholder-ui' }, function( domDocument ) {
 					const domElement = this.toDomElement( domDocument );
-					const view = new PlaceholderView( modelElement, editor, options );
+					const view = new PlaceholderView( options );
+					view.on( 'execute', options => {
+						editor.execute( 'replaceTemplate', options );
+					} );
 					view.render();
 					domElement.appendChild( view.element );
 					return domElement;
