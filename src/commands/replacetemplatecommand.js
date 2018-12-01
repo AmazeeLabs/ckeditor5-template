@@ -11,16 +11,12 @@ import TemplateCommandBase from './templatecommandbase';
  */
 export default class ReplaceTemplateCommand extends TemplateCommandBase {
 	/**
-	 * Retrieve the currently selected template or placeholder element.
-	 *
-	 * @returns {module:engine/view/element~Element|*}
-	 * @private
+	 * @inheritDoc
 	 */
-	get currentElement() {
-		return this.getCurrentlySelectedElement( templateElement => {
-			return ( templateElement.type === 'placeholder' || templateElement.isTemplateRoot ) &&
-				templateElement.conversions.length > 0;
-		} );
+	// eslint-disable-next-line no-unused-vars
+	matchElement( templateElement, modelElement ) {
+		return ( templateElement.type === 'placeholder' || templateElement.isTemplateRoot ) &&
+			templateElement.conversions.length > 0;
 	}
 
 	/**

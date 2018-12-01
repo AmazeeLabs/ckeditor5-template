@@ -11,15 +11,11 @@ import TemplateCommandBase from './templatecommandbase';
  */
 export default class RemoveTemplateCommand extends TemplateCommandBase {
 	/**
-	 * Retrieve the currently selected template or placeholder element.
-	 *
-	 * @returns {module:engine/view/element~Element|*}
-	 * @private
+	 * @inheritDoc
 	 */
-	get currentElement() {
-		return this.getCurrentlySelectedElement( templateElement => {
-			return templateElement.isTemplateRoot;
-		} );
+	// eslint-disable-next-line no-unused-vars
+	matchElement( templateElement, modelElement ) {
+		return templateElement.isTemplateRoot;
 	}
 
 	/**

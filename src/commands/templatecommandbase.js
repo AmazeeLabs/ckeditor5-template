@@ -14,24 +14,38 @@ export default class TemplateCommandBase extends Command {
 	constructor( editor ) {
 		super( editor );
 		this.set( 'currentTemplateLabel', null );
+		this.set( 'isApplicable', false );
+		this._currentElement = null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	refresh() {
-		const currentElement = this.currentElement;
-		this.isEnabled = !!currentElement;
-		if ( currentElement ) {
-			this.currentTemplateLabel = this.editor.templates.getElementInfo( currentElement.name ).label;
+		this._currentElement = this.getCurrentlySelectedElement();
+		this.isEnabled = !!this._currentElement;
+		this.isApplicable = this.isEnabled;
+		if ( this._currentElement ) {
+			this.currentTemplateLabel = this.editor.templates.getElementInfo( this._currentElement.name ).label;
 		}
 	}
 
 	/**
 	 * Retrieve the currently relevant element for this command.
 	 */
-	currentElement() {
-		// To be overridden by command implementations.
+	get currentElement() {
+		return this._currentElement;
+	}
+
+	/**
+	 * Check if a given template and model element are applicable for this command.
+	 *
+	 * @param {module:template/utils/elementinfo~ElementInfo} templateElement
+	 * @param {module:engine/model/element~Element} modelElement
+	 */
+	// eslint-disable-next-line no-unused-vars
+	matchElement( templateElement, modelElement ) {
+		return false;
 	}
 
 	/**
@@ -40,17 +54,12 @@ export default class TemplateCommandBase extends Command {
 	 * Will start from the current selection/anchor and move up in the document tree, to check if one of the parents
 	 * matches the condition.
 	 *
-	 *     this.getCurrentlySelectedElement( ( templateElement, modelElement ) => {
-	 *         return modelElement.name === 'paragraph';
-	 *     } );
-	 *
-	 * @param {Function} matcher
 	 */
-	getCurrentlySelectedElement( matcher ) {
+	getCurrentlySelectedElement() {
 		let element = this.editor.model.document.selection.getSelectedElement() || this.editor.model.document.selection.anchor.parent;
 		while ( element ) {
 			const info = this.editor.templates.getElementInfo( element.name );
-			if ( info && matcher( info, element ) ) {
+			if ( info && this.matchElement( info, element ) ) {
 				return element;
 			}
 			element = element.parent;

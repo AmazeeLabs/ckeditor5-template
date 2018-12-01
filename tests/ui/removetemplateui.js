@@ -6,7 +6,7 @@ import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-util
 
 import RemoveTemplateUi from '../../src/ui/removetemplateui';
 
-describe( 'TemplateUI', () => {
+describe( 'RemoveTemplateUI', () => {
 	let editorElement, editor, removeButton, model;
 
 	testUtils.createSinonSandbox();

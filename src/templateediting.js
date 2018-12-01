@@ -19,6 +19,8 @@ import {
 import { postfixTemplateElement } from './utils/integrity';
 import ReplaceTemplateCommand from './commands/replacetemplatecommand';
 import RemoveTemplateCommand from './commands/removetemplatecommand';
+import MoveTemplateUpCommand from './commands/movetemplateupcommand';
+import MoveTemplateDownCommand from './commands/movetemplatedowncommand';
 
 /**
  * The template engine feature.
@@ -127,6 +129,10 @@ export default class TemplateEditing extends Plugin {
 
 		// Add a command for removing a template element.
 		this.editor.commands.add( 'removeTemplate', new RemoveTemplateCommand( this.editor ) );
+
+		// Add commands to move templates within a container.
+		this.editor.commands.add( 'moveTemplateUp', new MoveTemplateUpCommand( this.editor ) );
+		this.editor.commands.add( 'moveTemplateDown', new MoveTemplateDownCommand( this.editor ) );
 
 		const templates = this.editor.config.get( 'templates' );
 
