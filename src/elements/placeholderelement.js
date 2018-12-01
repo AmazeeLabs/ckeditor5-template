@@ -8,7 +8,7 @@ import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
 import TemplateEditing from '../templateediting';
-import PlaceholderView from '../ui/placeholderview';
+import PlaceholderView from '../ui/views/placeholderview';
 
 /**
  * Allow to position placeholders in a document that can be filled with actual elements.

@@ -4,7 +4,7 @@ import { getOptimalPosition } from '@ckeditor/ckeditor5-utils/src/dom/position';
 
 import TemplateEditing from '../templateediting';
 import DeleteIcon from '../../theme/icons/trash.svg';
-import TemplateButtonView from './templatebuttonview';
+import TemplateButtonView from './views/templatebuttonview';
 
 /**
  * Provide the user interface to remove a template.

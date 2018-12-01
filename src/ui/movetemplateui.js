@@ -5,7 +5,7 @@ import { getOptimalPosition } from '@ckeditor/ckeditor5-utils/src/dom/position';
 import TemplateEditing from '../templateediting';
 import UpIcon from '../../theme/icons/arrow-up.svg';
 import DownIcon from '../../theme/icons/arrow-down.svg';
-import TemplateButtonView from './templatebuttonview';
+import TemplateButtonView from './views/templatebuttonview';
 import ContainerElement from '../elements/containerelement';
 
 /**
