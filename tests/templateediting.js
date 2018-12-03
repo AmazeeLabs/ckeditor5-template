@@ -26,7 +26,7 @@ describe( 'TemplateEditing', () => {
 					},
 					attribute: {
 						label: 'Simple',
-						template: '<div class="attribute" data-foo=""></div>',
+						template: '<div class="attribute" data-foo="foo"></div>',
 					},
 					nested: {
 						label: 'Nested',
@@ -96,9 +96,14 @@ describe( 'TemplateEditing', () => {
 		expect( getModelData( model ) ).to.equal( '[<ck__attribute data-foo="bar"></ck__attribute>]' );
 	} );
 
+	it( 'auto-adds attributes with default values', () => {
+		editor.setData( '<div class="attribute"></div>' );
+		expect( getModelData( model ) ).to.equal( '[<ck__attribute data-foo="foo"></ck__attribute>]' );
+	} );
+
 	it( 'ignores unknown attributes', () => {
 		editor.setData( '<div class="attribute" data-bar="foo"></div>' );
-		expect( getModelData( model ) ).to.equal( '[<ck__attribute></ck__attribute>]' );
+		expect( getModelData( model ) ).to.equal( '[<ck__attribute data-foo="foo"></ck__attribute>]' );
 	} );
 
 	it( 'downcasts simple elements', () => {

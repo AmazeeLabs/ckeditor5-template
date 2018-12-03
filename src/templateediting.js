@@ -84,6 +84,16 @@ export default class TemplateEditing extends Plugin {
 	}
 
 	/**
+	 * Find elements matching given criteria.
+	 *
+	 * @param {Function} matcher
+	 * @return {module:template/utils/elementinfo~ElementInfo[]}
+	 */
+	findElementInfo( matcher = null ) {
+		return matcher ? Object.values( this._elements ).filter( matcher ) : Object.values( this._elements );
+	}
+
+	/**
 	 * Retrieve all tempate elements with a given type.
 	 *
 	 * @param {String} type
@@ -91,6 +101,24 @@ export default class TemplateEditing extends Plugin {
 	 */
 	getElementsByType( type ) {
 		return Object.values( this._elements ).filter( el => el.type === type );
+	}
+
+	/**
+	 * Retrieve element and info for the first parent element matching given conditions.
+	 *
+	 * @param {Function} matcher
+	 * @returns {{element: (module:engine/view/element~Element), info: module:template/utils/elementinfo~ElementInfo}}
+	 */
+	findSelectedTemplateElement( matcher ) {
+		let element = this.editor.model.document.selection.getSelectedElement() || this.editor.model.document.selection.anchor.parent;
+		while ( element ) {
+			const info = this.editor.templates.getElementInfo( element.name );
+			if ( info && matcher( info, element ) ) {
+				return { element, info };
+			}
+			element = element.parent;
+		}
+		return { element: null, info: null };
 	}
 
 	/**
@@ -211,6 +239,14 @@ export default class TemplateEditing extends Plugin {
 		const templateElement = this.getElementInfo( item.name );
 		let changed = false;
 		if ( templateElement && this._postfixers.hasOwnProperty( templateElement.type ) ) {
+			for ( const attr of Object.keys( templateElement.attributes ) ) {
+				const value = templateElement.attributes[ attr ];
+
+				if ( value && !item.getAttribute( attr ) ) {
+					writer.setAttribute( attr, value, item );
+				}
+			}
+
 			for ( const postfixer of this._postfixers[ templateElement.type ] ) {
 				changed = changed || postfixer( templateElement, item, writer );
 				for ( const child of item.getChildren() ) {

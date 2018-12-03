@@ -22,7 +22,7 @@ export default class TemplateCommandBase extends Command {
 	 * @inheritDoc
 	 */
 	refresh() {
-		this._currentElement = this.getCurrentlySelectedElement();
+		this.updateCurrentlySelectedElement();
 		this.isEnabled = !!this._currentElement;
 		this.isApplicable = this.isEnabled;
 		if ( this._currentElement ) {
@@ -55,14 +55,9 @@ export default class TemplateCommandBase extends Command {
 	 * matches the condition.
 	 *
 	 */
-	getCurrentlySelectedElement() {
-		let element = this.editor.model.document.selection.getSelectedElement() || this.editor.model.document.selection.anchor.parent;
-		while ( element ) {
-			const info = this.editor.templates.getElementInfo( element.name );
-			if ( info && this.matchElement( info, element ) ) {
-				return element;
-			}
-			element = element.parent;
-		}
+	updateCurrentlySelectedElement() {
+		const result = this.editor.templates.findSelectedTemplateElement( ( info, element ) => this.matchElement( info, element ) );
+		this._currentElement = result.element;
+		this._currentElementInfo = result.info;
 	}
 }

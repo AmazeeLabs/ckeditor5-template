@@ -12,6 +12,7 @@ import PlaceholderElement from './elements/placeholderelement';
 import ContainerElement from './elements/containerelement';
 import RemoveTemplateUI from './ui/removetemplateui';
 import MoveTemplateUI from './ui/movetemplateui';
+import TemplateAttributeUI from './ui/templateattributeui';
 
 /**
  * Root template plugin, requiring all auxiliary plugins to enable template functionality.
@@ -46,6 +47,7 @@ export default class Template extends Plugin {
 			ContainerElement,
 			RemoveTemplateUI,
 			MoveTemplateUI,
+			TemplateAttributeUI,
 		];
 	}
 
