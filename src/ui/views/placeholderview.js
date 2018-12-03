@@ -1,16 +1,11 @@
 import View from '@ckeditor/ckeditor5-ui/src/view';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import ButtonView from '../../../../ckeditor5-ui/src/button/buttonview';
 
 /**
  * Placeholder view. Renders a UI that can be replaced with an template instance of choice.
  */
 export default class PlaceholderView extends View {
-	/**
-	 * Create a new placeholder view.
-	 *
-	 * @param {Object} allowed
-	 */
-	constructor( allowed ) {
+	constructor( modelElement, editor, allowed ) {
 		super();
 
 		const buttons = Object.keys( allowed ).map( template => {
@@ -24,7 +19,7 @@ export default class PlaceholderView extends View {
 			view.render();
 
 			view.on( 'execute', () => {
-				this.fire( 'execute', { template } );
+				editor.execute( 'replaceTemplate', { template } );
 			} );
 
 			return view;
