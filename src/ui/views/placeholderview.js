@@ -1,5 +1,5 @@
 import View from '@ckeditor/ckeditor5-ui/src/view';
-import ButtonView from '../../../../ckeditor5-ui/src/button/buttonview';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 
 /**
  * Placeholder view. Renders a UI that can be replaced with an template instance of choice.
