@@ -1,5 +1,5 @@
 {
-  "name": "@ckeditor/ckeditor5-template",
+  "name": "ckeditor5-template",
   "version": "11.0.0",
   "description": "Template feature for CKEditor 5.",
   "keywords": [
