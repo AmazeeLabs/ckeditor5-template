@@ -4,9 +4,9 @@ import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictest
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 
-import MoveTemplateUI from '../../src/ui/movetemplateui';
+import MoveTemplateUI from '../../src/ui/containerui';
 
-describe( 'MoveTemplateUI', () => {
+describe( 'ContainerUI', () => {
 	let editorElement, editor, upButton, downButton, model;
 
 	testUtils.createSinonSandbox();

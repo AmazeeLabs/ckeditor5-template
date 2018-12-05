@@ -116,7 +116,7 @@ describe( 'Container', () => {
 		].join( '' ) );
 
 		expect( getViewData( view ) ).to.equal( [
-			'<div ck-container-layout="vertical" class="ck-widget container" contenteditable="false">',
+			'<div class="ck-widget container" contenteditable="false">',
 			'[<div class=" ck-widget ck-widget_selected" contenteditable="false">',
 			'<div class="ck-placeholder-ui"></div>',
 			'</div>]',

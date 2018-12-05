@@ -11,7 +11,7 @@ import ContainerElement from '../elements/containerelement';
 /**
  * Provide the user interface to remove a template.
  */
-export default class MoveTemplateUI extends Plugin {
+export default class ContainerUI extends Plugin {
 	/**
 	 * @inheritDoc
 	 */

@@ -1,0 +1,20 @@
+:root {
+	--ck-gallery-transition: 0.5s ease;
+}
+
+.ck [ck-gallery-current-item] {
+	display: flex;
+	overflow: hidden;
+}
+
+.ck [ck-gallery-current-item] > * {
+	flex-shrink: 0;
+	width: 100%;
+	/* TODO: re-enable animation when button positioning can be delayed */
+	/*transition: transform 0.5s ease;*/
+}
+
+.ck .ck-gallery-controls {
+	display: flex;
+	align-items: center;
+}

@@ -13,6 +13,8 @@ import PlaceholderElement from './placeholderelement';
 
 /**
  * Allow an arbitrary list of elements of a given type.
+ *
+ * Automatically inserts placeholders between elements that allow injection of new children.
  */
 export default class ContainerElement extends Plugin {
 	/**
@@ -57,9 +59,7 @@ export default class ContainerElement extends Plugin {
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const el = viewWriter.createContainerElement(
 					templateElement.tagName,
-					Object.assign( getModelAttributes( templateElement, modelElement ), {
-						'ck-container-layout': templateElement.configuration.layout || 'vertical',
-					} )
+					getModelAttributes( templateElement, modelElement )
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );
 			}

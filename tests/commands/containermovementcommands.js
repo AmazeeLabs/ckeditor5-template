@@ -9,7 +9,7 @@ import ContainerElement from '../../src/elements/containerelement';
 import MoveTemplateUpCommand from '../../src/commands/movetemplateupcommand';
 import MoveTemplateDownCommand from '../../src/commands/movetemplatedowncommand';
 
-describe( 'MoveTemplateCommands', () => {
+describe( 'ContainerMovementCommands', () => {
 	let editorElement, editor, up, down, model;
 
 	testUtils.createSinonSandbox();
