@@ -1,0 +1,7 @@
+.ck .ck-widget:hover {
+	outline-color: transparent;
+}
+
+.ck .ck-widget.hovered {
+	outline-color: var(--ck-color-widget-hover-border);
+}
