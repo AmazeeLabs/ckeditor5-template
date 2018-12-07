@@ -14,7 +14,7 @@ export default class SetCurrentItemCommand extends TemplateCommandBase {
 	constructor( editor ) {
 		super( editor );
 		this.set( 'currentItem', 0 );
-		this.set( 'itemCount', 0 );
+		this.set( 'itemCount', 1 );
 	}
 
 	/**
@@ -46,11 +46,19 @@ export default class SetCurrentItemCommand extends TemplateCommandBase {
 		const modelElement = currentElement.getChild( options.index );
 
 		if ( viewElement ) {
+			// Wait for the gallery transition to finish and set the selection afterwards.
+			// Selection might not be set properly as long as the element is not actually visible.
+			const domElement = this.editor.editing.view.domConverter.mapViewToDom( viewElement.getChild( 0 ) );
+			const handler = domElement.addEventListener( 'transitionend', () => {
+				this.editor.model.change( writer => {
+					writer.setSelection( modelElement, 'on' );
+				} );
+				domElement.removeEventListener( 'transitionend', handler );
+			} );
+
+			this.currentItem = options.index;
 			this.editor.editing.view.change( writer => {
 				writer.setAttribute( 'ck-gallery-current-item', options.index, viewElement );
-			} );
-			this.editor.model.change( writer => {
-				writer.setSelection( modelElement, 'on' );
 			} );
 		}
 	}

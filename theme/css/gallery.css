@@ -10,8 +10,7 @@
 .ck [ck-gallery-current-item] > * {
 	flex-shrink: 0;
 	width: 100%;
-	/* TODO: re-enable animation when button positioning can be delayed */
-	/*transition: transform 0.5s ease;*/
+	transition: transform 0.5s ease;
 }
 
 .ck .ck-gallery-controls {
