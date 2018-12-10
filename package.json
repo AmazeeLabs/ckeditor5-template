@@ -1,6 +1,6 @@
 {
   "name": "@amazee/ckeditor5-template",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Template feature for CKEditor 5.",
   "keywords": [
     "ckeditor",
