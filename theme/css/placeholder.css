@@ -1,0 +1,4 @@
+.ck-placeholder-ui {
+	border: 1px dotted #CCC;
+	padding: var(--ck-spacing-small);
+}

@@ -141,8 +141,8 @@ export default class GalleryUI extends Plugin {
 			element: this.galleryControls.element,
 			target: domElement,
 			positions: [
-				( targetRect, controlsRect ) => ( {
-					top: targetRect.top - controlsRect.height,
+				targetRect => ( {
+					top: targetRect.top,
 					left: targetRect.left,
 				} )
 			]
@@ -155,9 +155,9 @@ export default class GalleryUI extends Plugin {
 			element: this.moveLeftButton.element,
 			target: domElement,
 			positions: [
-				targetRect => ( {
+				( targetRect, buttonRect ) => ( {
 					top: targetRect.top,
-					left: targetRect.left + targetRect.width,
+					left: targetRect.left + targetRect.width - buttonRect.width * 3,
 				} )
 			]
 		} );
@@ -170,8 +170,8 @@ export default class GalleryUI extends Plugin {
 			target: domElement,
 			positions: [
 				( targetRect, buttonRect ) => ( {
-					top: targetRect.top + buttonRect.height,
-					left: targetRect.left + targetRect.width,
+					top: targetRect.top,
+					left: targetRect.left + targetRect.width - buttonRect.width * 2,
 				} )
 			]
 		} );

@@ -3,6 +3,11 @@
 }
 
 .ck [ck-gallery-current-item] {
+	/* Add a top padding that is as high as the ui elements. */
+	padding-top: var(--ck-ui-component-min-height);
+}
+
+.ck [ck-gallery-current-item] {
 	display: flex;
 	overflow: hidden;
 }

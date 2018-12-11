@@ -10,6 +10,8 @@ import { downcastTemplateElement, getModelAttributes } from '../utils/conversion
 import TemplateEditing from '../templateediting';
 import PlaceholderView from '../ui/views/placeholderview';
 
+import '../../theme/css/placeholder.css';
+
 /**
  * Allow to position placeholders in a document that can be filled with actual elements.
  */
