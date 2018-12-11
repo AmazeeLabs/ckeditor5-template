@@ -102,7 +102,8 @@ export default class GalleryElement extends Plugin {
 			const galleries = domRoot.querySelectorAll( '[ck-gallery-current-item]' );
 			for ( const gallery of galleries ) {
 				for ( const item of gallery.childNodes ) {
-					item.style.transform = `translateX(calc(${ gallery.getAttribute( 'ck-gallery-current-item' ) } * -100%)`;
+					item.style.transform = `translateX(calc(${ gallery.getAttribute( 'ck-gallery-current-item' ) } * -100%)) scale(0.98)`;
+					item.style.transformOrigin = 'center';
 				}
 			}
 		} );

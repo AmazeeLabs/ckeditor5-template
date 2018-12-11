@@ -93,7 +93,7 @@ describe( 'SetCurrentItemCommand', () => {
 			command.execute( { index: 2 } );
 			const items = editor.editing.view.getDomRoot().querySelectorAll( 'div.a' );
 			for ( const item of items ) {
-				expect( item.style.transform ).to.equal( 'translateX(calc(-200%))' );
+				expect( item.style.transform ).to.equal( 'translateX(calc(-200%)) scale(0.98)' );
 			}
 		} );
 	} );
