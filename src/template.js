@@ -14,6 +14,10 @@ import RemoveTemplateUI from './ui/removetemplateui';
 import ContainerUI from './ui/containerui';
 import TemplateAttributeUI from './ui/templateattributeui';
 import GalleryUI from './ui/galleryui';
+import TemplateId from './templateid';
+import TextLimit from './textlimit';
+import HoveredWidget from './hoveredwidget';
+import GalleryElement from './elements/galleryelement';
 
 /**
  * Root template plugin, requiring all auxiliary plugins to enable template functionality.
@@ -41,15 +45,19 @@ export default class Template extends Plugin {
 	static get requires() {
 		return [
 			TemplateEditing,
-			TemplateUI,
 			MasterTemplate,
 			TextElement,
 			PlaceholderElement,
 			ContainerElement,
+			GalleryElement,
+			TemplateUI,
 			RemoveTemplateUI,
 			ContainerUI,
 			TemplateAttributeUI,
 			GalleryUI,
+			TemplateId,
+			TextLimit,
+			HoveredWidget
 		];
 	}
 
