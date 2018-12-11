@@ -116,9 +116,16 @@ describe( 'TemplateEditing', () => {
 		expect( editor.getData() ).to.equal( '<div class="parent"><div class="nested">&nbsp;</div></div>' );
 	} );
 
-	it( 'downcasts attributes', () => {
+	it( 'downcasts attributes to data', () => {
 		setModelData( model, '<ck__attribute data-foo="bar"></ck__attribute>' );
 		expect( editor.getData() ).to.equal( '<div class="attribute" data-foo="bar">&nbsp;</div>' );
+	} );
+
+	it( 'downcasts attributes to editing', () => {
+		setModelData( model, '<ck__attribute data-foo="bar"></ck__attribute>' );
+		expect( getViewData( view ) ).to.equal(
+			'[<div class="attribute ck-widget ck-widget_selected" contenteditable="false" data-foo="bar"></div>]'
+		);
 	} );
 
 	it( 'fixes missing children ', () => {

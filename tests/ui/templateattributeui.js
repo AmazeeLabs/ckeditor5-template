@@ -1,14 +1,15 @@
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
+import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
+import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 import TemplateAttributeUI from '../../src/ui/templateattributeui';
 import TemplateAttributeCommand from '../../src/commands/templateattributecommand';
 import InputTextView from '@ckeditor/ckeditor5-ui/src/inputtext/inputtextview';
 import DropdownView from '@ckeditor/ckeditor5-ui/src/dropdown/dropdownview';
 
 describe( 'TemplateAttributeUI', () => {
-	let editorElement, editor, model;
+	let editorElement, editor, model, view;
 
 	testUtils.createSinonSandbox();
 
@@ -68,6 +69,7 @@ describe( 'TemplateAttributeUI', () => {
 			.then( newEditor => {
 				editor = newEditor;
 				model = editor.model;
+				view = editor.editing.view;
 			} );
 	} );
 
@@ -103,6 +105,27 @@ describe( 'TemplateAttributeUI', () => {
 			setModelData( model, '[<ck__b></ck__b>]' );
 			const button = editor.plugins.get( TemplateAttributeUI ).configureButton;
 			expect( button.isVisible ).to.be.true;
+		} );
+	} );
+
+	describe( 'execute()', () => {
+		it( 'sets the model value', () => {
+			setModelData( model, '[<ck__b></ck__b>]' );
+			editor.execute( 'setTemplateAttribute:text', { value: 'abc' } );
+			expect( getModelData( model ) ).to.equal( '[<ck__b text="abc"></ck__b>]' );
+		} );
+		it( 'data is reflected in the view', () => {
+			setModelData( model, '[<ck__b></ck__b>]' );
+			editor.execute( 'setTemplateAttribute:text', { value: 'abc' } );
+			expect( getViewData( view ) ).to.equal(
+				'[<div class="b ck-widget ck-widget_selected" ' +
+				'contenteditable="false" text="abc"></div>]'
+			);
+		} );
+		it( 'data is reflected in the data', () => {
+			setModelData( model, '[<ck__b></ck__b>]' );
+			editor.execute( 'setTemplateAttribute:text', { value: 'abc' } );
+			expect( editor.getData() ).to.equal( '<div class="b" text="abc">&nbsp;</div>' );
 		} );
 	} );
 } );

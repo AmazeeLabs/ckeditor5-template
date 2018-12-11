@@ -50,6 +50,7 @@ export function upcastTemplateElement( editor, config ) {
  */
 export function getModelAttributes( templateElement, modelElement ) {
 	return Object.keys( templateElement.attributes )
+		.filter( attr => !!modelElement.getAttribute( attr ) )
 		.map( attr => ( { [ attr ]: modelElement.getAttribute( attr ) } ) )
 		.concat( [ { class: templateElement.classes } ] )
 		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
