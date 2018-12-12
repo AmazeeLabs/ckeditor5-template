@@ -52,7 +52,7 @@ export function getModelAttributes( templateElement, modelElement ) {
 	return Object.keys( templateElement.attributes )
 		.filter( attr => !!modelElement.getAttribute( attr ) )
 		.map( attr => ( { [ attr ]: modelElement.getAttribute( attr ) } ) )
-		.concat( [ { class: templateElement.classes } ] )
+		.concat( [ { class: templateElement.classes.join( ' ' ) } ] )
 		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
 }
 

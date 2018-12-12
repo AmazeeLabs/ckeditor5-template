@@ -24,6 +24,10 @@ describe( 'TemplateEditing', () => {
 						label: 'Simple',
 						template: '<div class="simple"></div>',
 					},
+					classes: {
+						label: 'Classes',
+						template: '<div class="b a"></div>',
+					},
 					attribute: {
 						label: 'Simple',
 						template: '<div class="attribute" data-foo="foo"></div>',
@@ -68,6 +72,21 @@ describe( 'TemplateEditing', () => {
 	it( 'upcasts simple elements', () => {
 		editor.setData( '<div class="simple"></div>' );
 		expect( getModelData( model ) ).to.equal( '[<ck__simple></ck__simple>]' );
+	} );
+
+	it( 'upcasts elements with multiple classes', () => {
+		editor.setData( '<div class="a b"></div>' );
+		expect( getModelData( model ) ).to.equal( '[<ck__classes></ck__classes>]' );
+	} );
+
+	it( 'properly data downcasts elements with multiple classes', () => {
+		setModelData( model, '<ck__classes></ck__classes>' );
+		expect( editor.getData() ).to.equal( '<div class="a b">&nbsp;</div>' );
+	} );
+
+	it( 'properly editing downcasts elements with multiple classes', () => {
+		setModelData( model, '<ck__classes></ck__classes>' );
+		expect( getViewData( view ) ).to.equal( '[<div class="a b ck-widget ck-widget_selected" contenteditable="false"></div>]' );
 	} );
 
 	it( 'ignores unknown elements ', () => {
