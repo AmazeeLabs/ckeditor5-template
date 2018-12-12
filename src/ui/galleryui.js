@@ -157,7 +157,7 @@ export default class GalleryUI extends Plugin {
 			positions: [
 				( targetRect, buttonRect ) => ( {
 					top: targetRect.top,
-					left: targetRect.left + targetRect.width - buttonRect.width * 3,
+					left: targetRect.left + targetRect.width - buttonRect.width * 2,
 				} )
 			]
 		} );
@@ -171,7 +171,7 @@ export default class GalleryUI extends Plugin {
 			positions: [
 				( targetRect, buttonRect ) => ( {
 					top: targetRect.top,
-					left: targetRect.left + targetRect.width - buttonRect.width * 2,
+					left: targetRect.left + targetRect.width - buttonRect.width,
 				} )
 			]
 		} );

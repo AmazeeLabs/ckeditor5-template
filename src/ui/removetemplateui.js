@@ -72,20 +72,31 @@ export default class RemoveTemplateUI extends Plugin {
 			return;
 		}
 
+		const inGallery = modelElement.parent &&
+			this.editor.templates.getElementInfo( modelElement.parent.name ) &&
+			this.editor.templates.getElementInfo( modelElement.parent.name ).type === 'gallery';
+
 		this.removeButton.isVisible = true;
 
-		const viewElement = this.editor.editing.mapper.toViewElement( modelElement );
+		const viewElement = this.editor.editing.mapper.toViewElement( inGallery ? modelElement.parent : modelElement );
 		const domElement = this.editor.editing.view.domConverter.mapViewToDom( viewElement );
 
 		const buttonPosition = getOptimalPosition( {
 			element: this.removeButton.element,
 			target: domElement,
-			positions: [
-				( targetRect, buttonRect ) => ( {
-					top: targetRect.top - buttonRect.height,
-					left: targetRect.left + targetRect.width,
-				} )
-			]
+			positions: inGallery ?
+				[
+					( targetRect, buttonRect ) => ( {
+						top: targetRect.top,
+						left: targetRect.left + targetRect.width - buttonRect.width * 3,
+					} )
+				] :
+				[
+					targetRect => ( {
+						top: targetRect.top,
+						left: targetRect.left + targetRect.width,
+					} )
+				]
 		} );
 
 		this.removeButton.top = buttonPosition.top;

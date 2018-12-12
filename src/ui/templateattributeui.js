@@ -448,8 +448,8 @@ export default class TemplateAttributeUI extends Plugin {
 			target: domElement,
 			positions: [
 				( targetRect, buttonRect ) => ( {
-					top: targetRect.top - buttonRect.height,
-					left: targetRect.left + targetRect.width - buttonRect.width,
+					top: targetRect.top + buttonRect.height,
+					left: targetRect.left + targetRect.width,
 				} )
 			]
 		} );
