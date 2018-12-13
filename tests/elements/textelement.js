@@ -20,7 +20,7 @@ describe( 'TextElement', () => {
 				templates: {
 					simple: {
 						label: 'Simple',
-						template: '<p class="simple" ck-type="text"></p>',
+						template: '<p class="simple" itemprop="content" ck-type="text"></p>',
 					},
 					placeholder: {
 						label: 'Placeholder',
@@ -63,14 +63,14 @@ describe( 'TextElement', () => {
 	it( 'simple text field', () => {
 		setModelData( model, '<ck__simple></ck__simple>' );
 		expect( getViewData( view ) ).to.equal( '[' +
-			'<p class="' + editableClasses + ' simple" contenteditable="true"></p>' +
+			'<p class="' + editableClasses + ' simple" contenteditable="true" itemprop="content"></p>' +
 			']' );
 	} );
 
 	it( 'simple text field with content', () => {
 		setModelData( model, '<ck__simple>F[o]o</ck__simple>' );
 		expect( getViewData( view ) ).to.equal(
-			'<p class="ck-editor__editable ck-editor__nested-editable ck-widget simple" contenteditable="true">F{o}o</p>'
+			'<p class="ck-editor__editable ck-editor__nested-editable ck-widget simple" contenteditable="true" itemprop="content">F{o}o</p>'
 		);
 	} );
 

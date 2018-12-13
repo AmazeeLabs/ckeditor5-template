@@ -27,7 +27,7 @@ describe( 'Gallery', () => {
 					},
 					gallery: {
 						label: 'Container',
-						template: '<div class="gallery" ck-type="gallery" ck-contains="a b"></div>',
+						template: '<div class="gallery" itemprop="gallery" ck-type="gallery" ck-contains="a b"></div>',
 					}
 				}
 			} )
@@ -46,7 +46,7 @@ describe( 'Gallery', () => {
 	it( 'is pre-filled with at least one placeholder', () => {
 		setModelData( model, '<ck__gallery></ck__gallery>' );
 		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__gallery>',
+			'<ck__gallery itemprop="gallery">',
 			'<ck__gallery__placeholder></ck__gallery__placeholder>',
 			'</ck__gallery>',
 			']' ].join( '' ) );
@@ -54,12 +54,12 @@ describe( 'Gallery', () => {
 
 	it( 'doesn\'t add placeholders to non-empty elements', () => {
 		setModelData( model, [
-			'<ck__gallery>',
+			'<ck__gallery itemprop="gallery">',
 			'<ck__a></ck__a>',
 			'</ck__gallery>'
 		].join( '' ) );
 		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__gallery>',
+			'<ck__gallery itemprop="gallery">',
 			'<ck__a></ck__a>',
 			'</ck__gallery>',
 			']' ].join( '' ) );
@@ -67,19 +67,19 @@ describe( 'Gallery', () => {
 
 	it( 'allows to select placeholders', () => {
 		setModelData( model, [
-			'<ck__gallery>',
+			'<ck__gallery itemprop="gallery">',
 			'[<ck__gallery__placeholder></ck__gallery__placeholder>]',
 			'</ck__gallery>'
 		].join( '' ) );
 
 		expect( getModelData( model ) ).to.equal( [
-			'<ck__gallery>',
+			'<ck__gallery itemprop="gallery">',
 			'[<ck__gallery__placeholder></ck__gallery__placeholder>]',
 			'</ck__gallery>',
 		].join( '' ) );
 
 		expect( getViewData( view ) ).to.equal( [
-			'<div ck-gallery-current-item="0" class="ck-widget gallery" contenteditable="false">',
+			'<div ck-gallery-current-item="0" class="ck-widget gallery" contenteditable="false" itemprop="gallery">',
 			'[<div class=" ck-widget ck-widget_selected" contenteditable="false">',
 			'<div class="ck-placeholder-ui"></div>',
 			'</div>]',
@@ -93,7 +93,7 @@ describe( 'Gallery', () => {
 		const command = new ReplaceTemplateCommand( editor );
 
 		setModelData( model, [
-			'<ck__gallery>',
+			'<ck__gallery itemprop="gallery">',
 			'[<ck__gallery__placeholder></ck__gallery__placeholder>]',
 			'</ck__gallery>'
 		].join( '' ) );
@@ -102,7 +102,7 @@ describe( 'Gallery', () => {
 		command.execute( { template: 'ck__a' } );
 
 		expect( getModelData( model ) ).to.equal( [
-			'<ck__gallery>',
+			'<ck__gallery itemprop="gallery">',
 			'[<ck__a></ck__a>]',
 			'</ck__gallery>',
 		].join( '' ) );
@@ -110,7 +110,7 @@ describe( 'Gallery', () => {
 
 	it( 'it sets the current element', () => {
 		setModelData( model, [
-			'<ck__gallery>',
+			'<ck__gallery itemprop="gallery">',
 			'[<ck__a></ck__a>]',
 			'<ck__a></ck__a>',
 			'<ck__a></ck__a>',
@@ -118,7 +118,7 @@ describe( 'Gallery', () => {
 		].join( '' ) );
 
 		expect( getViewData( view ) ).to.equal( [
-			'<div ck-gallery-current-item="0" class="ck-widget gallery" contenteditable="false">',
+			'<div ck-gallery-current-item="0" class="ck-widget gallery" contenteditable="false" itemprop="gallery">',
 			'[<div class="a ck-widget ck-widget_selected" contenteditable="false"></div>]',
 			'<div class="a ck-widget" contenteditable="false"></div>',
 			'<div class="a ck-widget" contenteditable="false"></div>',

@@ -27,7 +27,7 @@ describe( 'Container', () => {
 					},
 					container: {
 						label: 'Container',
-						template: '<div class="container" ck-type="container" ck-contains="a b"></div>',
+						template: '<div class="container" ck-type="container" ck-contains="a b" itemprop="container"></div>',
 					}
 				}
 			} )
@@ -46,7 +46,7 @@ describe( 'Container', () => {
 	it( 'is pre-filled with at least one placeholder', () => {
 		setModelData( model, '<ck__container></ck__container>' );
 		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'<ck__container__placeholder></ck__container__placeholder>',
 			'</ck__container>',
 			']' ].join( '' ) );
@@ -54,13 +54,13 @@ describe( 'Container', () => {
 
 	it( 'removes double placeholders', () => {
 		setModelData( model, [
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'<ck__container__placeholder></ck__container__placeholder>',
 			'<ck__container__placeholder></ck__container__placeholder>',
 			'</ck__container>'
 		].join( '' ) );
 		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'<ck__container__placeholder></ck__container__placeholder>',
 			'</ck__container>',
 			']' ].join( '' ) );
@@ -68,12 +68,12 @@ describe( 'Container', () => {
 
 	it( 'wraps elements in placeholders', () => {
 		setModelData( model, [
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'<ck__a></ck__a>',
 			'</ck__container>'
 		].join( '' ) );
 		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'<ck__container__placeholder></ck__container__placeholder>',
 			'<ck__a></ck__a>',
 			'<ck__container__placeholder></ck__container__placeholder>',
@@ -83,14 +83,14 @@ describe( 'Container', () => {
 
 	it( 'puts placeholders between each element', () => {
 		setModelData( model, [
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'<ck__a></ck__a>',
 			'<ck__a></ck__a>',
 			'<ck__a></ck__a>',
 			'</ck__container>'
 		].join( '' ) );
 		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'<ck__container__placeholder></ck__container__placeholder>',
 			'<ck__a></ck__a>',
 			'<ck__container__placeholder></ck__container__placeholder>',
@@ -104,19 +104,19 @@ describe( 'Container', () => {
 
 	it( 'allows to select placeholders', () => {
 		setModelData( model, [
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'[<ck__container__placeholder></ck__container__placeholder>]',
 			'</ck__container>'
 		].join( '' ) );
 
 		expect( getModelData( model ) ).to.equal( [
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'[<ck__container__placeholder></ck__container__placeholder>]',
 			'</ck__container>',
 		].join( '' ) );
 
 		expect( getViewData( view ) ).to.equal( [
-			'<div class="ck-widget container" contenteditable="false">',
+			'<div class="ck-widget container" contenteditable="false" itemprop="container">',
 			'[<div class=" ck-widget ck-widget_selected" contenteditable="false">',
 			'<div class="ck-placeholder-ui"></div>',
 			'</div>]',
@@ -130,7 +130,7 @@ describe( 'Container', () => {
 		const command = new ReplaceTemplateCommand( editor );
 
 		setModelData( model, [
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'[<ck__container__placeholder></ck__container__placeholder>]',
 			'</ck__container>'
 		].join( '' ) );
@@ -139,7 +139,7 @@ describe( 'Container', () => {
 		command.execute( { template: 'ck__a' } );
 
 		expect( getModelData( model ) ).to.equal( [
-			'<ck__container>',
+			'<ck__container itemprop="container">',
 			'<ck__container__placeholder></ck__container__placeholder>',
 			'[<ck__a></ck__a>]',
 			'<ck__container__placeholder></ck__container__placeholder>',
