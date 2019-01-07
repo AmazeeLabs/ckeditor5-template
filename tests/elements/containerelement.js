@@ -28,6 +28,10 @@ describe( 'Container', () => {
 					container: {
 						label: 'Container',
 						template: '<div class="container" ck-type="container" ck-contains="a b" itemprop="container"></div>',
+					},
+					containersingle: {
+						label: 'Container Single',
+						template: '<div class="container" ck-type="container" ck-contains="b" itemprop="container"></div>',
 					}
 				}
 			} )
@@ -146,4 +150,20 @@ describe( 'Container', () => {
 			'</ck__container>',
 		].join( '' ) );
 	} );
+
+	it( 'fill container if only one element is available', () => {
+		setModelData( model, [
+			'<ck__containersingle itemprop="container">',
+			'</ck__containersingle>'
+		].join( '' ) );
+
+		expect( getModelData( model ) ).to.equal( [
+			'[<ck__containersingle itemprop="container">',
+			'<ck__containersingle__placeholder></ck__containersingle__placeholder>',
+			'<ck__b></ck__b>',
+			'<ck__containersingle__placeholder></ck__containersingle__placeholder>',
+			'</ck__containersingle>]',
+		].join( '' ) );
+	} );
 } );
+
