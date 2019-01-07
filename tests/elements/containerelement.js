@@ -32,6 +32,10 @@ describe( 'Container', () => {
 					containersingle: {
 						label: 'Container Single',
 						template: '<div class="container" ck-type="container" ck-contains="b" itemprop="container"></div>',
+					},
+					c: {
+						label: 'C',
+						template: '<div class="container" ck-type="container" ck-contains="containersingle" itemprop="container"></div>',
 					}
 				}
 			} )
@@ -151,7 +155,7 @@ describe( 'Container', () => {
 		].join( '' ) );
 	} );
 
-	it( 'fill container if only one element is available', () => {
+	it( 'fills container if only one element is available', () => {
 		setModelData( model, [
 			'<ck__containersingle itemprop="container">',
 			'</ck__containersingle>'
@@ -165,5 +169,23 @@ describe( 'Container', () => {
 			'</ck__containersingle>]',
 		].join( '' ) );
 	} );
-} );
 
+	it( 'fills nested containers with placeholders', () => {
+		setModelData( model, [
+			'<ck__c itemprop="container">',
+			'</ck__c>'
+		].join( '' ) );
+
+		expect( getModelData( model ) ).to.equal( [
+			'[<ck__c itemprop="container">',
+			'<ck__c__placeholder></ck__c__placeholder>',
+			'<ck__containersingle itemprop="container">',
+			'<ck__containersingle__placeholder></ck__containersingle__placeholder>',
+			'<ck__b></ck__b>',
+			'<ck__containersingle__placeholder></ck__containersingle__placeholder>',
+			'</ck__containersingle>',
+			'<ck__c__placeholder></ck__c__placeholder>',
+			'</ck__c>]',
+		].join( '' ) );
+	} );
+} );
