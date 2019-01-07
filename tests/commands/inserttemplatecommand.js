@@ -3,7 +3,6 @@ import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import { downcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
 import InsertTemplateCommand from '../../src/commands/inserttemplatecommand';
 import TemplateEditing from '../../src/templateediting';
@@ -61,7 +60,7 @@ describe( 'InsertTemplateCommand', () => {
 		it( 'should be true when the selection directly in a block', () => {
 			model.schema.register( 'block', { inheritAllFrom: '$block' } );
 			model.schema.extend( '$text', { allowIn: 'block' } );
-			editor.conversion.for( 'downcast' ).add( downcastElementToElement( { model: 'block', view: 'block' } ) );
+			editor.conversion.for( 'downcast' ).elementToElement( { model: 'block', view: 'block' } );
 
 			setModelData( model, '<block>foo[]</block>' );
 			expect( command.isEnabled ).to.be.true;
