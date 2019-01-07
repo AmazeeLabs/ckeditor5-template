@@ -209,7 +209,7 @@ export default class TemplateEditing extends Plugin {
 				);
 			},
 			converterPriority: 'low',
-		} ));
+		} ) );
 
 		// Default data downcast conversions for template elements.
 		this.editor.conversion.for( 'dataDowncast' ).add( downcastTemplateElement( this.editor, {
