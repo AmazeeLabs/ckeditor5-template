@@ -32,6 +32,14 @@ describe( 'Placeholder', () => {
 					placeholder: {
 						label: 'Placeholder',
 						template: '<div class="placeholder"><div ck-type="placeholder" ck-conversions="a b"></div></div>',
+					},
+					placeholdersingle: {
+						lable: 'Placeholder Single',
+						template: '<div ck-type="placeholder" ck-conversions="a"></div>'
+					},
+					placeholdersingleb: {
+						lable: 'Placeholder Single',
+						template: '<div ck-type="placeholder" ck-conversions="b"></div>'
 					}
 				}
 			} )
@@ -93,6 +101,19 @@ describe( 'Placeholder', () => {
 			'<div class="ck-widget placeholder" contenteditable="false">',
 			'[<div class=" ck-widget ck-widget_selected" contenteditable="false"><div class="ck-placeholder-ui"></div></div>]',
 			'</div>'
+		].join( '' ) );
+	} );
+
+	it( 'renders element instead of placeholder out of containers', () => {
+		setModelData( model, [
+			'<ck__placeholdersingle>',
+			'</ck__placeholdersingle>',
+			'<ck__placeholdersingleb>',
+			'</ck__placeholdersingleb>',
+		].join( '' ) );
+
+		expect( getModelData( model ) ).to.equal( [
+			'<ck__a></ck__a>[<ck__b></ck__b>]',
 		].join( '' ) );
 	} );
 } );

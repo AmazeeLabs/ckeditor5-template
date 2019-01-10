@@ -34,6 +34,10 @@ ClassicEditor
 				label: 'Placeholder',
 				template: '<div class="placeholder" ck-type="placeholder" ck-conversions="a b"></div>',
 			},
+			placeholdersingle: {
+				label: 'Placeholder Single',
+				template: '<div class="placeholder" ck-type="placeholder" ck-conversions="a"></div>',
+			},
 		},
 	} )
 	.then( editor => {
