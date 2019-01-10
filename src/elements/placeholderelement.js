@@ -64,9 +64,9 @@ export default class PlaceholderElement extends Plugin {
 		// Postfix elements to make sure a templates structure is always correct.
 		this.editor.templates.registerPostFixer( [ 'placeholder' ], ( templateElement, item, writer ) => {
 			let changed = false;
-			if (!templateElement.parent || !templateElement.parent.configuration) {
-				const conversions = templateElement.configuration.conversions.split(' ');
-				if (conversions.length == 1) {
+			if ( !templateElement.parent || !templateElement.parent.configuration ) {
+				const conversions = templateElement.configuration.conversions.split( ' ' );
+				if ( conversions.length == 1 ) {
 					writer.insertElement( `ck__${ conversions[ 0 ] }`, item, 'before' );
 					writer.setSelection( item.previousSibling, 'on' );
 					writer.remove( item );
