@@ -22,9 +22,21 @@ ClassicEditor
 				label: 'B',
 				template: '<p class="b" ck-type="text">B</p>',
 			},
+			container: {
+				label: 'Container',
+				template: '<div class="wrapper"><div class="container" ck-type="container" ck-contains="a b"></div></div>',
+			},
+			containersingle: {
+				label: 'Container Single',
+				template: '<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"></div></div>',
+			},
 			placeholder: {
 				label: 'Placeholder',
 				template: '<div class="placeholder" ck-type="placeholder" ck-conversions="a b"></div>',
+			},
+			placeholdersingle: {
+				label: 'Placeholder Single',
+				template: '<div class="placeholder" ck-type="placeholder" ck-conversions="a"></div>',
 			},
 		},
 	} )
