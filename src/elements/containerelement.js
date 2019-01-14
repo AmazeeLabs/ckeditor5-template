@@ -99,7 +99,7 @@ export default class ContainerElement extends Plugin {
 				// If there are no children, inject at least one placeholder.
 				// If the only one element is allowed then insert it. Placeholder
 				// will be created on the next step.
-				if ( templateElement.contains.length == 1 ) {
+				if ( templateElement.contains.length === 1 ) {
 					writer.insertElement( `ck__${ templateElement.contains[ 0 ] }`, item, 'end' );
 				} else {
 					writer.insertElement( templateElement.name + '__placeholder', item, 'end' );

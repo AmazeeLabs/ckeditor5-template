@@ -28,6 +28,10 @@ describe( 'Gallery', () => {
 					gallery: {
 						label: 'Container',
 						template: '<div class="gallery" itemprop="gallery" ck-type="gallery" ck-contains="a b"></div>',
+					},
+					gallerysingle: {
+						label: 'Gallery Single',
+						template: '<div class="gallery" itemprop="gallery" ck-type="gallery" ck-contains="a"></div>',
 					}
 				}
 			} )
@@ -123,6 +127,19 @@ describe( 'Gallery', () => {
 			'<div class="a ck-widget" contenteditable="false"></div>',
 			'<div class="a ck-widget" contenteditable="false"></div>',
 			'</div>',
+		].join( '' ) );
+	} );
+
+	it( 'fills container if only one element is available', () => {
+		setModelData( model, [
+			'<ck__gallerysingle itemprop="container">',
+			'</ck__gallerysingle>'
+		].join( '' ) );
+
+		expect( getModelData( model ) ).to.equal( [
+			'[<ck__gallerysingle itemprop="container">',
+			'<ck__a></ck__a>',
+			'</ck__gallerysingle>]',
 		].join( '' ) );
 	} );
 } );

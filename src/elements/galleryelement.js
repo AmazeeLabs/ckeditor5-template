@@ -112,8 +112,11 @@ export default class GalleryElement extends Plugin {
 		this.editor.templates.registerPostFixer( [ 'gallery' ], ( templateElement, item, writer ) => {
 			let changed = false;
 			if ( item.childCount === 0 ) {
-				// If there are no children, inject at least one placeholder.
-				writer.insertElement( templateElement.name + '__placeholder', item, 'end' );
+				if ( templateElement.contains.length === 1 ) {
+					writer.insertElement( `ck__${ templateElement.contains[ 0 ] }`, item, 'end' );
+				} else {
+					writer.insertElement( templateElement.name + '__placeholder', item, 'end' );
+				}
 				changed = true;
 			}
 
