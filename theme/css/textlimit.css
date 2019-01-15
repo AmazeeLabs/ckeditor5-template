@@ -26,3 +26,11 @@
 .ck .ck-editor__nested-editable.ck-text-field-limit-exceeded {
 	border-color: var(--ck-color-text-limit-exceeded);
 }
+
+.ck .ck-widget.ck-widget_selected.ck-required-validation-error, .ck .ck-widget.ck-widget_selected.ck-required-validation-error:hover  {
+	outline-color: red;
+}
+
+.ck-required-validation-error {
+	outline: 2px solid red !important;
+}
