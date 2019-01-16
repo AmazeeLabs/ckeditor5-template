@@ -26,7 +26,7 @@ export default class Validation extends Plugin {
 	 */
 	_updateTooltipDisplay() {
 		const result = this.editor.templates.findSelectedTemplateElement( info => {
-			return info.configuration.min;
+			return info.configuration.validation;
 		} );
 
 		if ( !result.element || this.editor.isReadOnly ) {
@@ -34,11 +34,7 @@ export default class Validation extends Plugin {
 			return;
 		}
 
-		const name = result.info.configuration.name ? result.info.configuration.name : result.info.configuration.type;
-		if ( !this.templates[ name ] ) {
-			return;
-		}
-		const validation = this.templates[ name ].validation;
+		const validation = result.info.configuration.validation;
 
 		if ( !validation ) {
 			return;
@@ -50,8 +46,11 @@ export default class Validation extends Plugin {
 
 		const viewElement = this.editor.editing.mapper.toViewElement( result.element );
 		const domElement = this.editor.editing.view.domConverter.mapViewToDom( viewElement );
+		const elementContent = domElement.innerHTML.replace( /[\u200B-\u200D\uFEFF]/g, '' ).trim();
 
-		const match = domElement.innerHTML.match( validation );
+		const regex = new RegExp( validation, 'gm' );
+		const match = elementContent.match( regex );
+
 		if ( ( !match && min > 1 ) || ( min > 1 && match && match.length < min ) ) {
 			const length = match ? match.length : 0;
 			this._showTooltip(
