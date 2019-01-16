@@ -22,11 +22,14 @@ export default class AddItemCommand extends TemplateCommandBase {
 		const currentElement = this.currentElement;
 		const itemCount = this.currentElement.childCount;
 		const viewElement = this.editor.editing.mapper.toViewElement( currentElement );
+		const templateElement = this.editor.templates.getElementInfo( currentElement.name );
 
 		this.editor.model.change( writer => {
-			const placeholder = writer.createElement( `${ currentElement.name }__placeholder` );
-			writer.append( placeholder, currentElement );
-			writer.setSelection( placeholder, 'on' );
+			const element = templateElement.configuration.contains.length === 1 ?
+				writer.createElement( `ck__${ templateElement.configuration.contains[ 0 ] }` ) :
+				writer.createElement( `${ currentElement.name }__placeholder` );
+			writer.append( element, currentElement );
+			writer.setSelection( element, 'on' );
 		} );
 
 		this.editor.editing.view.change( writer => {

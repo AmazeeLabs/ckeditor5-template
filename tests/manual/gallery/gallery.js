@@ -26,6 +26,10 @@ ClassicEditor
 				label: 'Gallery',
 				template: '<div class="gallery" ck-type="gallery" ck-contains="a b"></div>',
 			},
+			gallerysingle: {
+				label: 'Gallery Single',
+				template: '<div class="gallery" ck-type="gallery" ck-contains="a"></div>',
+			},
 		},
 	} )
 	.then( editor => {
