@@ -45,7 +45,7 @@ export default class Validation extends Plugin {
 
 		const viewElement = this.editor.editing.mapper.toViewElement( result.element );
 		const domElement = this.editor.editing.view.domConverter.mapViewToDom( viewElement );
-		const elementContent = domElement.innerHTML.replace( /[\u200B-\u200D\uFEFF]/g, '' ).trim();
+		const elementContent = domElement.innerText.replace( /[\u200B-\u200D\uFEFF]/g, '' ).trim();
 
 		const regex = new RegExp( validation, 'gm' );
 		const match = elementContent.match( regex );
