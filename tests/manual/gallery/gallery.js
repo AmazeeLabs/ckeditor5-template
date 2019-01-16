@@ -22,13 +22,17 @@ ClassicEditor
 				label: 'B',
 				template: '<div class="b">B</div>',
 			},
+			test: {
+				label: 'Test',
+				template: '<div class="a">A</div>',
+			},
 			gallery: {
 				label: 'Gallery',
 				template: '<div class="gallery" ck-type="gallery" ck-contains="a b"></div>',
 			},
 			gallerysingle: {
 				label: 'Gallery Single',
-				template: '<div class="gallery" ck-type="gallery" ck-contains="a"></div>',
+				template: '<div class="gallery" ck-type="gallery" ck-contains="test"></div>',
 			},
 		},
 	} )

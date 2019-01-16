@@ -25,8 +25,8 @@ export default class AddItemCommand extends TemplateCommandBase {
 		const templateElement = this.editor.templates.getElementInfo( currentElement.name );
 
 		this.editor.model.change( writer => {
-			const element = templateElement.configuration.contains.length === 1 ?
-				writer.createElement( `ck__${ templateElement.configuration.contains[ 0 ] }` ) :
+			const element = templateElement.contains.length === 1 ?
+				writer.createElement( `ck__${ templateElement.contains[ 0 ] }` ) :
 				writer.createElement( `${ currentElement.name }__placeholder` );
 			writer.append( element, currentElement );
 			writer.setSelection( element, 'on' );
