@@ -14,7 +14,6 @@ export default class Validation extends Plugin {
 		this.tooltipView.set();
 		this.editor.ui.view.body.add( this.tooltipView );
 		this.editor.ui.focusTracker.add( this.tooltipView.element );
-		this.templates = this.editor.config.get( 'templates' );
 
 		// Update button positioning on any of the various occasions.
 		this.listenTo( this.editor.ui, 'update', () => this._updateTooltipDisplay() );
