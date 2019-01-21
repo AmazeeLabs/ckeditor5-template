@@ -16,11 +16,15 @@ ClassicEditor
 		toolbar: [ 'heading', '|', 'template', '|', 'undo', 'redo' ],
 		templates: {
 			textrequired: {
-				label: 'text',
+				label: 'text required',
 				template: '<p class="simple" ck-type="text" ck-min="2" ck-validation=".">Limited</p>',
 			},
+			textmax: {
+				label: 'text max',
+				template: '<p class="simple" ck-type="text" ck-max="5" ck-validation=".">Limited</p>',
+			},
 			text: {
-				label: 'text required',
+				label: 'text',
 				template: '<p class="simple" ck-type="text">Limited</p>',
 			},
 		}
