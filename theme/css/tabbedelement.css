@@ -1,0 +1,7 @@
+ck-tab {
+	display: none;
+}
+
+ck-tab.active {
+	display: block;
+}
