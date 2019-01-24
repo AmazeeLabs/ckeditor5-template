@@ -27,6 +27,10 @@ ClassicEditor
 				label: 'text',
 				template: '<p class="simple" ck-type="text">Limited</p>',
 			},
+			textminmax: {
+				label: 'text max',
+				template: '<p class="simple" ck-type="text" ck-min="2" ck-max="5" ck-validation=".">Limited</p>',
+			},
 		}
 	} )
 	.then( editor => {

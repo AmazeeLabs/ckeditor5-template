@@ -46,30 +46,28 @@ export default class Validation extends Plugin {
 
 		const viewElement = this.editor.editing.mapper.toViewElement( result.element );
 		const domElement = this.editor.editing.view.domConverter.mapViewToDom( viewElement );
-		const elementContent = domElement.innerHTML.replace( /[\u200B-\u200D\uFEFF]/g, '' ).trim();
+		const elementContent = domElement.innerText.replace( /[\u200B-\u200D\uFEFF]/g, '' ).trim();
 
 		const regex = new RegExp( validation, 'gm' );
 		const match = elementContent.match( regex );
 
+		const message = [];
+
 		if ( ( !match && min > 1 ) || ( min > 1 && match && match.length < min ) ) {
 			const length = match ? match.length : 0;
-			this._showTooltip(
-				this.editor.locale.t( 'Too short: please add at least %0 letters.', [ min - length ] ),
-				domElement,
-				true
-			);
+			message.push( this.editor.locale.t( 'Too short: please add at least %0 letters.', [ min - length ] ) );
 		} else if ( !match && min ) {
-			this._showTooltip( this.editor.locale.t( 'This is a mandatory field' ), domElement, true );
-		} else if ( min || !max ) {
-			this._hideTooltip( domElement );
+			message.push( this.editor.locale.t( 'This is a mandatory field' ), domElement, true );
 		}
 
-		if ( match && max ) {
-			const message = match.length > max ?
-				this.editor.locale.t( 'Too long: please remove at least %0 letters.', [ match.length - max ] ) :
-				this.editor.locale.t( '%0 letters remaining.', [ max - match.length ] );
-			this._showTooltip( message, domElement, match.length > max );
-		} else if ( max ) {
+		if ( match && max && match.length > max ) {
+			message.push( this.editor.locale.t( 'Too long: please remove at least %0 letters.', [ match.length - max ] ) );
+		}
+
+		if ( message.length > 0 ) {
+			this._showTooltip( message.join( ' ' ), domElement, true );
+		}
+		else {
 			this._hideTooltip( domElement );
 		}
 	}
