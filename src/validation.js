@@ -40,6 +40,7 @@ export default class Validation extends Plugin {
 		}
 
 		const min = parseInt( result.info.configuration.min );
+		const max = parseInt( result.info.configuration.max );
 
 		this.tooltipView.isVisible = true;
 
@@ -54,17 +55,31 @@ export default class Validation extends Plugin {
 			const length = match ? match.length : 0;
 			this._showTooltip(
 				this.editor.locale.t( 'Too short: please add at least %0 letters.', [ min - length ] ),
-				domElement
+				domElement,
+				true
 			);
-		} else if ( !match ) {
-			this._showTooltip( this.editor.locale.t( 'This is a mandatory field' ), domElement );
-		} else {
+		} else if ( !match && min ) {
+			this._showTooltip( this.editor.locale.t( 'This is a mandatory field' ), domElement, true );
+		} else if ( min || !max ) {
+			this._hideTooltip( domElement );
+		}
+
+		if ( match && max ) {
+			const message = match.length > max ?
+				this.editor.locale.t( 'Too long: please remove at least %0 letters.', [ match.length - max ] ) :
+				this.editor.locale.t( '%0 letters remaining.', [ max - match.length ] );
+			this._showTooltip( message, domElement, match.length > max );
+		} else if ( max ) {
 			this._hideTooltip( domElement );
 		}
 	}
 
-	_showTooltip( message, domElement ) {
-		domElement.classList.add( 'ck-required-validation-error' );
+	_showTooltip( message, domElement, highlight ) {
+		if ( highlight ) {
+			domElement.classList.add( 'ck-required-validation-error' );
+		} else {
+			domElement.classList.remove( 'ck-required-validation-error' );
+		}
 		this.tooltipView.isExceeded = true;
 		this.tooltipView.set( { text: message } );
 

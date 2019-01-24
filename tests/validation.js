@@ -21,11 +21,14 @@ describe( 'Validation', () => {
 				templates: {
 					a: {
 						label: 'A',
-						template: '<div class="a" ck-validation="."></div>',
+						template: '<div class="a" ck-validation="." ck-min="1"></div>',
 					},
 					b: {
 						template: '<div class="b"></div>',
 					},
+					c: {
+						template: '<div class="c" ck-validation="." ck-max="5"></div>'
+					}
 				}
 			} )
 			.then( newEditor => {
@@ -47,14 +50,14 @@ describe( 'Validation', () => {
 		expect( tooltipView.isVisible ).to.be.true;
 	} );
 
-	it( 'doesn\'t shows tooltip with validation error', () => {
+	it( 'doesn\'t show tooltip with validation error', () => {
 		setModelData( model, [
 			'<ck__b></ck__b>',
 		].join( '' ) );
 		expect( tooltipView.isVisible ).to.be.false;
 	} );
 
-	it( 'shows tooltip with validation error and hide it after input', () => {
+	it( 'shows tooltip with validation error and hides it after input', () => {
 		setModelData( model, [
 			'<ck__a></ck__a>',
 		].join( '' ) );
@@ -63,6 +66,21 @@ describe( 'Validation', () => {
 
 		setModelData( model, [
 			'<ck__a>some text</ck__a>',
+		].join( '' ) );
+
+		expect( tooltipView.isVisible ).to.be.false;
+	} );
+
+	it( 'shows tooltip with validation error for max attribute and hides it', () => {
+		setModelData( model, [
+			'<ck__c>testtestest</ck__c>',
+		].join( '' ) );
+
+		expect( tooltipView.isVisible ).to.be.true;
+		expect( tooltipView.text ).to.equal( 'Too long: please remove at least 6 letters.' );
+
+		setModelData( model, [
+			'<ck__c></ck__c>',
 		].join( '' ) );
 
 		expect( tooltipView.isVisible ).to.be.false;
