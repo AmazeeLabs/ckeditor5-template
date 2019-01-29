@@ -68,6 +68,14 @@ export default class TextElement extends Plugin {
 					inheritAllFrom: '$root',
 				} );
 			}
+
+			if ( element.configuration.plain === 'true' ) {
+				this.editor.model.schema.addAttributeCheck( context => {
+					if ( context.endsWith( `${ element.name } $text` ) ) {
+						return false;
+					}
+				} );
+			}
 		}
 
 		// Text element editing downcast

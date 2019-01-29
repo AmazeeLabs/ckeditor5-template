@@ -8,11 +8,12 @@ import HeadingPlugin from '@ckeditor/ckeditor5-heading/src/heading';
 import UndoPlugin from '@ckeditor/ckeditor5-undo/src/undo';
 
 import TemplatePlugin from '../../../src/template';
+import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ EnterPlugin, TypingPlugin, ParagraphPlugin, HeadingPlugin, TemplatePlugin, UndoPlugin ],
-		toolbar: [ 'heading', '|', 'template', '|', 'undo', 'redo' ],
+		plugins: [ EnterPlugin, TypingPlugin, ParagraphPlugin, HeadingPlugin, TemplatePlugin, UndoPlugin, Bold ],
+		toolbar: [ 'heading', '|', 'template', '|', 'undo', 'redo', 'bold' ],
 		templates: {
 			simple: {
 				label: 'Simple',
@@ -37,6 +38,10 @@ ClassicEditor
 			nested: {
 				label: 'Nested',
 				template: '<div class="parent"><p class="simple" ck-type="text"></p></div>'
+			},
+			plain: {
+				label: 'Plain',
+				template: '<div class="parent"><p class="plain" ck-type="text" ck-plain="true"></p></div>'
 			}
 		}
 	} )
