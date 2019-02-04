@@ -66,6 +66,9 @@ export default class TemplateId extends Plugin {
 	}
 
 	postfixIds( item, writer ) {
+		if ( !item ) {
+			return;
+		}
 		// Check if it exists and doesn't have an id attribute yet.
 		if ( item && !item.getAttribute( 'id' ) ) {
 			// Get the template information for this element.
@@ -77,9 +80,11 @@ export default class TemplateId extends Plugin {
 				writer.setAttribute( 'id', hash( `${ this.session }:${ this.tick }` ), item );
 			}
 		}
-
-		for ( const child of item.getChildren() ) {
-			this.postfixIds( child, writer );
+		const templateElement = this.editor.templates.getElementInfo( item.name );
+		if ( templateElement ) {
+			for ( const child of item.getChildren() ) {
+				this.postfixIds( child, writer );
+			}
 		}
 	}
 }
