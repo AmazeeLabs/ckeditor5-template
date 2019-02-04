@@ -25,6 +25,10 @@ describe( 'TemplateId', () => {
 					},
 					b: {
 						template: '<div class="b" id=""><div class="c"></div></div>',
+					},
+					container_b: {
+						label: 'B Container',
+						template: '<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"></div></div>',
 					}
 				}
 			} )
@@ -84,6 +88,17 @@ describe( 'TemplateId', () => {
 		].join( '' ) );
 		expect( getModelData( model ) ).to.equal( [
 			'[<ck__a id="374c5q"></ck__a>]'
+		].join( '' ) );
+	} );
+
+	it( 'generates ids for container children', () => {
+		editor.setData( [
+			'<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"></div></div>',
+		].join( '' ) );
+		expect( getModelData( model ) ).to.equal( [
+			'[<ck__container_b><ck__container_b__child0>',
+			'<ck__b id="374c5q"><ck__b__child0></ck__b__child0></ck__b>',
+			'</ck__container_b__child0></ck__container_b>]'
 		].join( '' ) );
 	} );
 } );
