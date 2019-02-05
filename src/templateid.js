@@ -59,20 +59,33 @@ export default class TemplateId extends Plugin {
 				if ( [ 'insert' ].includes( entry.type ) ) {
 					// Get the actual element.
 					const item = entry.position.nodeAfter;
-					// Check if it exists and doesn't have an id attribute yet.
-					if ( item && !item.getAttribute( 'id' ) ) {
-						// Get the template information for this element.
-						const info = this.editor.templates.getElementInfo( item.name );
-						// If the template defines an id attribute for this element, autofill it.
-						if ( info && info.attributes.hasOwnProperty( 'id' ) ) {
-							// Generate an id from the current session identifier and the increment counter
-							// for added elements.
-							writer.setAttribute( 'id', hash( `${ this.session }:${ this.tick }` ), item );
-						}
-					}
+					this.postfixIds( item, writer );
 				}
 			}
 		} );
+	}
+
+	postfixIds( item, writer ) {
+		if ( !item ) {
+			return;
+		}
+		// Check if it exists and doesn't have an id attribute yet.
+		if ( item && !item.getAttribute( 'id' ) ) {
+			// Get the template information for this element.
+			const info = this.editor.templates.getElementInfo( item.name );
+			// If the template defines an id attribute for this element, autofill it.
+			if ( info && info.attributes.hasOwnProperty( 'id' ) ) {
+				// Generate an id from the current session identifier and the increment counter
+				// for added elements.
+				writer.setAttribute( 'id', hash( `${ this.session }:${ this.tick }` ), item );
+			}
+		}
+		const templateElement = this.editor.templates.getElementInfo( item.name );
+		if ( templateElement ) {
+			for ( const child of item.getChildren() ) {
+				this.postfixIds( child, writer );
+			}
+		}
 	}
 }
 
