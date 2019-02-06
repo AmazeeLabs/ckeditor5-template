@@ -3,8 +3,8 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { getOptimalPosition } from '@ckeditor/ckeditor5-utils/src/dom/position';
 
 import TemplateEditing from '../templateediting';
-import UpIcon from '../../theme/icons/arrow-up.svg';
-import DownIcon from '../../theme/icons/arrow-down.svg';
+import UpIcon from '../../theme/icons/icon-move-up.svg';
+import DownIcon from '../../theme/icons/icon-move-down.svg';
 import TemplateButtonView from './views/templatebuttonview';
 import ContainerElement from '../elements/containerelement';
 
@@ -101,8 +101,8 @@ export default class ContainerUI extends Plugin {
 			target: domElement,
 			positions: [
 				( targetRect, buttonRect ) => ( {
-					top: targetRect.top + ( buttonRect.height * 2 ),
-					left: targetRect.left + targetRect.width,
+					top: targetRect.top,
+					left: targetRect.left + targetRect.width - buttonRect.width * 4,
 				} )
 			]
 		} );
@@ -115,8 +115,8 @@ export default class ContainerUI extends Plugin {
 			target: domElement,
 			positions: [
 				( targetRect, buttonRect ) => ( {
-					top: targetRect.top + ( buttonRect.height * 3 ),
-					left: targetRect.left + targetRect.width,
+					top: targetRect.top,
+					left: targetRect.left + targetRect.width - buttonRect.width * 3,
 				} )
 			]
 		} );

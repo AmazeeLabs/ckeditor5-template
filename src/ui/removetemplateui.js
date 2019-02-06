@@ -3,7 +3,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { getOptimalPosition } from '@ckeditor/ckeditor5-utils/src/dom/position';
 
 import TemplateEditing from '../templateediting';
-import DeleteIcon from '../../theme/icons/trash.svg';
+import DeleteIcon from '../../theme/icons/icon-delete.svg';
 import TemplateButtonView from './views/templatebuttonview';
 
 /**
@@ -92,9 +92,9 @@ export default class RemoveTemplateUI extends Plugin {
 					} )
 				] :
 				[
-					targetRect => ( {
+					( targetRect, buttonRect ) => ( {
 						top: targetRect.top,
-						left: targetRect.left + targetRect.width,
+						left: targetRect.left + targetRect.width - buttonRect.width * 2,
 					} )
 				]
 		} );

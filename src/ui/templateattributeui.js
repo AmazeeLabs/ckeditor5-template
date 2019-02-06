@@ -17,7 +17,7 @@ import TemplateEditing from '../templateediting';
 import TemplateAttributeCommand from '../commands/templateattributecommand';
 import TemplateButtonView from './views/templatebuttonview';
 
-import ConfigureIcon from '../../theme/icons/configure.svg';
+import ConfigureIcon from '../../theme/icons/icon-menu.svg';
 
 /**
  * Automatically add configurable attributes widgets to templates.
@@ -447,8 +447,8 @@ export default class TemplateAttributeUI extends Plugin {
 			target: domElement,
 			positions: [
 				( targetRect, buttonRect ) => ( {
-					top: targetRect.top + buttonRect.height,
-					left: targetRect.left + targetRect.width,
+					top: targetRect.top,
+					left: targetRect.left + targetRect.width - buttonRect.width,
 				} )
 			]
 		} );

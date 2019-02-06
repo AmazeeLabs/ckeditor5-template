@@ -26,7 +26,8 @@ export default class TemplateButtonView extends ButtonView {
 					position: 'absolute',
 					top: bind.to( 'top', val => toPx( val ) ),
 					left: bind.to( 'left', val => toPx( val ) ),
-				}
+				},
+				class: 'ck-button-ui'
 			}
 		} );
 	}
