@@ -8,9 +8,8 @@ import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
 import TemplateEditing from '../templateediting';
-import PlaceholderView from '../ui/views/placeholderview';
 
-import '../../theme/css/placeholder.css';
+import '@amazee/editor-components/dist/bundle';
 
 /**
  * Allow to position placeholders in a document that can be filled with actual elements.
@@ -44,18 +43,36 @@ export default class PlaceholderElement extends Plugin {
 
 				// Prepare selection options as a key value pair.
 				const options = templateElement.conversions.map( name => {
-					return { [ name ]: this.editor.templates.getElementInfo( name ).label };
-				} ).reduce( ( acc, val ) => Object.assign( acc, val ) );
+					const info = this.editor.templates.getElementInfo( name );
+					return { id: name, label: info.label, icon: info.icon };
+				} );
 
-				const element = viewWriter.createUIElement( 'div', { class: 'ck-placeholder-ui' }, function( domDocument ) {
+				const inContainer = editor.templates.getElementInfo( modelElement.parent.name ).type === 'container';
+
+				const attributes = {
+					class: 'ck-placeholder-ui',
+					sections: JSON.stringify( options ),
+				};
+
+				if (inContainer && !!modelElement.nextSibling) {
+					attributes.collapsed = true;
+				}
+				if (inContainer && !modelElement.nextSibling) {
+					attributes.closed = true;
+				}
+
+				const element = viewWriter.createUIElement( 'ck-placeholder', attributes, function( domDocument ) {
 					const domElement = this.toDomElement( domDocument );
-					const view = new PlaceholderView( modelElement, editor, options );
-					view.render();
-					domElement.appendChild( view.element );
+					domElement.addEventListener( 'addSection', event => {
+						editor.execute( 'replaceTemplate', { template: event.detail } );
+					} );
 					return domElement;
 				} );
 
-				const wrapper = viewWriter.createContainerElement( 'div', getModelAttributes( templateElement, modelElement ) );
+				const wrapperAttributes = Object.assign( {
+					class: 'ck-widget-no-hover',
+				}, getModelAttributes( templateElement, modelElement ) );
+				const wrapper = viewWriter.createContainerElement( 'div', wrapperAttributes );
 				viewWriter.insert( new ViewPosition( wrapper, 0 ), element );
 				return toWidget( wrapper, viewWriter );
 			},

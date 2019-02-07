@@ -19,6 +19,7 @@ export default class ElementInfo {
 		this._parent = parent;
 		this._children = [];
 		this._label = node.getAttribute( 'ck-label' );
+		this._icon = node.getAttribute( 'ck-icon' ) || 'configurator';
 
 		if ( parent ) {
 			parent.addChild( this );
@@ -101,6 +102,15 @@ export default class ElementInfo {
 	 */
 	get label() {
 		return this._label;
+	}
+
+	/**
+	 * Retrieve the human readable name for this element.
+	 *
+	 * @returns {String}
+	 */
+	get icon() {
+		return this._icon;
 	}
 
 	/**

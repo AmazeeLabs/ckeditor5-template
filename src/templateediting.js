@@ -171,6 +171,7 @@ export default class TemplateEditing extends Plugin {
 			const dom = parser.parseFromString( templates[ name ].template, 'text/xml' ).documentElement;
 			dom.setAttribute( 'ck-name', name );
 			dom.setAttribute( 'ck-label', templates[ name ].label );
+			dom.setAttribute( 'ck-icon', templates[ name ].icon || 'configurator' );
 			this.registerElement( dom );
 		} );
 

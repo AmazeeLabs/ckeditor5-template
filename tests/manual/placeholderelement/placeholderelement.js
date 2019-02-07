@@ -16,10 +16,12 @@ ClassicEditor
 		templates: {
 			a: {
 				label: 'A',
+				icon: 'configurator',
 				template: '<p class="a" ck-type="text">A</p>',
 			},
 			b: {
 				label: 'B',
+				icon: 'text-media',
 				template: '<p class="b" ck-type="text">B</p>',
 			},
 			container: {
