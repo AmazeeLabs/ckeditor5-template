@@ -92,7 +92,7 @@ export default class RemoveTemplateUI extends Plugin {
 					} )
 				] :
 				[
-					( targetRect, buttonRect ) => ( {
+					( targetRect ) => ( {
 						top: targetRect.top,
 						left: targetRect.left + targetRect.width,
 					} )
