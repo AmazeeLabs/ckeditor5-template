@@ -150,6 +150,7 @@ export default class TemplateAttributeUI extends Plugin {
 		this.configureButton.set( {
 			icon: ConfigureIcon,
 			isVisible: false,
+			class: 'ck-button-ui-attribute',
 		} );
 		this.editor.ui.view.body.add( this.configureButton );
 		this.editor.ui.focusTracker.add( this.configureButton.element );

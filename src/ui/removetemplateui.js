@@ -27,6 +27,7 @@ export default class RemoveTemplateUI extends Plugin {
 		// Statically set the remove icon.
 		this.removeButton.set( {
 			icon: DeleteIcon,
+			class: 'ck-button-ui-remove',
 		} );
 
 		this.editor.ui.view.body.add( this.removeButton );

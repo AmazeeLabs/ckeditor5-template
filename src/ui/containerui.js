@@ -29,10 +29,12 @@ export default class ContainerUI extends Plugin {
 
 		// Statically set icons.
 		this.upButton.set( {
-			icon: UpIcon
+			icon: UpIcon,
+			class: 'ck-button-ui-up',
 		} );
 		this.downButton.set( {
-			icon: DownIcon
+			icon: DownIcon,
+			class: 'ck-button-ui-down',
 		} );
 
 		this.editor.ui.view.body.add( this.upButton );
