@@ -101,8 +101,8 @@ export default class ContainerUI extends Plugin {
 			target: domElement,
 			positions: [
 				( targetRect, buttonRect ) => ( {
-					top: targetRect.top,
-					left: targetRect.left + targetRect.width - buttonRect.width * 4,
+					top: targetRect.top + ( buttonRect.height * 2 ),
+					left: targetRect.left + targetRect.width,
 				} )
 			]
 		} );
@@ -115,8 +115,8 @@ export default class ContainerUI extends Plugin {
 			target: domElement,
 			positions: [
 				( targetRect, buttonRect ) => ( {
-					top: targetRect.top,
-					left: targetRect.left + targetRect.width - buttonRect.width * 3,
+					top: targetRect.top + ( buttonRect.height * 3 ),
+					left: targetRect.left + targetRect.width,
 				} )
 			]
 		} );
