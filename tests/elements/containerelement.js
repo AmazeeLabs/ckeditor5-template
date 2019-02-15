@@ -126,7 +126,9 @@ describe( 'Container', () => {
 		expect( getViewData( view ) ).to.equal( [
 			'<div class="ck-widget container" contenteditable="false" itemprop="container">',
 			'[<div class=" ck-widget ck-widget_selected" contenteditable="false">',
-			'<div class="ck-placeholder-ui"></div>',
+			'<ck-placeholder class="ck-placeholder-ui" closed="true" ',
+			'sections="[{"id":"ck__a","label":"A","icon":"configurator"},{"id":"ck__b","label":"B","icon":"configurator"}]">',
+			'</ck-placeholder>',
 			'</div>]',
 			'</div>',
 		].join( '' ) );

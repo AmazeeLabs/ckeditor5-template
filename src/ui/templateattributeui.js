@@ -18,6 +18,7 @@ import TemplateAttributeCommand from '../commands/templateattributecommand';
 import TemplateButtonView from './views/templatebuttonview';
 
 import ConfigureIcon from '../../theme/icons/configure.svg';
+import { downcastAttributeToAttribute } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
 /**
  * Automatically add configurable attributes widgets to templates.
@@ -80,10 +81,10 @@ export default class TemplateAttributeUI extends Plugin {
 			this.editor.ui.componentFactory.add( componentName, callback );
 
 			// Add a downcast converter for each configurable attribute.
-			this.editor.conversion.for( 'downcast' ).attributeToAttribute( {
+			this.editor.conversion.for( 'downcast' ).add( downcastAttributeToAttribute( {
 				model: attr,
 				view: attr,
-			} );
+			} ) );
 		}
 
 		/**

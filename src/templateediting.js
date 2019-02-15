@@ -3,9 +3,10 @@
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcasthelpers';
+import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
+import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 
 import ElementInfo from './utils/elementinfo';
 import InsertTemplateCommand from './commands/inserttemplatecommand';
@@ -201,7 +202,7 @@ export default class TemplateEditing extends Plugin {
 		} );
 
 		// Default upcast conversion for template elements.
-		this.editor.conversion.for( 'upcast' ).elementToElement( upcastTemplateElement( this.editor, {
+		this.editor.conversion.for( 'upcast' ).add( upcastTemplateElement( this.editor, {
 			types: this._elementTypes,
 			model: ( templateElement, viewElement, modelWriter ) => {
 				return modelWriter.createElement(
@@ -209,8 +210,7 @@ export default class TemplateEditing extends Plugin {
 					getViewAttributes( templateElement, viewElement )
 				);
 			},
-			converterPriority: 'low',
-		} ) );
+		} ), { priority: 'low' } );
 
 		// Default data downcast conversions for template elements.
 		this.editor.conversion.for( 'dataDowncast' ).add( downcastTemplateElement( this.editor, {
@@ -295,14 +295,14 @@ export default class TemplateEditing extends Plugin {
 	 * @returns {Function}
 	 */
 	upcastTemplateElement( config ) {
-		return {
+		return upcastElementToElement( {
 			view: viewElement => !!this._findMatchingTemplateElement( viewElement, config.types ) && { name: true },
 			model: ( viewElement, modelWriter ) => config.model(
 				this._findMatchingTemplateElement( viewElement, config.types ),
 				viewElement,
 				modelWriter
 			)
-		};
+		} );
 	}
 
 	_findMatchingTemplateElement( viewElement, types ) {

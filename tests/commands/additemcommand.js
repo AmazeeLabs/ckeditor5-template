@@ -73,7 +73,7 @@ describe( 'AddItemCommand', () => {
 			expect( getViewData( view ) ).to.equal( [
 				'<div ck-gallery-current-item="1" class="ck-widget gallery" contenteditable="false">',
 				'<div class="a ck-widget" contenteditable="false"></div>',
-				'[<div class=" ck-widget ck-widget_selected" contenteditable="false"><div class="ck-placeholder-ui"></div></div>]',
+				'[<div class="a ck-widget ck-widget_selected" contenteditable="false"></div>]',
 				'</div>',
 			].join( '' ) );
 		} );
