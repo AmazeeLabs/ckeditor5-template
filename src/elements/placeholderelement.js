@@ -54,10 +54,10 @@ export default class PlaceholderElement extends Plugin {
 					sections: JSON.stringify( options ),
 				};
 
-				if (inContainer && !!modelElement.nextSibling) {
+				if ( inContainer && !!modelElement.nextSibling ) {
 					attributes.collapsed = true;
 				}
-				if (inContainer && !modelElement.nextSibling) {
+				if ( inContainer && !modelElement.nextSibling ) {
 					attributes.closed = true;
 				}
 

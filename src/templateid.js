@@ -52,6 +52,12 @@ export default class TemplateId extends Plugin {
 			} );
 		} );
 
+		// Add a downcast converter for id attribute.
+		this.editor.conversion.attributeToAttribute( {
+			model: 'id',
+			view: 'id',
+		} );
+
 		// Auto add an id to each template instance.
 		this.editor.model.document.registerPostFixer( writer => {
 			for ( const entry of this.editor.model.document.differ.getChanges() ) {
@@ -74,7 +80,7 @@ export default class TemplateId extends Plugin {
 			// Get the template information for this element.
 			const info = this.editor.templates.getElementInfo( item.name );
 			// If the template defines an id attribute for this element, autofill it.
-			if ( info && info.attributes.hasOwnProperty( 'id' ) ) {
+			if ( info ) {
 				// Generate an id from the current session identifier and the increment counter
 				// for added elements.
 				writer.setAttribute( 'id', hash( `${ this.session }:${ this.tick }` ), item );
