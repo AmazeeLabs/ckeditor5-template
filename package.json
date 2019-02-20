@@ -1,6 +1,6 @@
 {
   "name": "@amazee/ckeditor5-template",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Template feature for CKEditor 5.",
   "keywords": [
     "ckeditor",
@@ -10,7 +10,6 @@
     "ckeditor5-plugin"
   ],
   "dependencies": {
-    "@amazee/editor-components": "https://github.com/AmazeeLabs/editor-components.git",
     "@ckeditor/ckeditor5-core": "^11.1.0",
     "@ckeditor/ckeditor5-engine": "^12.0.0",
     "@ckeditor/ckeditor5-ui": "^11.2.0",

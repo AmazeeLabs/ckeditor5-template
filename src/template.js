@@ -51,10 +51,7 @@ export default class Template extends Plugin {
 			ContainerElement,
 			GalleryElement,
 			TemplateUI,
-			RemoveTemplateUI,
-			ContainerUI,
 			TemplateAttributeUI,
-			GalleryUI,
 			TemplateId,
 			TextLimit,
 			HoveredWidget

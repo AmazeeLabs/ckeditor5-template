@@ -4,7 +4,7 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
-import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
+import ViewPosition from '@ckeditor/ckeditor5-engine/src/view/position';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 
@@ -223,14 +223,12 @@ export default class TemplateEditing extends Plugin {
 			}
 		} ), { priority: 'low ' } );
 
-		const templateManager = this.editor.templates;
 		// Default editing downcast conversions for template container elements without functionality.
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'element' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
-				const parentTemplate = modelElement.parent && templateManager.getElementInfo( modelElement.parent.name );
 				const el = viewWriter.createContainerElement(
-					parentTemplate && parentTemplate.type === 'container' ? 'ck-container-item' : templateElement.tagName,
+					templateElement.tagName,
 					getModelAttributes( templateElement, modelElement )
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );
@@ -279,12 +277,41 @@ export default class TemplateEditing extends Plugin {
 	 */
 	downcastTemplateElement( config ) {
 		return dispatcher => {
-			dispatcher.on( 'insert', insertElement( ( modelElement, viewWriter ) => {
+			dispatcher.on( 'insert', this.insertElement( ( modelElement, viewWriter ) => {
 				const templateElement = this._elements[ modelElement.name ];
 				if ( templateElement && config.types.includes( templateElement.type ) ) {
 					return config.view( templateElement, modelElement, viewWriter );
 				}
 			} ) );
+		};
+	}
+
+	insertElement( elementCreator ) {
+		return ( evt, data, conversionApi ) => {
+			const viewElement = elementCreator( data.item, conversionApi.writer );
+			let wrapper = viewElement;
+
+			if ( !viewElement ) {
+				return;
+			}
+
+			if (
+				data.item.parent &&
+				this._elements[ data.item.parent.name ] &&
+				this._elements[ data.item.parent.name ].type === 'container'
+			) {
+				wrapper = conversionApi.writer.createContainerElement( 'ck-container-item' );
+				conversionApi.writer.insert( new ViewPosition( wrapper, 0 ), viewElement );
+			}
+
+			if ( !conversionApi.consumable.consume( data.item, 'insert' ) ) {
+				return;
+			}
+
+			const viewPosition = conversionApi.mapper.toViewPosition( data.range.start );
+
+			conversionApi.mapper.bindElements( data.item, viewElement );
+			conversionApi.writer.insert( viewPosition, wrapper );
 		};
 	}
 
