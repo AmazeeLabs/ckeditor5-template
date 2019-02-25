@@ -5,16 +5,23 @@
 }
 
 .ck.ck-tooltip.ck-text-limit {
-	transform: translateY(var(--ck-tooltip-arrow-size));
+	transform: translateY(calc(var(--ck-tooltip-size) * -1 ));
 	bottom: inherit;
+}
+
+.ck-rounded-corners .ck.ck-tooltip .ck-tooltip__text {
+	border-radius: 10px;
+    border-bottom-left-radius: 0;
 }
 
 .ck-tooltip.ck-text-limit .ck-tooltip__text {
 	left: 0;
+	height: var(--ck-tooltip-size);
 }
 
 :root {
-	--ck-color-text-limit-exceeded: #a80b07;
+	--ck-color-text-limit-exceeded: #e62a27;
+	--ck-tooltip-size: 30px;
 }
 
 .ck-text-limit-exceeded {
@@ -23,14 +30,30 @@
 	font-weight: bold;
 }
 
+.ck-text-helper {
+	--ck-color-tooltip-background: #FFF;	
+	font-size: 1em;
+	font-weight: bold;
+	box-shadow: 0px 3px 30px 0px rgba(0,0,0,0.2);
+}
+
+.ck-text-helper .ck-tooltip__text {
+	color: #222 !important;	
+}
+
 .ck .ck-editor__nested-editable.ck-text-field-limit-exceeded {
 	border-color: var(--ck-color-text-limit-exceeded);
 }
 
 .ck .ck-widget.ck-widget_selected.ck-required-validation-error, .ck .ck-widget.ck-widget_selected.ck-required-validation-error:hover  {
-	outline-color: red;
+	outline-color: var(--ck-color-text-limit-exceeded);
 }
 
 .ck-required-validation-error {
-	outline: 2px solid red !important;
+	outline: 1px solid var(--ck-color-text-limit-exceeded) !important;
 }
+
+.ck-required-validation-helper .ck-required-validation-helper:focus {
+	outline: none !important;
+}
+

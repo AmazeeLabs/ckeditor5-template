@@ -74,9 +74,11 @@ export default class Validation extends Plugin {
 
 	_showTooltip( message, domElement, highlight ) {
 		if ( highlight ) {
-			domElement.classList.add( 'ck-required-validation-error' );
+			domElement.classList.add( 'ck-required-validation-helper' );
+			this.tooltipView.isHelper = true;
 		} else {
-			domElement.classList.remove( 'ck-required-validation-error' );
+			domElement.classList.remove( 'ck-required-validation-helper' );
+			this.tooltipView.isHelper = false;
 		}
 		this.tooltipView.isExceeded = true;
 		this.tooltipView.set( { text: message } );
@@ -86,7 +88,7 @@ export default class Validation extends Plugin {
 			target: domElement,
 			positions: [
 				targetRect => ( {
-					top: targetRect.top + targetRect.height,
+					top: targetRect.top,
 					left: targetRect.left,
 				} )
 			]
@@ -97,7 +99,7 @@ export default class Validation extends Plugin {
 	}
 
 	_hideTooltip( domElement ) {
-		domElement.classList.remove( 'ck-required-validation-error' );
+		domElement.classList.remove( 'ck-required-validation-helper' );
 		this.tooltipView.isVisible = false;
 	}
 }

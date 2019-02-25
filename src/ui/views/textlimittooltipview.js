@@ -12,6 +12,7 @@ export default class TextLimitTooltipView extends TooltipView {
 		this.set( 'left', 0 );
 		this.set( 'isVisible', false );
 		this.set( 'isExceeded', false );
+		this.set( 'isHelper', false );
 
 		this.extendTemplate( {
 			attributes: {
@@ -19,6 +20,7 @@ export default class TextLimitTooltipView extends TooltipView {
 					'ck-text-limit',
 					bind.if( 'isVisible', 'ck-text-limit-show' ),
 					bind.if( 'isExceeded', 'ck-text-limit-exceeded' ),
+					bind.if( 'isHelper', 'ck-text-helper' ),
 				],
 				style: {
 					position: 'absolute',
