@@ -63,7 +63,7 @@ export default class RemoteControlCommand extends Command {
 
 	replaceElement( { element, target }, writer ) {
 		const targetElement = this.toModel( target );
-		writer.rename( targetElement, element );
+		writer.rename( targetElement, `ck__${ element }` );
 		writer.setSelection( targetElement, 'on' );
 	}
 

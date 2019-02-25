@@ -162,8 +162,6 @@ export default class TemplateEditing extends Plugin {
 		this.editor.commands.add( 'moveTemplateUp', new MoveTemplateUpCommand( this.editor ) );
 		this.editor.commands.add( 'moveTemplateDown', new MoveTemplateDownCommand( this.editor ) );
 
-		const masterTemplate = this.editor.config.get( 'masterTemplate' );
-
 		const templates = this.editor.config.get( 'templates' );
 
 		// Parse all template snippets and register them.

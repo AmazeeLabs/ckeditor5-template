@@ -71,7 +71,7 @@ export default class PlaceholderElement extends Plugin {
 		// All allowed elements need to be configured to be positionable in place of the placeholder.
 		for ( const templateElement of placeholderElements ) {
 			for ( const el of templateElement.conversions ) {
-				this.editor.model.schema.extend( el, {
+				this.editor.model.schema.extend( `ck__${ el }`, {
 					allowWhere: templateElement.name,
 				} );
 			}
