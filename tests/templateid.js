@@ -93,11 +93,11 @@ describe( 'TemplateId', () => {
 
 	it( 'generates ids for container children', () => {
 		editor.setData( [
-			'<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"></div></div>',
+			'<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"><div class="b"></div></div></div>',
 		].join( '' ) );
 		expect( getModelData( model ) ).to.equal( [
 			'[<ck__container_b><ck__container_b__child0>',
-			'<ck__b id="374c5q"><ck__b__child0></ck__b__child0></ck__b>',
+			'<ck__b id="374c5q"></ck__b>',
 			'</ck__container_b__child0></ck__container_b>]'
 		].join( '' ) );
 	} );

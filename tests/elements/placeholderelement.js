@@ -55,6 +55,16 @@ describe( 'Placeholder', () => {
 		return editor.destroy();
 	} );
 
+	it( 'is rendered as a placeholder component', () => {
+		editor.setData( '<div class="placeholder"></div>' );
+		expect( getViewData( view ) ).to.equal( [ '[' +
+			'<div class="ck-widget ck-widget_selected placeholder" contenteditable="false">' +
+			'<div class=" ck-widget" contenteditable="false">' +
+			'<ck-placeholder class="ck-placeholder-ui" sections="a b"></ck-placeholder>' +
+			'</div>' +
+			'</div>]' ].join( '' ) );
+	} );
+
 	it( 'is upcast to a placeholder', () => {
 		editor.setData( '<div class="placeholder"></div>' );
 		expect( getModelData( model ) ).to.equal( '[' +
@@ -74,18 +84,6 @@ describe( 'Placeholder', () => {
 			']' );
 	} );
 
-	it( 'renders buttons for allowed elements', () => {
-		setModelData( model, '<ck__placeholder></ck__placeholder>' );
-		expect( getViewData( view ) ).to.equal( '[' +
-			'<div class="ck-widget ck-widget_selected placeholder" contenteditable="false">' +
-			'<div class=" ck-widget" contenteditable="false">' +
-			'<ck-placeholder class="ck-placeholder-ui" ' +
-			'sections="[{"id":"ck__a","label":"A","icon":"configurator"},{"id":"ck__b","label":"B","icon":"configurator"}]">' +
-			'</ck-placeholder>' +
-			'</div>' +
-			'</div>]' );
-	} );
-
 	it( 'is selectable', () => {
 		setModelData( model, [
 			'<ck__placeholder>',
@@ -102,9 +100,7 @@ describe( 'Placeholder', () => {
 		expect( getViewData( view ) ).to.equal( [
 			'<div class="ck-widget placeholder" contenteditable="false">',
 			'[<div class=" ck-widget ck-widget_selected" contenteditable="false">',
-			'<ck-placeholder class="ck-placeholder-ui" ',
-			'sections="[{"id":"ck__a","label":"A","icon":"configurator"},{"id":"ck__b","label":"B","icon":"configurator"}]">',
-			'</ck-placeholder>',
+			'<ck-placeholder class="ck-placeholder-ui" sections="a b"></ck-placeholder>',
 			'</div>]',
 			'</div>'
 		].join( '' ) );
