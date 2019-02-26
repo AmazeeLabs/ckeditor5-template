@@ -2,6 +2,10 @@
 	--ck-gallery-transition: 0.5s ease;
 }
 
+ck-container, ck-container-item, ck-gallery, ck-placeholder {
+	display: block;
+}
+
 .ck [ck-gallery-current-item] {
 	/* Add a top padding that is as high as the ui elements. */
 	padding-top: var(--ck-ui-component-min-height);

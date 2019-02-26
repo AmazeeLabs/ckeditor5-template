@@ -3,13 +3,11 @@
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
 import TemplateEditing from '../templateediting';
-import PlaceholderElement from './placeholderelement';
 
 import '../../theme/css/gallery.css';
 
@@ -23,7 +21,7 @@ export default class GalleryElement extends Plugin {
 	 * @inheritDoc
 	 */
 	static get requires() {
-		return [ TemplateEditing, PlaceholderElement ];
+		return [ TemplateEditing ];
 	}
 
 	/**
@@ -67,13 +65,6 @@ export default class GalleryElement extends Plugin {
 					allowIn: galleryElement.name,
 				} );
 			}
-
-			// Register a new placeholder for this gallery by creating a template element.
-			const dom = global.document.createElement( 'div' );
-			dom.setAttribute( 'ck-type', 'placeholder' );
-			dom.setAttribute( 'ck-name', 'placeholder' );
-			dom.setAttribute( 'ck-conversions', galleryElement.contains.join( ' ' ) );
-			this.editor.templates.registerElement( dom, galleryElement );
 		}
 
 		// Allow `$text` within all elements.
@@ -86,27 +77,15 @@ export default class GalleryElement extends Plugin {
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'gallery' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
+				const attributes = getModelAttributes( templateElement, modelElement );
+				attributes.section = templateElement.contains[ 0 ];
 				const el = viewWriter.createContainerElement(
-					templateElement.tagName,
-					Object.assign( getModelAttributes( templateElement, modelElement ), {
-						'ck-gallery-current-item': 0,
-					} )
+					'ck-gallery',
+					attributes
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );
 			}
 		} ) );
-
-		// TODO: Throttle this?
-		this.editor.editing.view.on( 'render', () => {
-			const domRoot = this.editor.editing.view.getDomRoot();
-			const galleries = domRoot.querySelectorAll( '[ck-gallery-current-item]' );
-			for ( const gallery of galleries ) {
-				for ( const item of gallery.childNodes ) {
-					item.style.transform = `translateX(calc(${ gallery.getAttribute( 'ck-gallery-current-item' ) } * -100%)) scale(0.98)`;
-					item.style.transformOrigin = 'center';
-				}
-			}
-		} );
 
 		// Postfix elements to make sure a templates structure is always correct.
 		this.editor.templates.registerPostFixer( [ 'gallery' ], ( templateElement, item, writer ) => {

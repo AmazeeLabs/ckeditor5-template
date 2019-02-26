@@ -69,22 +69,28 @@ export default class TemplateAttributeUI extends Plugin {
 				dropdown: this._createDropdownView,
 				textfield: this._createTextfieldView,
 				multiselect: this._createMultiselectView,
+				custom: false
 			};
 
 			if ( !factories.hasOwnProperty( type ) ) {
 				throw `Unrecognized template attribute type: ${ type }`;
 			}
 
-			const factoryMethod = factories[ type ];
-			const args = [ templateAttribute, commandName, this.editor ];
-			const callback = factoryMethod.apply( this, args );
-			this.editor.ui.componentFactory.add( componentName, callback );
-
 			// Add a downcast converter for each configurable attribute.
 			this.editor.conversion.for( 'downcast' ).add( downcastAttributeToAttribute( {
 				model: attr,
 				view: attr,
 			} ) );
+
+			const factoryMethod = factories[ type ];
+
+			if ( !factoryMethod ) {
+				continue;
+			}
+
+			const args = [ templateAttribute, commandName, this.editor ];
+			const callback = factoryMethod.apply( this, args );
+			this.editor.ui.componentFactory.add( componentName, callback );
 		}
 
 		/**
@@ -106,7 +112,7 @@ export default class TemplateAttributeUI extends Plugin {
 			// Get the ids of all the configuration attributes attached to the
 			// selected element's template.
 			const configurableAttributes = Object.keys( this.templateAttributes )
-				.filter( attr => Object.keys( template.attributes ).includes( attr ) )
+				.filter( attr => Object.keys( template.attributes ).includes( attr ) && this.templateAttributes[ attr ].type !== 'custom' )
 				.sort();
 
 			// If template doesn't have configurable attributes, skip it.

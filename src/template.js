@@ -10,10 +10,7 @@ import TemplateUI from './ui/templateui';
 import TextElement from './elements/textelement';
 import PlaceholderElement from './elements/placeholderelement';
 import ContainerElement from './elements/containerelement';
-import RemoveTemplateUI from './ui/removetemplateui';
-import ContainerUI from './ui/containerui';
 import TemplateAttributeUI from './ui/templateattributeui';
-import GalleryUI from './ui/galleryui';
 import TemplateId from './templateid';
 import TextLimit from './textlimit';
 import HoveredWidget from './hoveredwidget';
@@ -51,10 +48,7 @@ export default class Template extends Plugin {
 			ContainerElement,
 			GalleryElement,
 			TemplateUI,
-			RemoveTemplateUI,
-			ContainerUI,
 			TemplateAttributeUI,
-			GalleryUI,
 			TemplateId,
 			TextLimit,
 			HoveredWidget

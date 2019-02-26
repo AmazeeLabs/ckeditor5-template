@@ -58,7 +58,7 @@ export default class ElementInfo {
 
 		// Calculate the possible conversions for an element.
 		this._conversions = this._configuration.conversions ?
-			this._configuration.conversions.split( ' ' ).map( el => `ck__${ el }` ) :
+			this._configuration.conversions.split( ' ' ) :
 			[];
 
 		this._contains = this._configuration.contains ?

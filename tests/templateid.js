@@ -96,13 +96,15 @@ describe( 'TemplateId', () => {
 
 	it( 'generates ids for container children and container', () => {
 		editor.setData( [
-			'<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"></div></div>',
+			'<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"><div class="b"></div></div></div>',
 		].join( '' ) );
 
 		expect( getModelData( model ) ).to.equal( [
-			'[<ck__container_b id="374c5q"><ck__container_b__child0 id="374cy7">',
-			'<ck__b id="374dqk"><ck__b__child0 id="374ej1"></ck__b__child0></ck__b>',
-			'</ck__container_b__child0></ck__container_b>]'
+			'[<ck__container_b id="374c5q">' +
+			'<ck__container_b__child0 id="374cy7">' +
+			'<ck__b id="374dqk"></ck__b>' +
+			'</ck__container_b__child0>' +
+			'</ck__container_b>]'
 		].join( '' ) );
 	} );
 
@@ -113,12 +115,10 @@ describe( 'TemplateId', () => {
 		].join( '' ) );
 
 		expect( getModelData( model ) ).to.equal( [
-			'[<ck__container_b id="374c5q"><ck__container_b__child0 id="374cy7">',
-			'<ck__b id="374dqk"><ck__b__child0 id="374ej1"></ck__b__child0></ck__b>',
-			'</ck__container_b__child0>',
-			'<ck__container_b__child0 id="3748sq"><ck__b id="3749l7">',
-			'<ck__b__child0 id="374adk"></ck__b__child0>',
-			'</ck__b></ck__container_b__child0>',
+			'[<ck__container_b id="374c5q">' +
+			'<ck__container_b__child0 id="374cy7"></ck__container_b__child0>' +
+			'<ck__container_b__child0 id="374dqk">' +
+			'</ck__container_b__child0>' +
 			'</ck__container_b>]'
 		].join( '' ) );
 	} );

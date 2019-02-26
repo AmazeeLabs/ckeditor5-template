@@ -3,8 +3,8 @@
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
+import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 
@@ -17,10 +17,7 @@ import {
 	upcastTemplateElement
 } from './utils/conversion';
 import { postfixTemplateElement } from './utils/integrity';
-import ReplaceTemplateCommand from './commands/replacetemplatecommand';
 import RemoveTemplateCommand from './commands/removetemplatecommand';
-import MoveTemplateUpCommand from './commands/movetemplateupcommand';
-import MoveTemplateDownCommand from './commands/movetemplatedowncommand';
 
 /**
  * The template engine feature.
@@ -152,15 +149,8 @@ export default class TemplateEditing extends Plugin {
 		// Add a command for inserting a template element.
 		this.editor.commands.add( 'insertTemplate', new InsertTemplateCommand( this.editor ) );
 
-		// Add a command for replacing a template element.
-		this.editor.commands.add( 'replaceTemplate', new ReplaceTemplateCommand( this.editor ) );
-
 		// Add a command for removing a template element.
 		this.editor.commands.add( 'removeTemplate', new RemoveTemplateCommand( this.editor ) );
-
-		// Add commands to move templates within a container.
-		this.editor.commands.add( 'moveTemplateUp', new MoveTemplateUpCommand( this.editor ) );
-		this.editor.commands.add( 'moveTemplateDown', new MoveTemplateDownCommand( this.editor ) );
 
 		const templates = this.editor.config.get( 'templates' );
 
@@ -223,12 +213,14 @@ export default class TemplateEditing extends Plugin {
 			}
 		} ), { priority: 'low ' } );
 
+		const templateManager = this.editor.templates;
 		// Default editing downcast conversions for template container elements without functionality.
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'element' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
+				const parentTemplate = modelElement.parent && templateManager.getElementInfo( modelElement.parent.name );
 				const el = viewWriter.createContainerElement(
-					templateElement.tagName,
+					parentTemplate && parentTemplate.type === 'container' ? 'ck-container-item' : templateElement.tagName,
 					getModelAttributes( templateElement, modelElement )
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );

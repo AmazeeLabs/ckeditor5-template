@@ -22,7 +22,8 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
 
 	// Build the list of matching elements for each seat.
-	const childOptions = templateElement.children.map( child => ( { [ child.name ]: child.conversions } ) )
+	const childOptions = templateElement.children
+		.map( child => ( { [ child.name ]: child.conversions.map( name => `ck__${ name }` ) } ) )
 		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
 
 	// Iterate through existing children, check if they apply to a seat and in case seat them there.

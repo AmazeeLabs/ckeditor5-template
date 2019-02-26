@@ -9,7 +9,7 @@ import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
 import TemplateEditing from '../templateediting';
 
-import '@amazee/editor-components/dist/bundle';
+import { eventType } from '@amazee/editor-components/components/editor/operations';
 
 /**
  * Allow to position placeholders in a document that can be filled with actual elements.
@@ -39,40 +39,12 @@ export default class PlaceholderElement extends Plugin {
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'placeholder' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
-				const editor = this.editor;
-
-				// Prepare selection options as a key value pair.
-				const options = templateElement.conversions.map( name => {
-					const info = this.editor.templates.getElementInfo( name );
-					return { id: name, label: info.label, icon: info.icon };
-				} );
-
-				const inContainer = editor.templates.getElementInfo( modelElement.parent.name ).type === 'container';
-
 				const attributes = {
 					class: 'ck-placeholder-ui',
-					sections: JSON.stringify( options ),
+					sections: templateElement.conversions.join( ' ' ),
 				};
-
-				if ( inContainer && !!modelElement.nextSibling ) {
-					attributes.collapsed = true;
-				}
-				if ( inContainer && !modelElement.nextSibling ) {
-					attributes.closed = true;
-				}
-
-				const element = viewWriter.createUIElement( 'ck-placeholder', attributes, function( domDocument ) {
-					const domElement = this.toDomElement( domDocument );
-					domElement.addEventListener( 'addSection', event => {
-						editor.execute( 'replaceTemplate', { template: event.detail } );
-					} );
-					return domElement;
-				} );
-
-				const wrapperAttributes = Object.assign( {
-					class: 'ck-widget-no-hover',
-				}, getModelAttributes( templateElement, modelElement ) );
-				const wrapper = viewWriter.createContainerElement( 'div', wrapperAttributes );
+				const element = viewWriter.createUIElement( 'ck-placeholder', attributes );
+				const wrapper = viewWriter.createContainerElement( 'div', getModelAttributes( templateElement, modelElement ) );
 				viewWriter.insert( new ViewPosition( wrapper, 0 ), element );
 				return toWidget( wrapper, viewWriter );
 			},
@@ -99,7 +71,7 @@ export default class PlaceholderElement extends Plugin {
 		// All allowed elements need to be configured to be positionable in place of the placeholder.
 		for ( const templateElement of placeholderElements ) {
 			for ( const el of templateElement.conversions ) {
-				this.editor.model.schema.extend( el, {
+				this.editor.model.schema.extend( `ck__${ el }`, {
 					allowWhere: templateElement.name,
 				} );
 			}
