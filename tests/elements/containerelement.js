@@ -1,10 +1,9 @@
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
+import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 
 import ContainerElement from '../../src/elements/containerelement';
-import ReplaceTemplateCommand from '../../src/commands/replacetemplatecommand';
 
 describe( 'Container', () => {
 	let editorElement, editor, model, view;
