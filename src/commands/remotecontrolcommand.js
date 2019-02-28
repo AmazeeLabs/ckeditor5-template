@@ -25,6 +25,8 @@ export default class RemoteControlCommand extends Command {
 			replace: () => this.replaceElement( options, writer ),
 			remove: () => this.removeElement( options, writer ),
 			attributes: () => this.setAttributes( options, writer ),
+			removeAttribute: () => this.removeAttribute( options, writer ),
+			swap: () => this.swap( options, writer ),
 		} )[ options.operation ]();
 	}
 
@@ -75,5 +77,17 @@ export default class RemoteControlCommand extends Command {
 	setAttributes( { target, attr }, writer ) {
 		const targetElement = this.toModel( target );
 		writer.setAttributes( attr, targetElement );
+	}
+
+	removeAttribute( { target, key }, writer ) {
+		const targetElement = this.toModel( target );
+		writer.removeAttribute( key, targetElement );
+	}
+
+	swap( { source, target }, writer ) {
+		const sourceElement = this.toModel( source );
+		const targetElement = this.toModel( target );
+		writer.insert( sourceElement, targetElement, 'before' );
+		writer.remove( targetElement );
 	}
 }

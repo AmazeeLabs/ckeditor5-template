@@ -220,7 +220,11 @@ export default class TemplateEditing extends Plugin {
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const parentTemplate = modelElement.parent && templateManager.getElementInfo( modelElement.parent.name );
 				const el = viewWriter.createContainerElement(
-					parentTemplate && parentTemplate.type === 'container' ? 'ck-container-item' : templateElement.tagName,
+					(
+						// TODO: Introduce a component negotiator? Or somehow enable the "is" attribute for web components.
+						( parentTemplate && parentTemplate.type === 'container' ) ||
+						modelElement.hasAttribute( 'added' ) || modelElement.hasAttribute( 'removed' )
+					) ? 'ck-container-item' : templateElement.tagName,
 					getModelAttributes( templateElement, modelElement )
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );
@@ -298,7 +302,12 @@ export default class TemplateEditing extends Plugin {
 	}
 
 	_findMatchingTemplateElement( viewElement, types ) {
-		return Object.values( this._elements ).filter( el => el.matches( viewElement ) && types.includes( el.type ) ).pop();
+		return Object.values( this._elements ).filter( el =>
+			el.matches( viewElement ) &&
+			types.includes( el.type ) &&
+			// TODO: Exclude text conflict elements, so its not consumed by the wrong converter.
+			viewElement.name !== 'ck-conflict-text'
+		).pop();
 	}
 
 	/**

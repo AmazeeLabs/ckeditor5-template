@@ -88,11 +88,13 @@ export default class ElementInfo {
 	matches( viewElement ) {
 		return viewElement &&
 			// Match the tag name.
-			viewElement.name === this._node.tagName &&
+			// viewElement.name === this._node.tagName &&
 			// Match all classes.
 			this.classes.join( ' ' ) === Array.from( viewElement.getClassNames() ).sort().join( ' ' ) &&
 			// If there is a parent, match the parent.
-			( !this.parent || this.parent.matches( viewElement.parent ) );
+			// TODO: Properly handle these exclusions. Register conflict elements as real elements? Handle it within
+			//       the text element?
+			( !this.parent || viewElement.parent.name === 'ck-conflict-option' || this.parent.matches( viewElement.parent ) );
 	}
 
 	/**
