@@ -86,8 +86,10 @@ export default class TemplateId extends Plugin {
 				writer.setAttribute( 'id', hash( `${ this.session }:${ this.tick }` ), item );
 			}
 
-			for ( const child of item.getChildren() ) {
-				this.postfixIds( child, writer );
+			if ( info ) {
+				for ( const child of item.getChildren() ) {
+					this.postfixIds( child, writer );
+				}
 			}
 		}
 	}
