@@ -21,10 +21,10 @@ describe( 'TemplateId', () => {
 				templates: {
 					a: {
 						label: 'A',
-						template: '<div class="a" id=""></div>',
+						template: '<div class="a"></div>',
 					},
 					b: {
-						template: '<div class="b" id=""><div class="c"></div></div>',
+						template: '<div class="b"><div class="c"></div></div>',
 					},
 					d: {
 						template: '<div class="d"></div>',
@@ -70,10 +70,10 @@ describe( 'TemplateId', () => {
 		].join( '' ) );
 	} );
 
-	it( 'adds ids to sub-elements', () => {
+	it( 'doesn\'t add ids to sub-elements', () => {
 		setModelData( model, '<ck__b><ck__b__child0></ck__b__child0></ck__b>' );
 		expect( getModelData( model ) ).to.equal( [
-			'[<ck__b id="374c5q"><ck__b__child0 id="374cy7"></ck__b__child0></ck__b>]'
+			'[<ck__b id="374c5q"><ck__b__child0></ck__b__child0></ck__b>]'
 		].join( '' ) );
 	} );
 
@@ -101,8 +101,8 @@ describe( 'TemplateId', () => {
 
 		expect( getModelData( model ) ).to.equal( [
 			'[<ck__container_b id="374c5q">' +
-			'<ck__container_b__child0 id="374cy7">' +
-			'<ck__b id="374dqk"></ck__b>' +
+			'<ck__container_b__child0>' +
+			'<ck__b id="374cy7"></ck__b>' +
 			'</ck__container_b__child0>' +
 			'</ck__container_b>]'
 		].join( '' ) );
@@ -110,14 +110,17 @@ describe( 'TemplateId', () => {
 
 	it( 'generates ids for container children without id', () => {
 		editor.setData( [
-			'<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"></div>',
-			'<div class="container" ck-type="container" ck-contains="d"></div></div>',
+			'<div class="wrapper">' +
+			'<div class="container" ck-type="container" ck-contains="b">' +
+			'<div class="b"></div>',
+			'</div>',
+			'</div>',
 		].join( '' ) );
 
 		expect( getModelData( model ) ).to.equal( [
 			'[<ck__container_b id="374c5q">' +
-			'<ck__container_b__child0 id="374cy7"></ck__container_b__child0>' +
-			'<ck__container_b__child0 id="374dqk">' +
+			'<ck__container_b__child0>' +
+			'<ck__b id="374cy7"></ck__b>' +
 			'</ck__container_b__child0>' +
 			'</ck__container_b>]'
 		].join( '' ) );

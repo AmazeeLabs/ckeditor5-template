@@ -79,15 +79,13 @@ export default class TemplateId extends Plugin {
 		if ( item && !item.getAttribute( 'id' ) ) {
 			// Get the template information for this element.
 			const info = this.editor.templates.getElementInfo( item.name );
-			// If the template defines an id attribute for this element, autofill it.
-			if ( info ) {
+			// Only add id's to template roots.
+			if ( info && !info.parent ) {
 				// Generate an id from the current session identifier and the increment counter
 				// for added elements.
 				writer.setAttribute( 'id', hash( `${ this.session }:${ this.tick }` ), item );
 			}
-		}
-		const templateElement = this.editor.templates.getElementInfo( item.name );
-		if ( templateElement ) {
+
 			for ( const child of item.getChildren() ) {
 				this.postfixIds( child, writer );
 			}
