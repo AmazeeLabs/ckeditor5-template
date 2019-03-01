@@ -3,13 +3,11 @@
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
 import TemplateEditing from '../templateediting';
-import PlaceholderElement from './placeholderelement';
 
 import '../../theme/css/gallery.css';
 
@@ -23,7 +21,7 @@ export default class GalleryElement extends Plugin {
 	 * @inheritDoc
 	 */
 	static get requires() {
-		return [ TemplateEditing, PlaceholderElement ];
+		return [ TemplateEditing ];
 	}
 
 	/**
@@ -67,13 +65,6 @@ export default class GalleryElement extends Plugin {
 					allowIn: galleryElement.name,
 				} );
 			}
-
-			// Register a new placeholder for this gallery by creating a template element.
-			const dom = global.document.createElement( 'div' );
-			dom.setAttribute( 'ck-type', 'placeholder' );
-			dom.setAttribute( 'ck-name', 'placeholder' );
-			dom.setAttribute( 'ck-conversions', galleryElement.contains.join( ' ' ) );
-			this.editor.templates.registerElement( dom, galleryElement );
 		}
 
 		// Allow `$text` within all elements.
@@ -87,7 +78,7 @@ export default class GalleryElement extends Plugin {
 			types: [ 'gallery' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const attributes = getModelAttributes( templateElement, modelElement );
-				attributes.section = templateElement.contains[0];
+				attributes.section = templateElement.contains[ 0 ];
 				const el = viewWriter.createContainerElement(
 					'ck-gallery',
 					attributes

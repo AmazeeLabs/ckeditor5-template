@@ -161,12 +161,14 @@ describe( 'ElementInfo', () => {
 	} );
 
 	describe( 'mismatches view element', () => {
-		it( 'by tag name', () => {
-			const dom = global.document.createElement( 'div' );
-			const info = new ElementInfo( dom );
-			const viewElement = new ViewElement( 'H1' );
-			expect( info.matches( viewElement ) ).to.equal( false );
-		} );
+		// TODO: Due to changes with conflict resolution (we need to be able to completely replace the element)
+		//       matching happens only based on classes from now own.
+		// it( 'by tag name', () => {
+		// 	const dom = global.document.createElement( 'div' );
+		// 	const info = new ElementInfo( dom );
+		// 	const viewElement = new ViewElement( 'H1' );
+		// 	expect( info.matches( viewElement ) ).to.equal( false );
+		// } );
 
 		it( 'by tag name and classes', () => {
 			const dom = global.document.createElement( 'h1' );

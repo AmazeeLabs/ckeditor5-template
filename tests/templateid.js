@@ -21,10 +21,13 @@ describe( 'TemplateId', () => {
 				templates: {
 					a: {
 						label: 'A',
-						template: '<div class="a" id=""></div>',
+						template: '<div class="a"></div>',
 					},
 					b: {
-						template: '<div class="b" id=""><div class="c"></div></div>',
+						template: '<div class="b"><div class="c"></div></div>',
+					},
+					d: {
+						template: '<div class="d"></div>',
 					},
 					container_b: {
 						label: 'B Container',
@@ -91,14 +94,35 @@ describe( 'TemplateId', () => {
 		].join( '' ) );
 	} );
 
-	it( 'generates ids for container children', () => {
+	it( 'generates ids for container children and container', () => {
 		editor.setData( [
-			'<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"></div></div>',
+			'<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"><div class="b"></div></div></div>',
 		].join( '' ) );
+
 		expect( getModelData( model ) ).to.equal( [
-			'[<ck__container_b><ck__container_b__child0>',
-			'<ck__b id="374c5q"><ck__b__child0></ck__b__child0></ck__b>',
-			'</ck__container_b__child0></ck__container_b>]'
+			'[<ck__container_b id="374c5q">' +
+			'<ck__container_b__child0>' +
+			'<ck__b id="374cy7"></ck__b>' +
+			'</ck__container_b__child0>' +
+			'</ck__container_b>]'
+		].join( '' ) );
+	} );
+
+	it( 'generates ids for container children without id', () => {
+		editor.setData( [
+			'<div class="wrapper">' +
+			'<div class="container" ck-type="container" ck-contains="b">' +
+			'<div class="b"></div>',
+			'</div>',
+			'</div>',
+		].join( '' ) );
+
+		expect( getModelData( model ) ).to.equal( [
+			'[<ck__container_b id="374c5q">' +
+			'<ck__container_b__child0>' +
+			'<ck__b id="374cy7"></ck__b>' +
+			'</ck__container_b__child0>' +
+			'</ck__container_b>]'
 		].join( '' ) );
 	} );
 } );

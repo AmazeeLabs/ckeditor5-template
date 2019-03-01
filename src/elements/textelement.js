@@ -91,7 +91,13 @@ export default class TextElement extends Plugin {
 					attachPlaceholder( this.editor.editing.view, el, templateElement.text );
 				}
 
-				return toWidgetEditable( templateElement.parent ? el : toWidget( el, viewWriter ), viewWriter );
+				const widget = templateElement.parent ? el : toWidget( el, viewWriter );
+				// TODO: Generalize this?
+				if ( modelElement.parent.name === `${ modelElement.name }__conflict_option` ) {
+					return widget;
+				}
+
+				return toWidgetEditable( widget, viewWriter );
 			}
 		} ), { priority: 'low ' } );
 

@@ -1,10 +1,9 @@
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
+import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 
 import ContainerElement from '../../src/elements/containerelement';
-import ReplaceTemplateCommand from '../../src/commands/replacetemplatecommand';
 
 describe( 'Container', () => {
 	let editorElement, editor, model, view;
@@ -51,143 +50,15 @@ describe( 'Container', () => {
 		return editor.destroy();
 	} );
 
-	it( 'is pre-filled with at least one placeholder', () => {
-		setModelData( model, '<ck__container></ck__container>' );
-		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__container itemprop="container">',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'</ck__container>',
-			']' ].join( '' ) );
-	} );
-
-	it( 'removes double placeholders', () => {
-		setModelData( model, [
-			'<ck__container itemprop="container">',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'</ck__container>'
-		].join( '' ) );
-		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__container itemprop="container">',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'</ck__container>',
-			']' ].join( '' ) );
-	} );
-
-	it( 'wraps elements in placeholders', () => {
+	it( 'renders children as container items', () => {
 		setModelData( model, [
 			'<ck__container itemprop="container">',
 			'<ck__a></ck__a>',
 			'</ck__container>'
 		].join( '' ) );
-		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__container itemprop="container">',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'<ck__a></ck__a>',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'</ck__container>',
-			']' ].join( '' ) );
-	} );
-
-	it( 'puts placeholders between each element', () => {
-		setModelData( model, [
-			'<ck__container itemprop="container">',
-			'<ck__a></ck__a>',
-			'<ck__a></ck__a>',
-			'<ck__a></ck__a>',
-			'</ck__container>'
-		].join( '' ) );
-		expect( getModelData( model ) ).to.equal( [ '[',
-			'<ck__container itemprop="container">',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'<ck__a></ck__a>',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'<ck__a></ck__a>',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'<ck__a></ck__a>',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'</ck__container>',
-			']' ].join( '' ) );
-	} );
-
-	it( 'allows to select placeholders', () => {
-		setModelData( model, [
-			'<ck__container itemprop="container">',
-			'[<ck__container__placeholder></ck__container__placeholder>]',
-			'</ck__container>'
-		].join( '' ) );
-
-		expect( getModelData( model ) ).to.equal( [
-			'<ck__container itemprop="container">',
-			'[<ck__container__placeholder></ck__container__placeholder>]',
-			'</ck__container>',
-		].join( '' ) );
-
-		expect( getViewData( view ) ).to.equal( [
-			'<div class="ck-widget container" contenteditable="false" itemprop="container">',
-			'[<div class=" ck-widget ck-widget_selected" contenteditable="false">',
-			'<ck-placeholder class="ck-placeholder-ui" closed="true" ',
-			'sections="[{"id":"ck__a","label":"A","icon":"configurator"},{"id":"ck__b","label":"B","icon":"configurator"}]">',
-			'</ck-placeholder>',
-			'</div>]',
-			'</div>',
-		].join( '' ) );
-
-		expect( model.document.selection.getSelectedElement().name ).to.equal( 'ck__container__placeholder' );
-	} );
-
-	it( 'allows to insert elements at a placeholder position', () => {
-		const command = new ReplaceTemplateCommand( editor );
-
-		setModelData( model, [
-			'<ck__container itemprop="container">',
-			'[<ck__container__placeholder></ck__container__placeholder>]',
-			'</ck__container>'
-		].join( '' ) );
-
-		expect( command.isEnabled ).to.be.true;
-		command.execute( { template: 'ck__a' } );
-
-		expect( getModelData( model ) ).to.equal( [
-			'<ck__container itemprop="container">',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'[<ck__a></ck__a>]',
-			'<ck__container__placeholder></ck__container__placeholder>',
-			'</ck__container>',
-		].join( '' ) );
-	} );
-
-	it( 'fills container if only one element is available', () => {
-		setModelData( model, [
-			'<ck__containersingle itemprop="container">',
-			'</ck__containersingle>'
-		].join( '' ) );
-
-		expect( getModelData( model ) ).to.equal( [
-			'[<ck__containersingle itemprop="container">',
-			'<ck__containersingle__placeholder></ck__containersingle__placeholder>',
-			'<ck__b></ck__b>',
-			'<ck__containersingle__placeholder></ck__containersingle__placeholder>',
-			'</ck__containersingle>]',
-		].join( '' ) );
-	} );
-
-	it( 'fills nested containers with placeholders', () => {
-		setModelData( model, [
-			'<ck__c itemprop="container">',
-			'</ck__c>'
-		].join( '' ) );
-
-		expect( getModelData( model ) ).to.equal( [
-			'[<ck__c itemprop="container">',
-			'<ck__c__placeholder></ck__c__placeholder>',
-			'<ck__containersingle itemprop="container">',
-			'<ck__containersingle__placeholder></ck__containersingle__placeholder>',
-			'<ck__b></ck__b>',
-			'<ck__containersingle__placeholder></ck__containersingle__placeholder>',
-			'</ck__containersingle>',
-			'<ck__c__placeholder></ck__c__placeholder>',
-			'</ck__c>]',
-		].join( '' ) );
+		expect( getViewData( view ) ).to.equal( [ '[' +
+		'<ck-container class="ck-widget ck-widget_selected container" contenteditable="false" itemprop="container" sections="a b">' +
+		'<ck-container-item class="a ck-widget" contenteditable="false"></ck-container-item>' +
+		'</ck-container>]' ].join( '' ) );
 	} );
 } );

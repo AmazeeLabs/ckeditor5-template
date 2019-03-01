@@ -22,6 +22,10 @@ ClassicEditor
 				label: 'B',
 				template: '<div class="b" id=""><div class="c"></div></div>',
 			},
+			c: {
+				label: 'C',
+				template: '<div class="c"></div>'
+			},
 			container_b: {
 				label: 'B Container',
 				template: '<div class="wrapper"><div class="container" ck-type="container" ck-contains="b"></div></div>',

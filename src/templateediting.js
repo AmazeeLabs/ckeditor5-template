@@ -17,10 +17,7 @@ import {
 	upcastTemplateElement
 } from './utils/conversion';
 import { postfixTemplateElement } from './utils/integrity';
-import ReplaceTemplateCommand from './commands/replacetemplatecommand';
 import RemoveTemplateCommand from './commands/removetemplatecommand';
-import MoveTemplateUpCommand from './commands/movetemplateupcommand';
-import MoveTemplateDownCommand from './commands/movetemplatedowncommand';
 
 /**
  * The template engine feature.
@@ -152,15 +149,8 @@ export default class TemplateEditing extends Plugin {
 		// Add a command for inserting a template element.
 		this.editor.commands.add( 'insertTemplate', new InsertTemplateCommand( this.editor ) );
 
-		// Add a command for replacing a template element.
-		this.editor.commands.add( 'replaceTemplate', new ReplaceTemplateCommand( this.editor ) );
-
 		// Add a command for removing a template element.
 		this.editor.commands.add( 'removeTemplate', new RemoveTemplateCommand( this.editor ) );
-
-		// Add commands to move templates within a container.
-		this.editor.commands.add( 'moveTemplateUp', new MoveTemplateUpCommand( this.editor ) );
-		this.editor.commands.add( 'moveTemplateDown', new MoveTemplateDownCommand( this.editor ) );
 
 		const templates = this.editor.config.get( 'templates' );
 
@@ -230,7 +220,11 @@ export default class TemplateEditing extends Plugin {
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const parentTemplate = modelElement.parent && templateManager.getElementInfo( modelElement.parent.name );
 				const el = viewWriter.createContainerElement(
-					parentTemplate && parentTemplate.type === 'container' ? 'ck-container-item' : templateElement.tagName,
+					(
+						// TODO: Introduce a component negotiator? Or somehow enable the "is" attribute for web components.
+						( parentTemplate && parentTemplate.type === 'container' ) ||
+						modelElement.hasAttribute( 'added' ) || modelElement.hasAttribute( 'removed' )
+					) ? 'ck-container-item' : templateElement.tagName,
 					getModelAttributes( templateElement, modelElement )
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );
@@ -308,7 +302,12 @@ export default class TemplateEditing extends Plugin {
 	}
 
 	_findMatchingTemplateElement( viewElement, types ) {
-		return Object.values( this._elements ).filter( el => el.matches( viewElement ) && types.includes( el.type ) ).pop();
+		return Object.values( this._elements ).filter( el =>
+			el.matches( viewElement ) &&
+			types.includes( el.type ) &&
+			// TODO: Exclude text conflict elements, so its not consumed by the wrong converter.
+			viewElement.name !== 'ck-conflict-text'
+		).pop();
 	}
 
 	/**

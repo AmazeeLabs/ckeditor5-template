@@ -89,10 +89,8 @@ describe( 'RemoveTemplateCommand', () => {
 			setModelData( model, '<ck__container>[<ck__a></ck__a>]<ck__a></ck__a></ck__container>' );
 			command.execute();
 			expect( getModelData( model ) ).to.equal( [
-				'<ck__container>[]',
-				'<ck__container__placeholder></ck__container__placeholder>',
-				'<ck__a></ck__a>',
-				'<ck__container__placeholder></ck__container__placeholder>',
+				'<ck__container>',
+				'[<ck__a></ck__a>]',
 				'</ck__container>',
 			].join( '' ) );
 		} );
@@ -101,9 +99,8 @@ describe( 'RemoveTemplateCommand', () => {
 			setModelData( model, '<ck__container>[<ck__a></ck__a>]</ck__container>' );
 			command.execute();
 			expect( getModelData( model ) ).to.equal( [
-				'<ck__container>[]',
-				'<ck__container__placeholder></ck__container__placeholder>',
-				'</ck__container>',
+				'[<ck__container>',
+				'</ck__container>]',
 			].join( '' ) );
 		} );
 	} );
