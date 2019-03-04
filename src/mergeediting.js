@@ -39,8 +39,8 @@ export default class MergeEditing extends Plugin {
 
 		// TODO: This should probably be constrained to conflict elements.
 		this.editor.conversion.attributeToAttribute( {
-			model: 'label',
-			view: 'label',
+			model: 'from',
+			view: 'from',
 		} );
 
 		// Register the text-conflict elements.
@@ -51,12 +51,12 @@ export default class MergeEditing extends Plugin {
 
 			this.editor.model.schema.register( wrapper, {
 				allowWhere: info.name,
-				allowAttributes: 'label',
+				allowAttributes: 'from',
 			} );
 
 			this.editor.model.schema.register( option, {
 				allowIn: `${ info.name }__conflict`,
-				allowAttributes: 'label',
+				allowAttributes: 'from',
 			} );
 
 			this.editor.model.schema.extend( info.name, {
