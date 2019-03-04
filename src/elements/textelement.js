@@ -50,7 +50,7 @@ export default class TextElement extends Plugin {
 	init() {
 		const textElements = this.editor.templates.getElementsByType( 'text' );
 
-		// If the current element is a container, allow bock elements inside it.
+		// If the current element is a container, allow block elements inside it.
 		this.editor.model.schema.extend( '$block', {
 			allowIn: textElements.filter( isContainerElement ).map( el => el.name ),
 		} );
@@ -82,22 +82,35 @@ export default class TextElement extends Plugin {
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'text' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
-				const el = viewWriter.createEditableElement(
-					templateElement.tagName,
+				if ( modelElement.parent.name === `${ modelElement.name }__conflict_option` ) {
+					return viewWriter.createContainerElement(
+						templateElement.tagName,
+						getModelAttributes( templateElement, modelElement )
+					);
+				}
+
+				if ( isContainerElement( templateElement ) ) {
+					const el = viewWriter.createEditableElement(
+						'ck-textfield',
+						getModelAttributes( templateElement, modelElement )
+					);
+
+					if ( templateElement.text ) {
+						attachPlaceholder( this.editor.editing.view, el, templateElement.text );
+					}
+
+					return toWidgetEditable( templateElement.parent ? el : toWidget( el, viewWriter ), viewWriter );
+				}
+
+				const editable = viewWriter.createEditableElement( 'div' );
+				const wrapper = viewWriter.createContainerElement(
+					'ck-textfield',
 					getModelAttributes( templateElement, modelElement )
 				);
 
-				if ( templateElement.text ) {
-					attachPlaceholder( this.editor.editing.view, el, templateElement.text );
-				}
+				viewWriter.insert( viewWriter.createPositionAt( wrapper, 'end' ), editable );
 
-				const widget = templateElement.parent ? el : toWidget( el, viewWriter );
-				// TODO: Generalize this?
-				if ( modelElement.parent.name === `${ modelElement.name }__conflict_option` ) {
-					return widget;
-				}
-
-				return toWidgetEditable( widget, viewWriter );
+				return toWidgetEditable( templateElement.parent ? editable : toWidget( editable, viewWriter ), viewWriter );
 			}
 		} ), { priority: 'low ' } );
 
