@@ -222,7 +222,7 @@ export default class TemplateEditing extends Plugin {
 				const el = viewWriter.createContainerElement(
 					(
 						// TODO: Introduce a component negotiator? Or somehow enable the "is" attribute for web components.
-						( parentTemplate && parentTemplate.type === 'container' ) ||
+						( parentTemplate && [ 'container', 'gallery', 'tabs' ].includes( parentTemplate.type ) ) ||
 						modelElement.hasAttribute( 'added' ) || modelElement.hasAttribute( 'removed' )
 					) ? 'ck-container-item' : templateElement.tagName,
 					getModelAttributes( templateElement, modelElement )

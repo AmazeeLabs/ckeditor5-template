@@ -33,6 +33,15 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 			childSeats[ child.name ] = child;
 		}
 
+		// Check for a conflict match.
+		const conflictSuffix = '__conflict';
+		if ( child.name.substr( child.name.length - conflictSuffix.length  ) === conflictSuffix ) {
+			const name = child.name.substr( 0, child.name.length - conflictSuffix.length );
+			if ( childSeats.hasOwnProperty( name ) && !childSeats[ name ] ) {
+				childSeats[ name ] = child;
+			}
+		}
+
 		// Check for an indirect name match (e.g. allow placeholder in element spots).
 		for ( const name of Object.keys( childSeats ) ) {
 			if ( childOptions[ name ].includes( child.name ) ) {
