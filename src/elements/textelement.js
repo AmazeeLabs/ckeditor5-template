@@ -82,6 +82,14 @@ export default class TextElement extends Plugin {
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'text' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
+				// TODO: Generalize this?
+				if ( modelElement.parent.name === `${ modelElement.name }__conflict__option` ) {
+					return viewWriter.createContainerElement(
+						templateElement.tagName,
+						getModelAttributes( templateElement, modelElement )
+					);
+				}
+
 				const el = viewWriter.createEditableElement(
 					templateElement.tagName,
 					getModelAttributes( templateElement, modelElement )
@@ -92,10 +100,6 @@ export default class TextElement extends Plugin {
 				}
 
 				const widget = templateElement.parent ? el : toWidget( el, viewWriter );
-				// TODO: Generalize this?
-				if ( modelElement.parent.name === `${ modelElement.name }__conflict_option` ) {
-					return widget;
-				}
 
 				return toWidgetEditable( widget, viewWriter );
 			}
