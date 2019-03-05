@@ -35,7 +35,7 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 
 		// Check for a conflict match.
 		const conflictSuffix = '__conflict';
-		if ( child.name.substr( child.name.length - conflictSuffix.length  ) === conflictSuffix ) {
+		if ( child.name && child.name.substr( child.name.length - conflictSuffix.length  ) === conflictSuffix ) {
 			const name = child.name.substr( 0, child.name.length - conflictSuffix.length );
 			if ( childSeats.hasOwnProperty( name ) && !childSeats[ name ] ) {
 				childSeats[ name ] = child;
