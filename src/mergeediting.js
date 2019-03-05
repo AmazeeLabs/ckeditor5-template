@@ -51,7 +51,6 @@ export default class MergeEditing extends Plugin {
 
 			this.editor.model.schema.register( wrapper, {
 				allowWhere: info.name,
-				allowAttributes: 'from',
 			} );
 
 			this.editor.model.schema.register( option, {
@@ -74,7 +73,7 @@ export default class MergeEditing extends Plugin {
 				model: option,
 				view: ( modelElement, viewWriter ) => {
 					return viewWriter.createContainerElement( 'ck-conflict-option', {
-						label: modelElement.getAttribute( 'label' ),
+						from: modelElement.getAttribute( 'from' ),
 					} );
 				}
 			} ), { priority: 'highest' } );

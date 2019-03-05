@@ -306,7 +306,7 @@ export default class TemplateEditing extends Plugin {
 			el.matches( viewElement ) &&
 			types.includes( el.type ) &&
 			// TODO: Exclude text conflict elements, so its not consumed by the wrong converter.
-			viewElement.name !== 'ck-conflict-text'
+			![ 'ck-conflict-text', 'ck-conflict-option' ].includes( viewElement.name )
 		).pop();
 	}
 
