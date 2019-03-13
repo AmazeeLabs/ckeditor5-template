@@ -35,6 +35,6 @@ export default class TextConstraintElement extends Plugin {
 		} ), { priority: 'high ' } );
 
 		// Postfix elements to make sure a templates structure is always correct.
-		this.editor.templates.registerPostFixer( [ 'button' ], postfixTemplateElement );
+		this.editor.templates.registerPostFixer( [ 'text-constraint' ], postfixTemplateElement );
 	}
 }
