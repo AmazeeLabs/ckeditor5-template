@@ -95,7 +95,7 @@ export default class ElementInfo {
 			// TODO: Properly handle these exclusions. Register conflict elements as real elements? Handle it within
 			//       the text element?
 			( !this.parent || viewElement.parent.name === 'ck-conflict-option' ||
-				viewElement.parent.name === 'ck-conflict-mediaq-option' || this.parent.matches( viewElement.parent ) );
+				viewElement.parent.name === 'ck-conflict-media-option' || this.parent.matches( viewElement.parent ) );
 	}
 
 	/**
