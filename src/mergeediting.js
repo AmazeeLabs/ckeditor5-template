@@ -107,6 +107,64 @@ export default class MergeEditing extends Plugin {
 				);
 			},
 		} ), { priority: 'highest' } );
+
+		// Media conflict elements register.
+		const mediaElements = this.editor.templates.findElementInfo( info => info.type === 'drupal-media' );
+		mediaElements.forEach( info => {
+			const wrapper = `${ info.name }__media__conflict`;
+			const option = `${ wrapper }__option`;
+
+			this.editor.model.schema.register( wrapper, {
+				allowIn: info.parent.name,
+			} );
+
+			this.editor.model.schema.register( option, {
+				allowIn: wrapper,
+				allowAttributes: [ 'from', 'position' ],
+			} );
+
+			this.editor.model.schema.extend( info.name, {
+				allowIn: option,
+			} );
+
+			this.editor.conversion.for( 'downcast' ).add( downcastElementToElement( {
+				model: wrapper,
+				view: ( modelElement, viewWriter ) => {
+					return viewWriter.createContainerElement( 'ck-conflict-media', getModelAttributes( info, modelElement ) );
+				}
+			} ), { priority: 'highest' } );
+
+			this.editor.conversion.for( 'downcast' ).add( downcastElementToElement( {
+				model: option,
+				view: ( modelElement, viewWriter ) => {
+					return viewWriter.createContainerElement( 'ck-conflict-media-option', {
+						from: modelElement.getAttribute( 'from' ),
+					} );
+				}
+			} ), { priority: 'highest' } );
+
+			this.editor.conversion.for( 'upcast' ).add( upcastElementToElement( {
+				view: viewElement => viewElement.name === 'ck-conflict-media' && { name: true },
+				model: ( viewElement, modelWriter ) => {
+					const textElement = this.editor.templates.findElementInfo( info => info.type == 'container' ).pop();
+					return modelWriter.createElement(
+						wrapper,
+						getViewAttributes( textElement, viewElement )
+					);
+				},
+			} ), { priority: 'highest' } );
+
+			this.editor.conversion.for( 'upcast' ).add( upcastElementToElement( {
+				view: viewElement => viewElement.name === 'ck-conflict-media-option' && { name: true },
+				model: ( viewElement, modelWriter ) => {
+					const textElement = this.editor.templates.findElementInfo( info => info.type == 'container' ).pop();
+					return modelWriter.createElement(
+						option,
+						getViewAttributes( textElement, viewElement )
+					);
+				},
+			} ), { priority: 'highest' } );
+		} );
 	}
 
 	matchingTextElement( viewElement ) {
