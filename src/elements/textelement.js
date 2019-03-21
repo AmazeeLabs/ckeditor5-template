@@ -83,7 +83,8 @@ export default class TextElement extends Plugin {
 			types: [ 'text' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
 				// TODO: Generalize this?
-				if ( modelElement.parent.name === `${ modelElement.name }__conflict__option` ) {
+				if ( modelElement.parent.name === `${ modelElement.name }__conflict__option` ||
+					modelElement.parent.name === `${ modelElement.name }__media__conflict__option` ) {
 					return viewWriter.createContainerElement(
 						templateElement.tagName,
 						getModelAttributes( templateElement, modelElement )
