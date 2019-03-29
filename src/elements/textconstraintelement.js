@@ -31,8 +31,9 @@ export default class TextConstraintElement extends Plugin {
 					'ck-textfield',
 					Object.assign( getModelAttributes( templateElement, modelElement ), config )
 				);
-			}
-		} ), { priority: 'high ' } );
+			},
+			converterPriority: 'high'
+		} ) );
 
 		// Postfix elements to make sure a templates structure is always correct.
 		this.editor.templates.registerPostFixer( [ 'text-constraint' ], postfixTemplateElement );

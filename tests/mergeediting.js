@@ -158,10 +158,10 @@ describe( 'TemplateEditing', () => {
 			'<ck-container-item class="b ck-widget" contenteditable="false">' +
 				'<ck-conflict-text class="text" label="X">' +
 					'<ck-conflict-option label="A">' +
-						'<p class="ck-editor__editable ck-editor__nested-editable text" contenteditable="true">A</p>' +
+						'<p class="text">A</p>' +
 					'</ck-conflict-option>' +
 					'<ck-conflict-option label="B">' +
-						'<p class="ck-editor__editable ck-editor__nested-editable text" contenteditable="true">B</p>' +
+						'<p class="text">B</p>' +
 					'</ck-conflict-option>' +
 				'</ck-conflict-text>' +
 			'</ck-container-item>' +

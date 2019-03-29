@@ -3,7 +3,7 @@
  */
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { toWidget, toWidgetEditable } from '@ckeditor/ckeditor5-widget/src/utils';
-import { attachPlaceholder } from '@ckeditor/ckeditor5-engine/src/view/placeholder';
+import { enablePlaceholder } from '@ckeditor/ckeditor5-engine/src/view/placeholder';
 
 import TemplateEditing from '../templateediting';
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
@@ -97,14 +97,19 @@ export default class TextElement extends Plugin {
 				);
 
 				if ( templateElement.text ) {
-					attachPlaceholder( this.editor.editing.view, el, templateElement.text );
+					enablePlaceholder( {
+						view: this.editor.editing.view,
+						element: el,
+						text: templateElement.text
+					} );
 				}
 
 				const widget = templateElement.parent ? el : toWidget( el, viewWriter );
 
 				return toWidgetEditable( widget, viewWriter );
-			}
-		} ), { priority: 'low ' } );
+			},
+			converterPriority: 'low'
+		} ) );
 
 		// Add an empty paragraph if a container text element is empty.
 		this.editor.templates.registerPostFixer( [ 'text' ], ( templateElement, modelElement, modelWriter ) => {

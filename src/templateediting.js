@@ -4,9 +4,8 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
-import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
+import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcasthelpers';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
-import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 
 import ElementInfo from './utils/elementinfo';
 import InsertTemplateCommand from './commands/inserttemplatecommand';
@@ -18,6 +17,12 @@ import {
 } from './utils/conversion';
 import { postfixTemplateElement } from './utils/integrity';
 import RemoveTemplateCommand from './commands/removetemplatecommand';
+
+// @todo: remove these imports required for reproducing here the now private API in @ckeditor/ckeditor5-engine/src/conversion/upcasthelpers
+// This allows up for the time being to maintain the interface exposed by TemplateEditing.upcastTemplateElement().
+import { cloneDeep } from 'lodash-es';
+import Matcher from '@ckeditor/ckeditor5-engine/src/view/matcher';
+import ModelRange from '@ckeditor/ckeditor5-engine/src/model/range';
 
 /**
  * The template engine feature.
@@ -187,6 +192,7 @@ export default class TemplateEditing extends Plugin {
 		// Allow `$text` within all elements.
 		// Required until https://github.com/ckeditor/ckeditor5-engine/issues/1593 is fixed.
 		// TODO: Remove this once the issue is resolved.
+		// @todo: Issue is now resolved, _but_ this still breaks tests.
 		this.editor.model.schema.extend( '$text', {
 			allowIn: Object.keys( this._elements ),
 		} );
@@ -200,7 +206,8 @@ export default class TemplateEditing extends Plugin {
 					getViewAttributes( templateElement, viewElement )
 				);
 			},
-		} ), { priority: 'low' } );
+			converterPriority: 'low'
+		} ) );
 
 		// Default data downcast conversions for template elements.
 		this.editor.conversion.for( 'dataDowncast' ).add( downcastTemplateElement( this.editor, {
@@ -210,8 +217,9 @@ export default class TemplateEditing extends Plugin {
 					templateElement.tagName,
 					getModelAttributes( templateElement, modelElement )
 				);
-			}
-		} ), { priority: 'low ' } );
+			},
+			converterPriority: 'low'
+		} ) );
 
 		const templateManager = this.editor.templates;
 		// Default editing downcast conversions for template container elements without functionality.
@@ -228,8 +236,9 @@ export default class TemplateEditing extends Plugin {
 					getModelAttributes( templateElement, modelElement )
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );
-			}
-		} ), { priority: 'low ' } );
+			},
+			converterPriority: 'low'
+		} ) );
 	}
 
 	_postfixElement( item, writer ) {
@@ -291,14 +300,16 @@ export default class TemplateEditing extends Plugin {
 	 * @returns {Function}
 	 */
 	upcastTemplateElement( config ) {
-		return upcastElementToElement( {
+		// @todo: Use the local "copy"
+		return _upcastElementToElement( {
 			view: viewElement => !!this._findMatchingTemplateElement( viewElement, config.types ) && { name: true },
 			model: ( viewElement, modelWriter ) => config.model(
 				this._findMatchingTemplateElement( viewElement, config.types ),
 				viewElement,
 				modelWriter
-			)
-		} );
+			),
+			converterPriority: config.converterPriority || 'normal'
+		}	);
 	}
 
 	_findMatchingTemplateElement( viewElement, types ) {
@@ -323,7 +334,8 @@ export default class TemplateEditing extends Plugin {
 
 		// Register the element itself.
 		this.editor.model.schema.register( element.name, {
-			isObject: !parent,
+			// @see https://github.com/ckeditor/ckeditor5/issues/1582 "Mark your widget as isObject in the schema"
+			isObject: true,
 			isBlock: true,
 			// If this is the root element of a template, allow it in root. Else allow it only in its parent.
 			allowIn: parent ? parent.name : '$root',
@@ -335,4 +347,127 @@ export default class TemplateEditing extends Plugin {
 		Array.from( dom.childNodes ).filter( node => node.nodeType === 1 )
 			.map( child => this.registerElement( child, element ) );
 	}
+}
+
+// Duplicated old, now private API here.
+
+function _upcastElementToElement( config ) {
+	config = cloneDeep( config );
+
+	const converter = prepareToElementConverter( config );
+
+	const elementName = getViewElementNameFromConfig( config );
+	const eventName = elementName ? 'element:' + elementName : 'element';
+
+	return dispatcher => {
+		dispatcher.on( eventName, converter, { priority: config.converterPriority || 'normal' } );
+	};
+}
+
+// Helper function for upcasting-to-element converter. Takes the model configuration, the converted view element
+// and a writer instance and returns a model element instance to be inserted in the model.
+//
+// @param {String|Function|module:engine/model/element~Element} model Model conversion configuration.
+// @param {module:engine/view/node~Node} input The converted view node.
+// @param {module:engine/model/writer~Writer} writer A writer instance to use to create the model element.
+function getModelElement( model, input, writer ) {
+	if ( model instanceof Function ) {
+		return model( input, writer );
+	} else {
+		return writer.createElement( model );
+	}
+}
+
+// Helper for to-model-element conversion. Takes a config object and returns a proper converter function.
+//
+// @param {Object} config Conversion configuration.
+// @returns {Function} View to model converter.
+function prepareToElementConverter( config ) {
+	const matcher = new Matcher( config.view );
+
+	return ( evt, data, conversionApi ) => {
+		// This will be usually just one pattern but we support matchers with many patterns too.
+		const match = matcher.match( data.viewItem );
+
+		// If there is no match, this callback should not do anything.
+		if ( !match ) {
+			return;
+		}
+
+		// Force consuming element's name.
+		match.match.name = true;
+
+		// Create model element basing on config.
+		const modelElement = getModelElement( config.model, data.viewItem, conversionApi.writer );
+
+		// Do not convert if element building function returned falsy value.
+		if ( !modelElement ) {
+			return;
+		}
+
+		// When element was already consumed then skip it.
+		if ( !conversionApi.consumable.test( data.viewItem, match.match ) ) {
+			return;
+		}
+
+		// Find allowed parent for element that we are going to insert.
+		// If current parent does not allow to insert element but one of the ancestors does
+		// then split nodes to allowed parent.
+		const splitResult = conversionApi.splitToAllowedParent( modelElement, data.modelCursor );
+
+		// When there is no split result it means that we can't insert element to model tree, so let's skip it.
+		if ( !splitResult ) {
+			return;
+		}
+
+		// Insert element on allowed position.
+		conversionApi.writer.insert( modelElement, splitResult.position );
+
+		// Convert children and insert to element.
+		const childrenResult = conversionApi.convertChildren( data.viewItem, conversionApi.writer.createPositionAt( modelElement, 0 ) );
+
+		// Consume appropriate value from consumable values list.
+		conversionApi.consumable.consume( data.viewItem, match.match );
+
+		// Set conversion result range.
+		data.modelRange = new ModelRange(
+			// Range should start before inserted element
+			conversionApi.writer.createPositionBefore( modelElement ),
+			// Should end after but we need to take into consideration that children could split our
+			// element, so we need to move range after parent of the last converted child.
+			// before: <allowed>[]</allowed>
+			// after: <allowed>[<converted><child></child></converted><child></child><converted>]</converted></allowed>
+			conversionApi.writer.createPositionAfter( childrenResult.modelCursor.parent )
+		);
+
+		// Now we need to check where the modelCursor should be.
+		// If we had to split parent to insert our element then we want to continue conversion inside split parent.
+		//
+		// before: <allowed><notAllowed>[]</notAllowed></allowed>
+		// after:  <allowed><notAllowed></notAllowed><converted></converted><notAllowed>[]</notAllowed></allowed>
+		if ( splitResult.cursorParent ) {
+			data.modelCursor = conversionApi.writer.createPositionAt( splitResult.cursorParent, 0 );
+
+			// Otherwise just continue after inserted element.
+		} else {
+			data.modelCursor = data.modelRange.end;
+		}
+	};
+}
+
+// Helper function for from-view-element conversion. Checks if `config.view` directly specifies converted view element's name
+// and if so, returns it.
+//
+// @param {Object} config Conversion config.
+// @returns {String|null} View element name or `null` if name is not directly set.
+function getViewElementNameFromConfig( config ) {
+	if ( typeof config.view == 'string' ) {
+		return config.view;
+	}
+
+	if ( typeof config.view == 'object' && typeof config.view.name == 'string' ) {
+		return config.view.name;
+	}
+
+	return null;
 }

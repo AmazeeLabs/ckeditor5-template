@@ -18,7 +18,6 @@ import TemplateAttributeCommand from '../commands/templateattributecommand';
 import TemplateButtonView from './views/templatebuttonview';
 
 import ConfigureIcon from '../../theme/icons/configure.svg';
-import { downcastAttributeToAttribute } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
 /**
  * Automatically add configurable attributes widgets to templates.
@@ -77,10 +76,10 @@ export default class TemplateAttributeUI extends Plugin {
 			}
 
 			// Add a downcast converter for each configurable attribute.
-			this.editor.conversion.for( 'downcast' ).add( downcastAttributeToAttribute( {
+			this.editor.conversion.for( 'downcast' ).attributeToAttribute( {
 				model: attr,
 				view: attr,
-			} ) );
+			} );
 
 			const factoryMethod = factories[ type ];
 
@@ -184,7 +183,7 @@ export default class TemplateAttributeUI extends Plugin {
 				if ( this.toolbarPanels.hasOwnProperty( pointer ) ) {
 					this.toolbarPanels[ pointer ].pin( {
 						target: this.configureButton.element,
-						limiter: this.editor.ui.view.editableElement,
+						limiter: this.editor.ui.view.getEditableElement(),
 					} );
 				}
 			}

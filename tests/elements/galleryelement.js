@@ -51,7 +51,7 @@ describe( 'Gallery', () => {
 		setModelData( model, '<ck__gallery></ck__gallery>' );
 		expect( getViewData( view ) ).to.equal( [ '[' +
 		'<ck-gallery class="ck-widget ck-widget_selected gallery" contenteditable="false" itemprop="gallery" section="a">' +
-		'<div class="a ck-widget" contenteditable="false"></div>' +
+		'<ck-container-item class="a ck-widget" contenteditable="false"></ck-container-item>' +
 		'</ck-gallery>]' ].join( '' ) );
 	} );
 } );
