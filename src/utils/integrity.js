@@ -36,7 +36,11 @@ export function postfixTemplateElement( templateElement, item, writer ) {
 		// Check for a conflict match.
 		const conflictSuffix = '__conflict';
 		if ( child.name && child.name.substr( child.name.length - conflictSuffix.length ) === conflictSuffix ) {
-			const name = child.name.substr( 0, child.name.length - conflictSuffix.length );
+			let name = child.name.substr( 0, child.name.length - conflictSuffix.length );
+			// Media conflict element resolve.
+			if ( name.substr( name.length - 7 ) == '__media' ) {
+				name = name.substr( 0, name.length - 7 );
+			}
 			if ( childSeats.hasOwnProperty( name ) && !childSeats[ name ] ) {
 				childSeats[ name ] = child;
 			}
