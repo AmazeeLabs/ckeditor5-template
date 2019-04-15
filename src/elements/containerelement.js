@@ -8,7 +8,6 @@ import { downcastTemplateElement, getModelAttributes } from '../utils/conversion
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
 import TemplateEditing from '../templateediting';
-import PlaceholderElement from './placeholderelement';
 
 /**
  * Allow an arbitrary list of elements of a given type.
@@ -20,7 +19,7 @@ export default class ContainerElement extends Plugin {
 	 * @inheritDoc
 	 */
 	static get requires() {
-		return [ TemplateEditing, PlaceholderElement ];
+		return [ TemplateEditing ];
 	}
 
 	/**
@@ -45,7 +44,7 @@ export default class ContainerElement extends Plugin {
 				const attributes = getModelAttributes( templateElement, modelElement );
 				attributes.sections = templateElement.contains.join( ' ' );
 				const el = viewWriter.createContainerElement(
-					'ck-container',
+					templateElement.tagName,
 					attributes
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );

@@ -18,23 +18,23 @@ describe( 'Container', () => {
 				templates: {
 					a: {
 						label: 'A',
-						template: '<div class="a"></div>',
+						template: '<ck-section class="a"></ck-section>',
 					},
 					b: {
 						label: 'B',
-						template: '<div class="b"></div>',
+						template: '<ck-section class="b"></ck-section>',
 					},
 					container: {
 						label: 'Container',
-						template: '<div class="container" ck-type="container" ck-contains="a b" itemprop="container"></div>',
+						template: '<ck-container class="container" ck-type="container" ck-contains="a b" itemprop="container"></ck-container>',
 					},
 					containersingle: {
 						label: 'Container Single',
-						template: '<div class="container" ck-type="container" ck-contains="b" itemprop="container"></div>',
+						template: '<ck-container class="container" ck-type="container" ck-contains="b" itemprop="container"></ck-container>',
 					},
 					c: {
 						label: 'C',
-						template: '<div class="container" ck-type="container" ck-contains="containersingle" itemprop="container"></div>',
+						template: '<ck-container class="container" ck-type="container" ck-contains="containersingle" itemprop="container"></ck-container>',
 					}
 				}
 			} )
@@ -58,7 +58,7 @@ describe( 'Container', () => {
 		].join( '' ) );
 		expect( getViewData( view ) ).to.equal( [ '[' +
 		'<ck-container class="ck-widget ck-widget_selected container" contenteditable="false" itemprop="container" sections="a b">' +
-		'<ck-container-item class="a ck-widget" contenteditable="false"></ck-container-item>' +
+		'<ck-section class="a ck-widget" contenteditable="false"></ck-section>' +
 		'</ck-container>]' ].join( '' ) );
 	} );
 } );
