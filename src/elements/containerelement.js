@@ -6,6 +6,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
+import { postfixTemplateElement } from '@amazee/ckeditor5-template/src/utils/integrity';
 
 import TemplateEditing from '../templateediting';
 import PlaceholderElement from './placeholderelement';
@@ -51,6 +52,9 @@ export default class ContainerElement extends Plugin {
 				return templateElement.parent ? el : toWidget( el, viewWriter );
 			}
 		} ) );
+
+		// Postfix elements to make sure a templates structure is always correct.
+		this.editor.templates.registerPostFixer( [ 'container' ], postfixTemplateElement );
 	}
 }
 
