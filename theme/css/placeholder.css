@@ -1,8 +1,0 @@
-.ck-placeholder-ui {
-	border: 1px dotted #CCC;
-	padding: var(--ck-spacing-small);
-}
-
-ck-container, ck-container-item, ck-placeholder, ck-gallery {
-	display: block;
-}

@@ -9,7 +9,7 @@ import TextElement from '../src/elements/textelement';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import ContainerElement from '../src/elements/containerelement';
 
-describe( 'TemplateEditing', () => {
+describe( 'Merge editing', () => {
 	let editorElement, model, view, editor;
 
 	testUtils.createSinonSandbox();
@@ -62,11 +62,11 @@ describe( 'TemplateEditing', () => {
 		const data = [ '[' +
 			'<ck__container>' +
 				'<ck__b>' +
-					'<ck__b__child0__conflict label="X">' +
-						'<ck__b__child0__conflict__option label="A">' +
+					'<ck__b__child0__conflict>' +
+						'<ck__b__child0__conflict__option from="A">' +
 							'<ck__b__child0></ck__b__child0>' +
 						'</ck__b__child0__conflict__option>' +
-						'<ck__b__child0__conflict__option label="B">' +
+						'<ck__b__child0__conflict__option from="B">' +
 							'<ck__b__child0></ck__b__child0>' +
 						'</ck__b__child0__conflict__option>' +
 					'</ck__b__child0__conflict>' +
@@ -81,10 +81,10 @@ describe( 'TemplateEditing', () => {
 		editor.setData( [
 			'<div class="container">' +
 				'<div class="b">' +
-					'<ck-conflict-text class="text" label="X">' +
-						'<ck-conflict-option label="A"><p class="text">A</p></ck-conflict-option>' +
-						'<ck-conflict-option label="B"><p class="text">B</p></ck-conflict-option>' +
-						'<ck-conflict-option label="C"><p class="text">C</p></ck-conflict-option>' +
+					'<ck-conflict-text class="text">' +
+						'<ck-conflict-option from="A"><p class="text">A</p></ck-conflict-option>' +
+						'<ck-conflict-option from="B"><p class="text">B</p></ck-conflict-option>' +
+						'<ck-conflict-option from="C"><p class="text">C</p></ck-conflict-option>' +
 					'</ck-conflict-text>' +
 				'</div>' +
 			'</div>'
@@ -93,14 +93,14 @@ describe( 'TemplateEditing', () => {
 		expect( getModelData( model ) ).to.equal( [ '[' +
 			'<ck__container>' +
 				'<ck__b>' +
-					'<ck__b__child0__conflict label="X">' +
-						'<ck__b__child0__conflict__option label="A">' +
+					'<ck__b__child0__conflict>' +
+						'<ck__b__child0__conflict__option from="A">' +
 							'<ck__b__child0>A</ck__b__child0>' +
 						'</ck__b__child0__conflict__option>' +
-						'<ck__b__child0__conflict__option label="B">' +
+						'<ck__b__child0__conflict__option from="B">' +
 							'<ck__b__child0>B</ck__b__child0>' +
 						'</ck__b__child0__conflict__option>' +
-						'<ck__b__child0__conflict__option label="C">' +
+						'<ck__b__child0__conflict__option from="C">' +
 							'<ck__b__child0>C</ck__b__child0>' +
 						'</ck__b__child0__conflict__option>' +
 					'</ck__b__child0__conflict>' +
@@ -113,11 +113,11 @@ describe( 'TemplateEditing', () => {
 		const data = [ '[' +
 		'<ck__container>' +
 			'<ck__b>' +
-				'<ck__b__child0__conflict label="X">' +
-					'<ck__b__child0__conflict__option label="A">' +
+				'<ck__b__child0__conflict>' +
+					'<ck__b__child0__conflict__option from="A">' +
 						'<ck__b__child0>A</ck__b__child0>' +
 					'</ck__b__child0__conflict__option>' +
-					'<ck__b__child0__conflict__option label="B">' +
+					'<ck__b__child0__conflict__option from="B">' +
 						'<ck__b__child0>B</ck__b__child0>' +
 					'</ck__b__child0__conflict__option>' +
 				'</ck__b__child0__conflict>' +
@@ -128,9 +128,9 @@ describe( 'TemplateEditing', () => {
 		expect( editor.getData() ).to.equal( [
 			'<div class="container">' +
 				'<div class="b">' +
-					'<ck-conflict-text class="text" label="X">' +
-						'<ck-conflict-option label="A"><p class="text">A</p></ck-conflict-option>' +
-						'<ck-conflict-option label="B"><p class="text">B</p></ck-conflict-option>' +
+					'<ck-conflict-text class="text">' +
+						'<ck-conflict-option from="A"><p class="text">A</p></ck-conflict-option>' +
+						'<ck-conflict-option from="B"><p class="text">B</p></ck-conflict-option>' +
 					'</ck-conflict-text>' +
 				'</div>' +
 			'</div>'
@@ -141,11 +141,11 @@ describe( 'TemplateEditing', () => {
 		const data = [ '[' +
 		'<ck__container>' +
 			'<ck__b>' +
-				'<ck__b__child0__conflict label="X">' +
-					'<ck__b__child0__conflict__option label="A">' +
+				'<ck__b__child0__conflict>' +
+					'<ck__b__child0__conflict__option from="A">' +
 						'<ck__b__child0>A</ck__b__child0>' +
 					'</ck__b__child0__conflict__option>' +
-					'<ck__b__child0__conflict__option label="B">' +
+					'<ck__b__child0__conflict__option from="B">' +
 						'<ck__b__child0>B</ck__b__child0>' +
 					'</ck__b__child0__conflict__option>' +
 				'</ck__b__child0__conflict>' +
@@ -154,18 +154,18 @@ describe( 'TemplateEditing', () => {
 		']' ].join( '' );
 		setModelData( model, data );
 		expect( getViewData( view ) ).to.equal( [ '[' +
-		'<ck-container class="ck-widget ck-widget_selected container" contenteditable="false" sections="a b">' +
-			'<ck-container-item class="b ck-widget" contenteditable="false">' +
-				'<ck-conflict-text class="text" label="X">' +
-					'<ck-conflict-option label="A">' +
+		'<div class="ck-widget ck-widget_selected container" contenteditable="false" sections="a b">' +
+			'<div class="b ck-widget" contenteditable="false">' +
+				'<ck-conflict-text class="text">' +
+					'<ck-conflict-option from="A">' +
 						'<p class="text">A</p>' +
 					'</ck-conflict-option>' +
-					'<ck-conflict-option label="B">' +
+					'<ck-conflict-option from="B">' +
 						'<p class="text">B</p>' +
 					'</ck-conflict-option>' +
 				'</ck-conflict-text>' +
-			'</ck-container-item>' +
-		'</ck-container>' +
+			'</div>' +
+		'</div>' +
 		']' ].join( '' ) );
 	} );
 } );

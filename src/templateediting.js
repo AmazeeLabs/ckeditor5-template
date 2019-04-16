@@ -8,7 +8,6 @@ import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcas
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
 import ElementInfo from './utils/elementinfo';
-import InsertTemplateCommand from './commands/inserttemplatecommand';
 import {
 	downcastTemplateElement,
 	getModelAttributes,
@@ -16,7 +15,7 @@ import {
 	upcastTemplateElement
 } from './utils/conversion';
 import { postfixTemplateElement } from './utils/integrity';
-import RemoveTemplateCommand from './commands/removetemplatecommand';
+import InsertTemplateCommand from './commands/inserttemplatecommand';
 
 // @todo: remove these imports required for reproducing here the now private API in @ckeditor/ckeditor5-engine/src/conversion/upcasthelpers
 // This allows up for the time being to maintain the interface exposed by TemplateEditing.upcastTemplateElement().
@@ -154,9 +153,6 @@ export default class TemplateEditing extends Plugin {
 		// Add a command for inserting a template element.
 		this.editor.commands.add( 'insertTemplate', new InsertTemplateCommand( this.editor ) );
 
-		// Add a command for removing a template element.
-		this.editor.commands.add( 'removeTemplate', new RemoveTemplateCommand( this.editor ) );
-
 		const templates = this.editor.config.get( 'templates' );
 
 		// Parse all template snippets and register them.
@@ -221,18 +217,12 @@ export default class TemplateEditing extends Plugin {
 			converterPriority: 'low'
 		} ) );
 
-		const templateManager = this.editor.templates;
 		// Default editing downcast conversions for template container elements without functionality.
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'element' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
-				const parentTemplate = modelElement.parent && templateManager.getElementInfo( modelElement.parent.name );
 				const el = viewWriter.createContainerElement(
-					(
-						// TODO: Introduce a component negotiator? Or somehow enable the "is" attribute for web components.
-						( parentTemplate && [ 'container', 'gallery', 'tabs' ].includes( parentTemplate.type ) ) ||
-						modelElement.hasAttribute( 'added' ) || modelElement.hasAttribute( 'removed' )
-					) ? 'ck-container-item' : templateElement.tagName,
+					templateElement.tagName,
 					getModelAttributes( templateElement, modelElement )
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );

@@ -8,13 +8,8 @@ import TemplateEditing from './templateediting';
 import MasterTemplate from './mastertemplate';
 import TemplateUI from './ui/templateui';
 import TextElement from './elements/textelement';
-import PlaceholderElement from './elements/placeholderelement';
 import ContainerElement from './elements/containerelement';
-import TemplateAttributeUI from './ui/templateattributeui';
 import TemplateId from './templateid';
-import TextLimit from './textlimit';
-import HoveredWidget from './hoveredwidget';
-import GalleryElement from './elements/galleryelement';
 
 /**
  * Root template plugin, requiring all auxiliary plugins to enable template functionality.
@@ -44,14 +39,9 @@ export default class Template extends Plugin {
 			TemplateEditing,
 			MasterTemplate,
 			TextElement,
-			PlaceholderElement,
 			ContainerElement,
-			GalleryElement,
 			TemplateUI,
-			TemplateAttributeUI,
 			TemplateId,
-			TextLimit,
-			HoveredWidget
 		];
 	}
 
