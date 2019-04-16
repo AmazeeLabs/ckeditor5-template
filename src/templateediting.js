@@ -234,6 +234,14 @@ export default class TemplateEditing extends Plugin {
 				}
 			}
 
+			for ( const conf of Object.keys( templateElement.configuration ) ) {
+				const key = `ck-${ conf }`;
+				const value = templateElement.configuration[ conf ];
+				if ( value && !item.getAttribute( key ) ) {
+					writer.setAttribute( key, value, item );
+				}
+			}
+
 			for ( const postfixer of this._postfixers[ templateElement.type ] ) {
 				changed = changed || postfixer( templateElement, item, writer );
 				for ( const child of item.getChildren() ) {
@@ -312,26 +320,21 @@ export default class TemplateEditing extends Plugin {
 		this._typeMap[ element.type ] = element.name;
 
 		// Register the element itself.
+		const attributes = Object.keys( element.attributes ).concat( Object.keys( element.configuration ).map( key => `ck-${ key }` ) );
+
 		this.editor.model.schema.register( element.name, {
 			isObject: !parent,
 			isBlock: true,
 			// If this is the root element of a template, allow it in root. Else allow it only in its parent.
 			allowIn: parent ? parent.name : '$root',
 			// Register all know attributes.
-			allowAttributes: Object.keys( element.attributes ),
+			allowAttributes: attributes,
 		} );
 
-		Object.keys( element.attributes ).forEach( attr => {
+		attributes.forEach( attr => {
 			this.editor.conversion.for( 'editingDowncast' ).add( downcastAttributeToAttribute( {
 				model: attr,
 				view: attr,
-			} ) );
-		} );
-
-		Object.keys( element.configuration ).forEach( conf => {
-			this.editor.conversion.for( 'editingDowncast' ).add( downcastAttributeToAttribute( {
-				model: `ck-${ conf }`,
-				view: `ck-${ conf }`,
 			} ) );
 		} );
 

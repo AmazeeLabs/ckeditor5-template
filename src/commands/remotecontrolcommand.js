@@ -57,7 +57,12 @@ export default class RemoteControlCommand extends Command {
 		const parentElement = this.toModel( parent );
 		const targetElement = parentElement.getChild( target );
 		const referenceElement = parentElement.getChild( reference );
-		writer.insert( targetElement, referenceElement, position );
+		if ( position === 'end' ) {
+			writer.append( targetElement, parentElement );
+		}
+		else {
+			writer.insert( targetElement, referenceElement, position );
+		}
 	}
 
 	replaceElement( { section, target }, writer ) {
