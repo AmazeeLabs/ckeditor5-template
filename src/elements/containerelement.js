@@ -4,7 +4,7 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
-import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
+import { downcastTemplateElement, getConfigAttributes, getModelAttributes } from '../utils/conversion';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import { postfixTemplateElement } from '@amazee/ckeditor5-template/src/utils/integrity';
 
@@ -43,7 +43,7 @@ export default class ContainerElement extends Plugin {
 			types: [ 'container' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
 				const attributes = getModelAttributes( templateElement, modelElement );
-				attributes.sections = templateElement.contains.join( ' ' );
+				Object.assign( attributes, getConfigAttributes( templateElement ) );
 				const el = viewWriter.createContainerElement(
 					templateElement.tagName,
 					attributes

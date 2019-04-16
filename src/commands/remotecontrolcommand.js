@@ -40,18 +40,16 @@ export default class RemoteControlCommand extends Command {
 		operations.map( operation => operation.detail ).forEach( operation => this.dispatchOperation( operation, writer ) );
 	}
 
-	insertElement( { element, parent, position, reference, attr }, writer ) {
+	insertElement( { section, parent, position, reference, attr }, writer ) {
 		const parentElement = this.toModel( parent );
-		const el = writer.createElement( `ck__${ element }` );
+		const el = writer.createElement( `ck__${ section }` );
 		writer.setAttributes( attr, el );
 		if ( position === 'end' ) {
 			writer.append( el, parentElement );
-			writer.setSelection( el, 'on' );
 		}
 		else {
 			const referenceElement = parentElement.getChild( reference );
 			writer.insert( el, referenceElement, position );
-			writer.setSelection( el, 'on' );
 		}
 	}
 
@@ -60,13 +58,11 @@ export default class RemoteControlCommand extends Command {
 		const targetElement = parentElement.getChild( target );
 		const referenceElement = parentElement.getChild( reference );
 		writer.insert( targetElement, referenceElement, position );
-		writer.setSelection( targetElement, 'on' );
 	}
 
-	replaceElement( { element, target }, writer ) {
+	replaceElement( { section, target }, writer ) {
 		const targetElement = this.toModel( target );
-		writer.rename( targetElement, `ck__${ element }` );
-		writer.setSelection( targetElement, 'on' );
+		writer.rename( targetElement, `ck__${ section }` );
 	}
 
 	removeElement( { target }, writer ) {
