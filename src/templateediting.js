@@ -4,7 +4,7 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
-import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
+import { downcastAttributeToAttribute, insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 
@@ -319,6 +319,20 @@ export default class TemplateEditing extends Plugin {
 			allowIn: parent ? parent.name : '$root',
 			// Register all know attributes.
 			allowAttributes: Object.keys( element.attributes ),
+		} );
+
+		Object.keys( element.attributes ).forEach( attr => {
+			this.editor.conversion.for( 'editingDowncast' ).add( downcastAttributeToAttribute( {
+				model: attr,
+				view: attr,
+			} ) );
+		} );
+
+		Object.keys( element.configuration ).forEach( conf => {
+			this.editor.conversion.for( 'editingDowncast' ).add( downcastAttributeToAttribute( {
+				model: `ck-${ conf }`,
+				view: `ck-${ conf }`,
+			} ) );
 		} );
 
 		// Register all child elements.
