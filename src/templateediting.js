@@ -325,6 +325,7 @@ export default class TemplateEditing extends Plugin {
 		this.editor.model.schema.register( element.name, {
 			isObject: !parent,
 			isBlock: true,
+			isLimit: true,
 			// If this is the root element of a template, allow it in root. Else allow it only in its parent.
 			allowIn: parent ? parent.name : '$root',
 			// Register all know attributes.
