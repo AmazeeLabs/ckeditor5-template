@@ -89,6 +89,8 @@ export default class ElementInfo {
 		return viewElement &&
 			// Match the tag name.
 			// viewElement.name === this._node.tagName &&
+			// Check the element has methods.
+			typeof viewElement.getClassNames == 'function' &&
 			// Match all classes.
 			this.classes.join( ' ' ) === Array.from( viewElement.getClassNames() ).sort().join( ' ' ) &&
 			// If there is a parent, match the parent.
