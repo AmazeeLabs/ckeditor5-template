@@ -57,8 +57,8 @@ describe( 'Container', () => {
 			'</ck__container>'
 		].join( '' ) );
 		expect( getViewData( view ) ).to.equal( [ '[' +
-		'<ck-container class="ck-widget ck-widget_selected container" contenteditable="false" itemprop="container" sections="a b">' +
-		'<ck-section class="a ck-widget" contenteditable="false"></ck-section>' +
+		'<ck-container ck-contains="a b" ck-icon="configurator" ck-label="Container" ck-name="container" ck-type="container" class="ck-widget ck-widget_selected container" contenteditable="false" itemprop="container">' +
+		'<ck-section ck-icon="configurator" ck-label="A" ck-name="a" class="a ck-widget" contenteditable="false"></ck-section>' +
 		'</ck-container>]' ].join( '' ) );
 	} );
 } );

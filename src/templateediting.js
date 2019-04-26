@@ -10,7 +10,7 @@ import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversio
 
 import ElementInfo from './utils/elementinfo';
 import {
-	downcastTemplateElement,
+	downcastTemplateElement, getConfigAttributes,
 	getModelAttributes,
 	getViewAttributes,
 	upcastTemplateElement
@@ -213,9 +213,11 @@ export default class TemplateEditing extends Plugin {
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'element' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
+				const attributes = getModelAttributes( templateElement, modelElement );
+				Object.assign( attributes, getConfigAttributes( templateElement ) );
 				const el = viewWriter.createContainerElement(
 					templateElement.tagName,
-					getModelAttributes( templateElement, modelElement )
+					attributes
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );
 			}
@@ -231,14 +233,6 @@ export default class TemplateEditing extends Plugin {
 
 				if ( value && !item.getAttribute( attr ) ) {
 					writer.setAttribute( attr, value, item );
-				}
-			}
-
-			for ( const conf of Object.keys( templateElement.configuration ) ) {
-				const key = `ck-${ conf }`;
-				const value = templateElement.configuration[ conf ];
-				if ( value && !item.getAttribute( key ) ) {
-					writer.setAttribute( key, value, item );
 				}
 			}
 

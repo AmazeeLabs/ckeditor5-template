@@ -102,7 +102,7 @@ describe( 'TemplateId', () => {
 		expect( getModelData( model ) ).to.equal( [
 			'[<ck__container_b id="374c5q">' +
 			'<ck__container_b__child0>' +
-			'<ck__b id="374cy7"></ck__b>' +
+			'<ck__b id="374cy7"><ck__b__child0></ck__b__child0></ck__b>' +
 			'</ck__container_b__child0>' +
 			'</ck__container_b>]'
 		].join( '' ) );
@@ -120,7 +120,7 @@ describe( 'TemplateId', () => {
 		expect( getModelData( model ) ).to.equal( [
 			'[<ck__container_b id="374c5q">' +
 			'<ck__container_b__child0>' +
-			'<ck__b id="374cy7"></ck__b>' +
+			'<ck__b id="374cy7"><ck__b__child0></ck__b__child0></ck__b>' +
 			'</ck__container_b__child0>' +
 			'</ck__container_b>]'
 		].join( '' ) );
