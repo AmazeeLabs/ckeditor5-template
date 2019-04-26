@@ -183,7 +183,7 @@ export default class TemplateAttributeUI extends Plugin {
 				if ( this.toolbarPanels.hasOwnProperty( pointer ) ) {
 					this.toolbarPanels[ pointer ].pin( {
 						target: this.configureButton.element,
-						limiter: this.editor.ui.view.getEditableElement(),
+						limiter: this.editor.ui.view.editableElement,
 					} );
 				}
 			}

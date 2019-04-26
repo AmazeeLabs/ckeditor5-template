@@ -114,14 +114,14 @@ describe( 'TextElement', () => {
 
 	it( 'nested text element', () => {
 		setModelData( model, '<ck__nested></ck__nested>' );
-		expect( getViewData( view ) ).to.equal( '[<div class="ck-widget ck-widget_selected parent" contenteditable="false">' +
+		expect( getViewData( view ) ).to.equal( '[<div ck-icon="configurator" ck-label="Nested" ck-name="nested" class="ck-widget ck-widget_selected parent" contenteditable="false">' +
 			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true"></p>' +
 			'</div>]' );
 	} );
 
 	it( 'nested text element with content', () => {
 		setModelData( model, '<ck__nested><ck__nested__child0>F[o]o</ck__nested__child0></ck__nested>' );
-		expect( getViewData( view ) ).to.equal( '<div class="ck-widget parent" contenteditable="false">' +
+		expect( getViewData( view ) ).to.equal( '<div ck-icon="configurator" ck-label="Nested" ck-name="nested" class="ck-widget parent" contenteditable="false">' +
 			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true">F{o}o</p>' +
 			'</div>' );
 	} );

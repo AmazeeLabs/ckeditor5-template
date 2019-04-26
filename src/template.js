@@ -10,6 +10,7 @@ import TemplateUI from './ui/templateui';
 import TextElement from './elements/textelement';
 import ContainerElement from './elements/containerelement';
 import TemplateId from './templateid';
+import TemplateAttributeUI from './ui/templateattributeui';
 
 /**
  * Root template plugin, requiring all auxiliary plugins to enable template functionality.
@@ -40,6 +41,7 @@ export default class Template extends Plugin {
 			MasterTemplate,
 			TextElement,
 			ContainerElement,
+			TemplateAttributeUI,
 			TemplateUI,
 			TemplateId,
 		];
