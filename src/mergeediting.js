@@ -59,7 +59,7 @@ export default class MergeEditing extends Plugin {
 
 			this.editor.model.schema.register( option, {
 				allowIn: `${ info.name }__conflict`,
-				allowAttributes: [ 'label' ],
+				allowAttributes: [ 'from', 'label' ],
 			} );
 
 			this.editor.model.schema.extend( info.name, {
