@@ -159,7 +159,13 @@ export default class ElementInfo {
 	 * @returns {string}
 	 */
 	get type() {
-		return this._configuration.type || 'element';
+		if ( this._configuration.input ) {
+			return 'text';
+		}
+		if ( this._configuration.contains ) {
+			return 'container';
+		}
+		return 'element';
 	}
 
 	/**
