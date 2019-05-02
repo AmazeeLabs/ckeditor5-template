@@ -20,31 +20,23 @@ describe( 'TextElement', () => {
 				templates: {
 					simple: {
 						label: 'Simple',
-						template: '<p class="simple" itemprop="content" ck-type="text"></p>',
+						template: '<div class="simple" itemprop="content" ck-input="basic"></div>',
 					},
 					placeholder: {
 						label: 'Placeholder',
-						template: '<p class="placeholder" ck-type="text">Placeholder!</p>',
+						template: '<div class="placeholder" ck-input="basic">Placeholder!</div>',
 					},
 					container: {
 						label: 'Container',
-						template: '<div class="container" ck-type="text"></div>'
+						template: '<div class="container" ck-input="full"></div>'
 					},
 					containerWithText: {
 						label: 'Container with text',
-						template: '<div class="container-with-text" ck-type="text">Text</div>'
-					},
-					fakeContainer: {
-						label: 'Fake Container',
-						template: '<p class="fake-container" ck-type="text" ck-multiline="true"></p>'
-					},
-					fakeBlock: {
-						label: 'Fake Block',
-						template: '<div class="fake-block" ck-type="text" ck-mutiline="false"></div>'
+						template: '<div class="container-with-text" ck-input="full">Text</div>'
 					},
 					nested: {
 						label: 'Nested',
-						template: '<div class="parent"><p class="simple" ck-type="text"></p></div>'
+						template: '<div class="parent"><p class="simple" ck-input="basic"></p></div>'
 					},
 				}
 			} )
@@ -63,22 +55,22 @@ describe( 'TextElement', () => {
 	it( 'simple text field', () => {
 		setModelData( model, '<ck__simple></ck__simple>' );
 		expect( getViewData( view ) ).to.equal( '[' +
-			'<p class="' + editableClasses + ' simple" contenteditable="true" itemprop="content"></p>' +
+			'<div class="' + editableClasses + ' simple" contenteditable="true" itemprop="content"></div>' +
 			']' );
 	} );
 
 	it( 'simple text field with content', () => {
 		setModelData( model, '<ck__simple>F[o]o</ck__simple>' );
 		expect( getViewData( view ) ).to.equal(
-			'<p class="ck-editor__editable ck-editor__nested-editable ck-widget simple" contenteditable="true" itemprop="content">F{o}o</p>'
+			'<div class="ck-editor__editable ck-editor__nested-editable ck-widget simple" contenteditable="true" itemprop="content">F{o}o</div>'
 		);
 	} );
 
 	it( 'simple text field with placeholder', () => {
 		setModelData( model, '<ck__placeholder></ck__placeholder>' );
 		expect( getViewData( view ) ).to.equal( '[' +
-			'<p class="ck-editor__editable ck-editor__nested-editable ck-placeholder ck-widget ck-widget_selected placeholder" ' +
-			'contenteditable="true" data-placeholder="Placeholder!"></p>' +
+			'<div class="ck-editor__editable ck-editor__nested-editable ck-placeholder ck-widget ck-widget_selected placeholder" ' +
+			'contenteditable="true" data-placeholder="Placeholder!"></div>' +
 			']' );
 	} );
 
@@ -100,28 +92,16 @@ describe( 'TextElement', () => {
 			'contenteditable="true" data-placeholder="Text"><p>Text</p></div>]' );
 	} );
 
-	it( 'block element forced to container', () => {
-		setModelData( model, '<ck__fakeContainer></ck__fakeContainer>' );
-		expect( getViewData( view ) ).to.equal( '[<p class="' + editableClasses + ' fake-container" ' +
-			'contenteditable="true"><p></p></p>]' );
-	} );
-
-	it( 'container element forced to block', () => {
-		setModelData( model, '<ck__fakeBlock></ck__fakeBlock>' );
-		expect( getViewData( view ) ).to.equal( '[<div class="' + editableClasses + ' fake-block" ' +
-			'contenteditable="true"><p></p></div>]' );
-	} );
-
 	it( 'nested text element', () => {
 		setModelData( model, '<ck__nested></ck__nested>' );
-		expect( getViewData( view ) ).to.equal( '[<div class="ck-widget ck-widget_selected parent" contenteditable="false">' +
+		expect( getViewData( view ) ).to.equal( '[<div ck-icon="configurator" ck-label="Nested" ck-name="nested" class="ck-widget ck-widget_selected parent" contenteditable="false">' +
 			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true"></p>' +
 			'</div>]' );
 	} );
 
 	it( 'nested text element with content', () => {
 		setModelData( model, '<ck__nested><ck__nested__child0>F[o]o</ck__nested__child0></ck__nested>' );
-		expect( getViewData( view ) ).to.equal( '<div class="ck-widget parent" contenteditable="false">' +
+		expect( getViewData( view ) ).to.equal( '<div ck-icon="configurator" ck-label="Nested" ck-name="nested" class="ck-widget parent" contenteditable="false">' +
 			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true">F{o}o</p>' +
 			'</div>' );
 	} );

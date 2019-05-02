@@ -4,20 +4,19 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
-import { insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
+import { downcastAttributeToAttribute, insertElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
 
 import ElementInfo from './utils/elementinfo';
-import InsertTemplateCommand from './commands/inserttemplatecommand';
 import {
-	downcastTemplateElement,
+	downcastTemplateElement, getConfigAttributes,
 	getModelAttributes,
 	getViewAttributes,
 	upcastTemplateElement
 } from './utils/conversion';
 import { postfixTemplateElement } from './utils/integrity';
-import RemoveTemplateCommand from './commands/removetemplatecommand';
+import InsertTemplateCommand from './commands/inserttemplatecommand';
 
 /**
  * The template engine feature.
@@ -149,9 +148,6 @@ export default class TemplateEditing extends Plugin {
 		// Add a command for inserting a template element.
 		this.editor.commands.add( 'insertTemplate', new InsertTemplateCommand( this.editor ) );
 
-		// Add a command for removing a template element.
-		this.editor.commands.add( 'removeTemplate', new RemoveTemplateCommand( this.editor ) );
-
 		const templates = this.editor.config.get( 'templates' );
 
 		// Parse all template snippets and register them.
@@ -213,19 +209,15 @@ export default class TemplateEditing extends Plugin {
 			}
 		} ), { priority: 'low ' } );
 
-		const templateManager = this.editor.templates;
 		// Default editing downcast conversions for template container elements without functionality.
 		this.editor.conversion.for( 'editingDowncast' ).add( downcastTemplateElement( this.editor, {
 			types: [ 'element' ],
 			view: ( templateElement, modelElement, viewWriter ) => {
-				const parentTemplate = modelElement.parent && templateManager.getElementInfo( modelElement.parent.name );
+				const attributes = getModelAttributes( templateElement, modelElement );
+				Object.assign( attributes, getConfigAttributes( templateElement ) );
 				const el = viewWriter.createContainerElement(
-					(
-						// TODO: Introduce a component negotiator? Or somehow enable the "is" attribute for web components.
-						( parentTemplate && [ 'container', 'gallery', 'tabs' ].includes( parentTemplate.type ) ) ||
-						modelElement.hasAttribute( 'added' ) || modelElement.hasAttribute( 'removed' )
-					) ? 'ck-container-item' : templateElement.tagName,
-					getModelAttributes( templateElement, modelElement )
+					templateElement.tagName,
+					attributes
 				);
 				return templateElement.parent ? el : toWidget( el, viewWriter );
 			}
@@ -322,6 +314,8 @@ export default class TemplateEditing extends Plugin {
 		this._typeMap[ element.type ] = element.name;
 
 		// Register the element itself.
+		const attributes = Object.keys( element.attributes ).concat( Object.keys( element.configuration ).map( key => `ck-${ key }` ) );
+
 		this.editor.model.schema.register( element.name, {
 			isObject: !parent,
 			isBlock: true,
@@ -329,7 +323,14 @@ export default class TemplateEditing extends Plugin {
 			// If this is the root element of a template, allow it in root. Else allow it only in its parent.
 			allowIn: parent ? parent.name : '$root',
 			// Register all know attributes.
-			allowAttributes: Object.keys( element.attributes ),
+			allowAttributes: attributes,
+		} );
+
+		attributes.forEach( attr => {
+			this.editor.conversion.for( 'editingDowncast' ).add( downcastAttributeToAttribute( {
+				model: attr,
+				view: attr,
+			} ) );
 		} );
 
 		// Register all child elements.
