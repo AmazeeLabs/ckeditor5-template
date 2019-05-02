@@ -32,7 +32,7 @@ describe( 'Merge editing', () => {
 					},
 					b: {
 						label: 'B',
-						template: '<div class="b"><p class="text" ck-type="text"></p></div>',
+						template: '<div class="b"><p class="text" ck-input="basic"></p></div>',
 					},
 				}
 			} )

@@ -30,10 +30,7 @@ export const containerElements = [
  * @returns {boolean}
  */
 function isContainerElement( templateElement ) {
-	return templateElement.configuration.multiline !== 'false' && (
-		containerElements.includes( templateElement.tagName ) ||
-		templateElement.configuration.multiline === 'true'
-	);
+	return templateElement.configuration.input === 'full';
 }
 
 export default class TextElement extends Plugin {
@@ -63,13 +60,12 @@ export default class TextElement extends Plugin {
 		// All container text elements inherit everything from root.
 		// This also makes sure that all elements allowed in root are as well allowed here.
 		for ( const element of textElements ) {
-			if ( isContainerElement( element ) ) {
+			if ( element.configuration.input === 'full' ) {
 				this.editor.model.schema.extend( element.name, {
 					inheritAllFrom: '$root',
 				} );
 			}
-
-			if ( element.configuration.plain === 'true' ) {
+			if ( element.configuration.input === 'plain' ) {
 				this.editor.model.schema.addAttributeCheck( context => {
 					if ( context.endsWith( `${ element.name } $text` ) ) {
 						return false;
