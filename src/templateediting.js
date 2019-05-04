@@ -326,10 +326,12 @@ export default class TemplateEditing extends Plugin {
 
 		// Register the element itself.
 		const attributes = Object.keys( element.attributes ).concat( Object.keys( element.configuration ).map( key => `ck-${ key }` ) );
+
 		this.editor.model.schema.register( element.name, {
 			// @see https://github.com/ckeditor/ckeditor5/issues/1582 "Mark your widget as isObject in the schema"
 			isObject: true,
 			isBlock: true,
+			isLimit: true,
 			// If this is the root element of a template, allow it in root. Else allow it only in its parent.
 			allowIn: parent ? parent.name : '$root',
 			// Register all know attributes.
