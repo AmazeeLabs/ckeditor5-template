@@ -85,8 +85,8 @@ export default class RemoteControlCommand extends Command {
 		writer.removeAttribute( key, targetElement );
 	}
 
-	swap( { source, target }, writer ) {
-		const sourceElement = this.toModel( source );
+	swap( { element, target }, writer ) {
+		const sourceElement = this.toModel( element );
 		const targetElement = this.toModel( target );
 		writer.insert( sourceElement, targetElement, 'before' );
 		writer.remove( targetElement );
