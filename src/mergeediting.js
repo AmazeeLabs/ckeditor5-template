@@ -1,8 +1,6 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import TemplateEditing from './templateediting';
 import { getModelAttributes, getViewAttributes } from './utils/conversion';
-import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
-import { downcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
 /**
  * Handles merged documents, with sections assigned that are added or removed.
@@ -43,6 +41,11 @@ export default class MergeEditing extends Plugin {
 			view: 'from',
 		} );
 
+		this.editor.conversion.attributeToAttribute( {
+			model: 'label',
+			view: 'label',
+		} );
+
 		// Register the text-conflict elements.
 		const textElements = this.editor.templates.findElementInfo( info => info.type === 'text' );
 		textElements.forEach( info => {
@@ -51,35 +54,44 @@ export default class MergeEditing extends Plugin {
 
 			this.editor.model.schema.register( wrapper, {
 				allowWhere: info.name,
+				allowAttributes: [ 'from', 'label' ],
 			} );
 
 			this.editor.model.schema.register( option, {
 				allowIn: `${ info.name }__conflict`,
-				allowAttributes: 'from',
+				allowAttributes: [ 'from', 'label' ],
 			} );
 
 			this.editor.model.schema.extend( info.name, {
 				allowIn: option,
 			} );
 
-			this.editor.conversion.for( 'downcast' ).add( downcastElementToElement( {
+			this.editor.conversion.for( 'downcast' ).elementToElement( {
 				model: wrapper,
 				view: ( modelElement, viewWriter ) => {
 					return viewWriter.createContainerElement( 'ck-conflict-text', getModelAttributes( info, modelElement ) );
-				}
-			} ), { priority: 'highest' } );
+				},
+				converterPriority: 'highest'
+			} );
 
-			this.editor.conversion.for( 'downcast' ).add( downcastElementToElement( {
+			this.editor.conversion.for( 'downcast' ).elementToElement( {
 				model: option,
 				view: ( modelElement, viewWriter ) => {
-					return viewWriter.createContainerElement( 'ck-conflict-option', {
-						from: modelElement.getAttribute( 'from' ),
-					} );
-				}
-			} ), { priority: 'highest' } );
+					const from = modelElement.getAttribute( 'from' );
+					if ( typeof from !== 'undefined' ) {
+						return viewWriter.createContainerElement( 'ck-conflict-option', {
+							from
+						} );
+					}
+					else {
+						return viewWriter.createContainerElement( 'ck-conflict-option' );
+					}
+				},
+				converterPriority: 'highest'
+			} );
 		} );
 
-		this.editor.conversion.for( 'upcast' ).add( upcastElementToElement( {
+		this.editor.conversion.for( 'upcast' ).elementToElement( {
 			view: viewElement => {
 				if ( viewElement.name === 'ck-conflict-text' &&
 				!!this.matchingTextElement( viewElement ) ) {
@@ -93,9 +105,10 @@ export default class MergeEditing extends Plugin {
 					getViewAttributes( textElement, viewElement )
 				);
 			},
-		} ), { priority: 'highest' } );
+			converterPriority: 'highest'
+		} );
 
-		this.editor.conversion.for( 'upcast' ).add( upcastElementToElement( {
+		this.editor.conversion.for( 'upcast' ).elementToElement( {
 			view: viewElement =>
 				viewElement.name === 'ck-conflict-option' &&
 				!!this.matchingTextElement( viewElement.parent ) && { name: true },
@@ -106,7 +119,8 @@ export default class MergeEditing extends Plugin {
 					getViewAttributes( textElement, viewElement )
 				);
 			},
-		} ), { priority: 'highest' } );
+			converterPriority: 'highest'
+		} );
 
 		// Media conflict elements register.
 		const mediaElements = this.editor.templates.findElementInfo( info => info.type === 'drupal-media' );
@@ -127,23 +141,25 @@ export default class MergeEditing extends Plugin {
 				allowIn: option,
 			} );
 
-			this.editor.conversion.for( 'downcast' ).add( downcastElementToElement( {
+			this.editor.conversion.for( 'downcast' ).elementToElement( {
 				model: wrapper,
 				view: ( modelElement, viewWriter ) => {
 					return viewWriter.createContainerElement( 'ck-conflict-media', getModelAttributes( info, modelElement ) );
-				}
-			} ), { priority: 'highest' } );
+				},
+				converterPriority: 'highest'
+			} );
 
-			this.editor.conversion.for( 'downcast' ).add( downcastElementToElement( {
+			this.editor.conversion.for( 'downcast' ).elementToElement( {
 				model: option,
 				view: ( modelElement, viewWriter ) => {
 					return viewWriter.createContainerElement( 'ck-conflict-media-option', {
 						from: modelElement.getAttribute( 'from' ),
 					} );
-				}
-			} ), { priority: 'highest' } );
+				},
+				converterPriority: 'highest'
+			} );
 
-			this.editor.conversion.for( 'upcast' ).add( upcastElementToElement( {
+			this.editor.conversion.for( 'upcast' ).elementToElement( {
 				view: viewElement => viewElement.name === 'ck-conflict-media' && { name: true },
 				model: ( viewElement, modelWriter ) => {
 					const textElement = this.editor.templates.findElementInfo( info => info.type == 'container' ).pop();
@@ -152,9 +168,10 @@ export default class MergeEditing extends Plugin {
 						getViewAttributes( textElement, viewElement )
 					);
 				},
-			} ), { priority: 'highest' } );
+				converterPriority: 'highest'
+			} );
 
-			this.editor.conversion.for( 'upcast' ).add( upcastElementToElement( {
+			this.editor.conversion.for( 'upcast' ).elementToElement( {
 				view: viewElement => viewElement.name === 'ck-conflict-media-option' && { name: true },
 				model: ( viewElement, modelWriter ) => {
 					const textElement = this.editor.templates.findElementInfo( info => info.type == 'container' ).pop();
@@ -163,7 +180,8 @@ export default class MergeEditing extends Plugin {
 						getViewAttributes( textElement, viewElement )
 					);
 				},
-			} ), { priority: 'highest' } );
+				converterPriority: 'highest'
+			} );
 		} );
 	}
 
