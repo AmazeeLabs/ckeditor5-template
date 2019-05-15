@@ -1,7 +1,11 @@
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
+import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
+import { setData as setViewData, getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
+
+
+import List from '@ckeditor/ckeditor5-list/src/list';
+
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
 import TextElement from '../../src/elements/textelement';
@@ -16,7 +20,7 @@ describe( 'TextElement', () => {
 
 		return ClassicTestEditor
 			.create( editorElement, {
-				plugins: [ TextElement, Paragraph ],
+				plugins: [ List, TextElement, Paragraph ],
 				templates: {
 					simple: {
 						label: 'Simple',
@@ -38,6 +42,14 @@ describe( 'TextElement', () => {
 						label: 'Nested',
 						template: '<div class="parent"><p class="simple" ck-input="basic"></p></div>'
 					},
+					sectiona: {
+						label: 'Section A',
+						template: '<div class="sectiona"><div class="container-with-text-a" ck-input="full">Text</div></div>'
+					},
+					sectionb: {
+						label: 'Section B',
+						template: '<div class="sectionb"><div class="container-with-text-b" ck-input="full">Text</div></div>'
+					}
 				}
 			} )
 			.then( newEditor => {
@@ -104,5 +116,18 @@ describe( 'TextElement', () => {
 		expect( getViewData( view ) ).to.equal( '<div ck-icon="configurator" ck-label="Nested" ck-name="nested" class="ck-widget parent" contenteditable="false">' +
 			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true">F{o}o</p>' +
 			'</div>' );
+	} );
+
+	it( 'do not merge two sections with a list inside', () => {
+		setModelData( model, '<ck__sectiona><ck__sectiona__child0>' +
+				'<listItem listIndent="0" listType="bulleted">dsafasdfasdf</listItem>' +
+				'<listItem listIndent="0" listType="bulleted">asdfasdfasdf</listItem>' +
+			'</ck__sectiona__child0></ck__sectiona>' +
+			'<ck__sectionb><ck__sectionb__child0>' +
+			'<listItem listIndent="0" listType="bulleted">dsafasdfasdf</listItem>' +
+			'<listItem listIndent="0" listType="bulleted">asdfasdfasdf</listItem>' +
+			'</ck__sectionb__child0></ck__sectionb>' );
+
+		console.log(getViewData( view ));
 	} );
 } );
