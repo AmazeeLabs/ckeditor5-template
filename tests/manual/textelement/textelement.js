@@ -17,31 +17,31 @@ ClassicEditor
 		templates: {
 			simple: {
 				label: 'Simple',
-				template: '<p class="simple" ck-type="text"></p>',
+				template: '<p class="simple" ck-input="plain"></p>',
 			},
-			placeholder: {
-				label: 'Placeholder',
-				template: '<p class="placeholder" ck-type="text">Placeholder!</p>',
+			simple_placeholder: {
+				label: 'Simple placeholder',
+				template: '<p class="placeholder" ck-input="plain">Placeholder</p>',
 			},
-			container: {
-				label: 'Container',
-				template: '<div class="container" ck-type="text">Tralala</div>'
+			basic: {
+				label: 'Basic',
+				template: '<div class="basic" ck-input="basic"></div>'
 			},
-			fakeContainer: {
-				label: 'Fake Container',
-				template: '<p class="fake-container" ck-type="text" ck-multiline="true"></p>'
+			basic_placeholder: {
+				label: 'Basic placeholder',
+				template: '<div class="basic-placeholder" ck-input="basic">Placeholder</div>'
 			},
-			fakeBlock: {
-				label: 'Fake Block',
-				template: '<div class="fake-block" ck-type="text" ck-multiline="false"></div>'
+			full: {
+				label: 'Full',
+				template: '<div class="full" ck-input="full"></div>'
+			},
+			full_placeholder: {
+				label: 'Full placeholder',
+				template: '<div class="full-placeholder" ck-input="full">Placeholder</div>'
 			},
 			nested: {
 				label: 'Nested',
-				template: '<div class="parent"><p class="simple" ck-type="text"></p></div>'
-			},
-			plain: {
-				label: 'Plain',
-				template: '<div class="parent"><p class="plain" ck-type="text" ck-plain="true"></p></div>'
+				template: '<div class="parent"><p class="simple" ck-input="plain"></p></div>'
 			}
 		}
 	} )
