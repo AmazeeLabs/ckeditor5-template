@@ -9,11 +9,12 @@ import UndoPlugin from '@ckeditor/ckeditor5-undo/src/undo';
 
 import TemplatePlugin from '../../../src/template';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import Table from '@ckeditor/ckeditor5-table/src/table';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ EnterPlugin, TypingPlugin, ParagraphPlugin, HeadingPlugin, TemplatePlugin, UndoPlugin, Bold ],
-		toolbar: [ 'heading', '|', 'template', '|', 'undo', 'redo', 'bold' ],
+		plugins: [ EnterPlugin, TypingPlugin, ParagraphPlugin, HeadingPlugin, TemplatePlugin, UndoPlugin, Bold, Table ],
+		toolbar: [ 'heading', '|', 'template', '|', 'undo', 'redo', 'bold', 'tableRow', 'tableColumn' ],
 		templates: {
 			simple: {
 				label: 'Simple',
@@ -38,6 +39,10 @@ ClassicEditor
 			full_placeholder: {
 				label: 'Full placeholder',
 				template: '<div class="full-placeholder" ck-input="full">Placeholder</div>'
+			},
+			table: {
+				label: 'Table',
+				template: '<div class="full-placeholder" ck-input="table">Table</div>'
 			},
 			nested: {
 				label: 'Nested',

@@ -7,6 +7,7 @@ import { enablePlaceholder } from '@ckeditor/ckeditor5-engine/src/view/placehold
 
 import TemplateEditing from '../templateediting';
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
+import TableEditing from '@ckeditor/ckeditor5-table/src/tableediting';
 
 /**
  * Element names that are considered multiline containers by default.
@@ -38,7 +39,7 @@ export default class TextElement extends Plugin {
 	 * @inheritDoc
 	 */
 	static get requires() {
-		return [ TemplateEditing ];
+		return [ TemplateEditing, TableEditing ];
 	}
 
 	/**
@@ -60,6 +61,11 @@ export default class TextElement extends Plugin {
 		// All container text elements inherit everything from root.
 		// This also makes sure that all elements allowed in root are as well allowed here.
 		for ( const element of textElements ) {
+			if ( element.configuration.input === 'table' ) {
+				this.editor.model.schema.extend( 'table', {
+					allowIn: element.name,
+				} );
+			}
 			if ( element.configuration.input === 'full' ) {
 				this.editor.model.schema.extend( element.name, {
 					inheritAllFrom: '$root',
@@ -109,7 +115,26 @@ export default class TextElement extends Plugin {
 
 		// Add an empty paragraph if a container text element is empty.
 		this.editor.templates.registerPostFixer( [ 'text' ], ( templateElement, modelElement, modelWriter ) => {
-			if (
+			if ( templateElement.configuration.input === 'table' ) {
+				if ( modelElement.childCount === 0 ) {
+					const rows = 3;
+					const columns = 2;
+					const table = modelWriter.createElement( 'table' );
+					modelWriter.insert( table, modelElement, 'end' );
+					for ( let i = 0; i < rows; i++ ) {
+						const tableRow = modelWriter.createElement( 'tableRow' );
+						modelWriter.insert( tableRow, table, 'end' );
+						for ( let j = 0; j < columns; j++ ) {
+							const tableCell = modelWriter.createElement( 'tableCell' );
+							const paragraph = modelWriter.createElement( 'paragraph' );
+							modelWriter.insert( tableCell, tableRow, 'end' );
+							modelWriter.insert( paragraph, tableCell, 'end' );
+						}
+					}
+					return true;
+				}
+			}
+			else if (
 				isContainerElement( templateElement ) &&
 				modelElement.childCount === 0 &&
 				this.editor.model.schema.checkChild( modelElement, 'paragraph' )
