@@ -4,12 +4,32 @@ import ViewElement from '@ckeditor/ckeditor5-engine/src/view/element';
 import ElementInfo from '../../src/utils/elementinfo';
 
 describe( 'ElementInfo', () => {
-	it( 'returns its type', () => {
+	it( 'defaults to element type', () => {
 		const node = global.document.createElement( 'div' );
-		node.setAttribute( 'ck-type', 'test' );
+		node.setAttribute( 'ck-contains', '' );
 
 		const element = new ElementInfo( node );
-		expect( element.type ).to.equal( 'test' );
+		expect( element.type ).to.equal( 'element' );
+
+		expect( element.isTemplateRoot ).to.be.true;
+	} );
+
+	it( 'detects text elements', () => {
+		const node = global.document.createElement( 'div' );
+		node.setAttribute( 'ck-input', 'full' );
+
+		const element = new ElementInfo( node );
+		expect( element.type ).to.equal( 'text' );
+
+		expect( element.isTemplateRoot ).to.be.true;
+	} );
+
+	it( 'detects containers', () => {
+		const node = global.document.createElement( 'div' );
+		node.setAttribute( 'ck-contains', 'foo bar' );
+
+		const element = new ElementInfo( node );
+		expect( element.type ).to.equal( 'container' );
 
 		expect( element.isTemplateRoot ).to.be.true;
 	} );

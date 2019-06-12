@@ -3,10 +3,11 @@
  */
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { toWidget, toWidgetEditable } from '@ckeditor/ckeditor5-widget/src/utils';
-import { attachPlaceholder } from '@ckeditor/ckeditor5-engine/src/view/placeholder';
+import { enablePlaceholder } from '@ckeditor/ckeditor5-engine/src/view/placeholder';
 
 import TemplateEditing from '../templateediting';
 import { downcastTemplateElement, getModelAttributes } from '../utils/conversion';
+import TableEditing from '@ckeditor/ckeditor5-table/src/tableediting';
 
 /**
  * Element names that are considered multiline containers by default.
@@ -30,10 +31,7 @@ export const containerElements = [
  * @returns {boolean}
  */
 function isContainerElement( templateElement ) {
-	return templateElement.configuration.multiline !== 'false' && (
-		containerElements.includes( templateElement.tagName ) ||
-		templateElement.configuration.multiline === 'true'
-	);
+	return templateElement.configuration.input === 'full';
 }
 
 export default class TextElement extends Plugin {
@@ -41,7 +39,7 @@ export default class TextElement extends Plugin {
 	 * @inheritDoc
 	 */
 	static get requires() {
-		return [ TemplateEditing ];
+		return [ TemplateEditing, TableEditing ];
 	}
 
 	/**
@@ -63,13 +61,17 @@ export default class TextElement extends Plugin {
 		// All container text elements inherit everything from root.
 		// This also makes sure that all elements allowed in root are as well allowed here.
 		for ( const element of textElements ) {
-			if ( isContainerElement( element ) ) {
+			if ( element.configuration.input === 'table' ) {
+				this.editor.model.schema.extend( 'table', {
+					allowIn: element.name,
+				} );
+			}
+			if ( element.configuration.input === 'full' ) {
 				this.editor.model.schema.extend( element.name, {
 					inheritAllFrom: '$root',
 				} );
 			}
-
-			if ( element.configuration.plain === 'true' ) {
+			if ( element.configuration.input === 'plain' ) {
 				this.editor.model.schema.addAttributeCheck( context => {
 					if ( context.endsWith( `${ element.name } $text` ) ) {
 						return false;
@@ -97,18 +99,42 @@ export default class TextElement extends Plugin {
 				);
 
 				if ( templateElement.text ) {
-					attachPlaceholder( this.editor.editing.view, el, templateElement.text );
+					enablePlaceholder( {
+						view: this.editor.editing.view,
+						element: el,
+						text: templateElement.text
+					} );
 				}
 
 				const widget = templateElement.parent ? el : toWidget( el, viewWriter );
 
 				return toWidgetEditable( widget, viewWriter );
-			}
-		} ), { priority: 'low ' } );
+			},
+			converterPriority: 'low'
+		} ) );
 
 		// Add an empty paragraph if a container text element is empty.
 		this.editor.templates.registerPostFixer( [ 'text' ], ( templateElement, modelElement, modelWriter ) => {
-			if (
+			if ( templateElement.configuration.input === 'table' ) {
+				if ( modelElement.childCount === 0 ) {
+					const rows = 3;
+					const columns = 2;
+					const table = modelWriter.createElement( 'table' );
+					modelWriter.insert( table, modelElement, 'end' );
+					for ( let i = 0; i < rows; i++ ) {
+						const tableRow = modelWriter.createElement( 'tableRow' );
+						modelWriter.insert( tableRow, table, 'end' );
+						for ( let j = 0; j < columns; j++ ) {
+							const tableCell = modelWriter.createElement( 'tableCell' );
+							const paragraph = modelWriter.createElement( 'paragraph' );
+							modelWriter.insert( tableCell, tableRow, 'end' );
+							modelWriter.insert( paragraph, tableCell, 'end' );
+						}
+					}
+					return true;
+				}
+			}
+			else if (
 				isContainerElement( templateElement ) &&
 				modelElement.childCount === 0 &&
 				this.editor.model.schema.checkChild( modelElement, 'paragraph' )

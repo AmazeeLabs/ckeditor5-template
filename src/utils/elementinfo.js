@@ -89,6 +89,8 @@ export default class ElementInfo {
 		return viewElement &&
 			// Match the tag name.
 			// viewElement.name === this._node.tagName &&
+			// Check the element has methods.
+			typeof viewElement.getClassNames == 'function' &&
 			// Match all classes.
 			this.classes.join( ' ' ) === Array.from( viewElement.getClassNames() ).sort().join( ' ' ) &&
 			// If there is a parent, match the parent.
@@ -157,7 +159,13 @@ export default class ElementInfo {
 	 * @returns {string}
 	 */
 	get type() {
-		return this._configuration.type || 'element';
+		if ( this._configuration.input ) {
+			return 'text';
+		}
+		if ( this._configuration.contains ) {
+			return 'container';
+		}
+		return 'element';
 	}
 
 	/**

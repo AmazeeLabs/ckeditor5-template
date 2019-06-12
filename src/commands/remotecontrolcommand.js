@@ -40,18 +40,16 @@ export default class RemoteControlCommand extends Command {
 		operations.map( operation => operation.detail ).forEach( operation => this.dispatchOperation( operation, writer ) );
 	}
 
-	insertElement( { element, parent, position, reference, attr }, writer ) {
+	insertElement( { section, parent, position, reference, attr }, writer ) {
 		const parentElement = this.toModel( parent );
-		const el = writer.createElement( `ck__${ element }` );
+		const el = writer.createElement( `ck__${ section }` );
 		writer.setAttributes( attr, el );
 		if ( position === 'end' ) {
 			writer.append( el, parentElement );
-			writer.setSelection( el, 'on' );
 		}
 		else {
 			const referenceElement = parentElement.getChild( reference );
 			writer.insert( el, referenceElement, position );
-			writer.setSelection( el, 'on' );
 		}
 	}
 
@@ -59,14 +57,17 @@ export default class RemoteControlCommand extends Command {
 		const parentElement = this.toModel( parent );
 		const targetElement = parentElement.getChild( target );
 		const referenceElement = parentElement.getChild( reference );
-		writer.insert( targetElement, referenceElement, position );
-		writer.setSelection( targetElement, 'on' );
+		if ( position === 'end' ) {
+			writer.append( targetElement, parentElement );
+		}
+		else {
+			writer.insert( targetElement, referenceElement, position );
+		}
 	}
 
-	replaceElement( { element, target }, writer ) {
+	replaceElement( { section, target }, writer ) {
 		const targetElement = this.toModel( target );
-		writer.rename( targetElement, `ck__${ element }` );
-		writer.setSelection( targetElement, 'on' );
+		writer.rename( targetElement, `ck__${ section }` );
 	}
 
 	removeElement( { target }, writer ) {
@@ -84,8 +85,8 @@ export default class RemoteControlCommand extends Command {
 		writer.removeAttribute( key, targetElement );
 	}
 
-	swap( { source, target }, writer ) {
-		const sourceElement = this.toModel( source );
+	swap( { element, target }, writer ) {
+		const sourceElement = this.toModel( element );
 		const targetElement = this.toModel( target );
 		writer.insert( sourceElement, targetElement, 'before' );
 		writer.remove( targetElement );

@@ -9,39 +9,44 @@ import UndoPlugin from '@ckeditor/ckeditor5-undo/src/undo';
 
 import TemplatePlugin from '../../../src/template';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import Table from '@ckeditor/ckeditor5-table/src/table';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ EnterPlugin, TypingPlugin, ParagraphPlugin, HeadingPlugin, TemplatePlugin, UndoPlugin, Bold ],
-		toolbar: [ 'heading', '|', 'template', '|', 'undo', 'redo', 'bold' ],
+		plugins: [ EnterPlugin, TypingPlugin, ParagraphPlugin, HeadingPlugin, TemplatePlugin, UndoPlugin, Bold, Table ],
+		toolbar: [ 'heading', '|', 'template', '|', 'undo', 'redo', 'bold', 'tableRow', 'tableColumn' ],
 		templates: {
 			simple: {
 				label: 'Simple',
-				template: '<p class="simple" ck-type="text"></p>',
+				template: '<p class="simple" ck-input="plain"></p>',
 			},
-			placeholder: {
-				label: 'Placeholder',
-				template: '<p class="placeholder" ck-type="text">Placeholder!</p>',
+			simple_placeholder: {
+				label: 'Simple placeholder',
+				template: '<p class="placeholder" ck-input="plain">Placeholder</p>',
 			},
-			container: {
-				label: 'Container',
-				template: '<div class="container" ck-type="text">Tralala</div>'
+			basic: {
+				label: 'Basic',
+				template: '<div class="basic" ck-input="basic"></div>'
 			},
-			fakeContainer: {
-				label: 'Fake Container',
-				template: '<p class="fake-container" ck-type="text" ck-multiline="true"></p>'
+			basic_placeholder: {
+				label: 'Basic placeholder',
+				template: '<div class="basic-placeholder" ck-input="basic">Placeholder</div>'
 			},
-			fakeBlock: {
-				label: 'Fake Block',
-				template: '<div class="fake-block" ck-type="text" ck-multiline="false"></div>'
+			full: {
+				label: 'Full',
+				template: '<div class="full" ck-input="full"></div>'
+			},
+			full_placeholder: {
+				label: 'Full placeholder',
+				template: '<div class="full-placeholder" ck-input="full">Placeholder</div>'
+			},
+			table: {
+				label: 'Table',
+				template: '<div class="full-placeholder" ck-input="table">Table</div>'
 			},
 			nested: {
 				label: 'Nested',
-				template: '<div class="parent"><p class="simple" ck-type="text"></p></div>'
-			},
-			plain: {
-				label: 'Plain',
-				template: '<div class="parent"><p class="plain" ck-type="text" ck-plain="true"></p></div>'
+				template: '<div class="parent"><p class="simple" ck-input="plain"></p></div>'
 			}
 		}
 	} )

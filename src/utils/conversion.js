@@ -57,6 +57,20 @@ export function getModelAttributes( templateElement, modelElement ) {
 }
 
 /**
+ * Generate a map of all template config to be downcasted.
+ *
+ * @param {module:template/utils/elementinfo~ElementInfo} templateElement
+ *
+ * @returns {Object}
+ */
+export function getConfigAttributes( templateElement ) {
+	return Object.keys( templateElement.configuration )
+		.map( attr => ( { [ `ck-${ attr }` ]: templateElement.configuration[ attr ] } ) )
+		.concat( [ { class: templateElement.classes.join( ' ' ) } ] )
+		.reduce( ( acc, val ) => Object.assign( acc, val ), {} );
+}
+
+/**
  * Generate a map of all template attributes to be upcasted.
  *
  * @param {module:template/utils/elementinfo~ElementInfo} templateElement

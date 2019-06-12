@@ -118,7 +118,7 @@ describe( 'TemplateAttributeUI', () => {
 			setModelData( model, '[<ck__b></ck__b>]' );
 			editor.execute( 'setTemplateAttribute:text', { value: 'abc' } );
 			expect( getViewData( view ) ).to.equal(
-				'[<div class="b ck-widget ck-widget_selected" ' +
+				'[<div ck-icon="configurator" ck-label="Attributes" ck-name="b" class="b ck-widget ck-widget_selected" ' +
 				'contenteditable="false" text="abc"></div>]'
 			);
 		} );
