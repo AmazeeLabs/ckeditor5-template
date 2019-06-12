@@ -109,7 +109,7 @@ export default class MergeEditing extends Plugin {
 		} ), { priority: 'highest' } );
 
 		// Media conflict elements register.
-		const mediaElements = this.editor.templates.findElementInfo( info => info.type === 'drupal-media' );
+		const mediaElements = this.editor.templates.findElementInfo( info => info.tagName === 'ck-media' );
 		mediaElements.forEach( info => {
 			const wrapper = `${ info.name }__media__conflict`;
 			const option = `${ wrapper }__option`;
