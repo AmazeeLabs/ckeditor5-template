@@ -24,6 +24,28 @@ export default class MergeEditing extends Plugin {
 			} );
 		} );
 
+		this.editor.templates.findElementInfo( info => info.tagName == 'ck-button').forEach( info => {
+			this.editor.model.schema.extend( info.name, {
+				allowAttributes: [ 'left', 'right', 'source' ],
+			} );
+		}) ;
+
+		this.editor.conversion.attributeToAttribute( {
+			model: 'left',
+			view: 'left',
+		} );
+
+		this.editor.conversion.attributeToAttribute( {
+			model: 'right',
+			view: 'right',
+		} );
+
+		this.editor.conversion.attributeToAttribute( {
+			model: 'source',
+			view: 'source',
+		} );
+
+
 		// Add a downcast converter for added and removed attributes.
 		this.editor.conversion.attributeToAttribute( {
 			model: 'added',
