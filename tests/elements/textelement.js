@@ -1,7 +1,7 @@
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import { setData as setViewData, getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
+import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 
 import List from '@ckeditor/ckeditor5-list/src/list';
 
@@ -93,7 +93,7 @@ describe( 'TextElement', () => {
 	it( 'multiline textfield', () => {
 		setModelData( model, '<ck__container></ck__container>' );
 		expect( getViewData( view ) ).to.equal( '[<div class="' + editableClasses + ' container" ' +
-			'contenteditable="true"><p></p></div>]' );
+			'contenteditable="true"></div>]' );
 	} );
 
 	it( 'multiline textfield with content', () => {
@@ -105,7 +105,7 @@ describe( 'TextElement', () => {
 	it( 'multiline textfield with default text', () => {
 		setModelData( model, '<ck__containerWithText></ck__containerWithText>' );
 		expect( getViewData( view ) ).to.equal( '[<div class="' + editableClasses + ' container-with-text" ' +
-			'contenteditable="true" data-placeholder="Text"><p>Text</p></div>]' );
+			'contenteditable="true" data-placeholder="Text"></div>]' );
 	} );
 
 	it( 'nested text element', () => {
