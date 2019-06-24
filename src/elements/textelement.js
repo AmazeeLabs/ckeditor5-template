@@ -134,6 +134,18 @@ export default class TextElement extends Plugin {
 					return true;
 				}
 			}
+			else if (
+				isContainerElement( templateElement ) &&
+				modelElement.childCount === 0 &&
+				this.editor.model.schema.checkChild( modelElement, 'paragraph' )
+			) {
+				const paragraph = modelWriter.createElement( 'paragraph' );
+				modelWriter.insert( paragraph, modelElement, 'end' );
+				if ( templateElement.text ) {
+					modelWriter.insert( modelWriter.createText( templateElement.text ), paragraph );
+				}
+				return true;
+			}
 		} );
 	}
 }
