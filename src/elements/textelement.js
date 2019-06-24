@@ -99,10 +99,18 @@ export default class TextElement extends Plugin {
 				);
 
 				if ( templateElement.text ) {
+					// By default, the placeholder is added right into the element and
+					// displayed only when it's not empty. To placeholder elements,
+					// e.g. such with ck-input="full", we add an empty paragraph right at
+					// the start, so they are never empty. Setting `isDirectHost` to false
+					// tells CKEditor to add the placeholder to the first child element
+					// instead.
+					const isDirectHost = templateElement.configuration.input !== 'full';
 					enablePlaceholder( {
 						view: this.editor.editing.view,
 						element: el,
-						text: templateElement.text
+						text: templateElement.text,
+						isDirectHost
 					} );
 				}
 
@@ -141,9 +149,6 @@ export default class TextElement extends Plugin {
 			) {
 				const paragraph = modelWriter.createElement( 'paragraph' );
 				modelWriter.insert( paragraph, modelElement, 'end' );
-				if ( templateElement.text ) {
-					modelWriter.insert( modelWriter.createText( templateElement.text ), paragraph );
-				}
 				return true;
 			}
 		} );

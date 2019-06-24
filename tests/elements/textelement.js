@@ -1,7 +1,7 @@
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import { setData as setViewData, getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
+import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 
 import List from '@ckeditor/ckeditor5-list/src/list';
 
