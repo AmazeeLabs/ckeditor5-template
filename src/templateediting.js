@@ -197,9 +197,13 @@ export default class TemplateEditing extends Plugin {
 		this.editor.conversion.for( 'upcast' ).add( upcastTemplateElement( this.editor, {
 			types: this._elementTypes,
 			model: ( templateElement, viewElement, modelWriter ) => {
+				const attributes = getViewAttributes( templateElement, viewElement );
+				if ( attributes.slot && viewElement.parent.name == 'ck-conflict-media-option' ) {
+					delete attributes.slot;
+				}
 				return modelWriter.createElement(
 					templateElement.name,
-					getViewAttributes( templateElement, viewElement )
+					attributes
 				);
 			},
 			converterPriority: 'low'
