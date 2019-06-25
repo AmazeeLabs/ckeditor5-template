@@ -23,4 +23,4 @@ install:
 - yarn add @ckeditor/ckeditor5-dev-tests
 - ckeditor5-dev-tests-install-dependencies
 script:
-- ckeditor5-dev-tests-travis
+- ./bin/test-travis.sh
