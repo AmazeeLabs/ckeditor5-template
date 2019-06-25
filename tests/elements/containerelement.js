@@ -26,15 +26,18 @@ describe( 'Container', () => {
 					},
 					container: {
 						label: 'Container',
-						template: '<ck-container class="container" ck-type="container" ck-contains="a b" itemprop="container"></ck-container>',
+						template: '<ck-container class="container" ck-type="container"' +
+							' ck-contains="a b" itemprop="container"></ck-container>',
 					},
 					containersingle: {
 						label: 'Container Single',
-						template: '<ck-container class="container" ck-type="container" ck-contains="b" itemprop="container"></ck-container>',
+						template: '<ck-container class="container" ck-type="container"' +
+							' ck-contains="b" itemprop="container"></ck-container>',
 					},
 					c: {
 						label: 'C',
-						template: '<ck-container class="container" ck-type="container" ck-contains="containersingle" itemprop="container"></ck-container>',
+						template: '<ck-container class="container" ck-type="container"' +
+							' ck-contains="containersingle" itemprop="container"></ck-container>',
 					}
 				}
 			} )
@@ -57,7 +60,8 @@ describe( 'Container', () => {
 			'</ck__container>'
 		].join( '' ) );
 		expect( getViewData( view ) ).to.equal( [ '[' +
-		'<ck-container ck-contains="a b" ck-icon="configurator" ck-label="Container" ck-name="container" ck-type="container" class="ck-widget ck-widget_selected container" contenteditable="false" itemprop="container">' +
+		'<ck-container ck-contains="a b" ck-icon="configurator" ck-label="Container" ck-name="container"' +
+		' ck-type="container" class="ck-widget ck-widget_selected container" contenteditable="false" itemprop="container">' +
 		'<ck-section ck-icon="configurator" ck-label="A" ck-name="a" class="a ck-widget" contenteditable="false"></ck-section>' +
 		'</ck-container>]' ].join( '' ) );
 	} );

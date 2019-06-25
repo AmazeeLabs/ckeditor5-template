@@ -3,7 +3,7 @@ import DomEventObserver from '@ckeditor/ckeditor5-engine/src/view/observer/domev
 export default class RemoteControlObserver extends DomEventObserver {
 	constructor( view ) {
 		super( view );
-		this.domEventType = "ckEditorOperation";
+		this.domEventType = 'ckEditorOperation';
 		this.useCapture = true;
 	}
 

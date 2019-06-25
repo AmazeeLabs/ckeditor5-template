@@ -154,7 +154,8 @@ describe( 'Merge editing', () => {
 		']' ].join( '' );
 		setModelData( model, data );
 		expect( getViewData( view ) ).to.equal( [ '[' +
-		'<div ck-contains="a b" ck-icon="configurator" ck-label="Container" ck-name="container" ck-type="container" class="ck-widget ck-widget_selected container" contenteditable="false">' +
+		'<div ck-contains="a b" ck-icon="configurator" ck-label="Container" ck-name="container"' +
+		' ck-type="container" class="ck-widget ck-widget_selected container" contenteditable="false">' +
 			'<div ck-icon="configurator" ck-label="B" ck-name="b" class="b ck-widget" contenteditable="false">' +
 				'<ck-conflict-text class="text">' +
 					'<ck-conflict-option from="A">' +
