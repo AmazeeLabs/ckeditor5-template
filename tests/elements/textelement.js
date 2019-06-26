@@ -1,7 +1,7 @@
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import { setData as setViewData, getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
+import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 
 import List from '@ckeditor/ckeditor5-list/src/list';
 
@@ -78,7 +78,8 @@ describe( 'TextElement', () => {
 	it( 'simple text field with content', () => {
 		setModelData( model, '<ck__simple>F[o]o</ck__simple>' );
 		expect( getViewData( view ) ).to.equal(
-			'<div class="ck-editor__editable ck-editor__nested-editable ck-widget simple" contenteditable="true" itemprop="content">F{o}o</div>'
+			'<div class="ck-editor__editable ck-editor__nested-editable' +
+			' ck-widget simple" contenteditable="true" itemprop="content">F{o}o</div>'
 		);
 	} );
 
@@ -110,14 +111,16 @@ describe( 'TextElement', () => {
 
 	it( 'nested text element', () => {
 		setModelData( model, '<ck__nested></ck__nested>' );
-		expect( getViewData( view ) ).to.equal( '[<div ck-icon="configurator" ck-label="Nested" ck-name="nested" class="ck-widget ck-widget_selected parent" contenteditable="false">' +
+		expect( getViewData( view ) ).to.equal( '[<div ck-icon="configurator" ck-label="Nested" ck-name="nested"' +
+			' class="ck-widget ck-widget_selected parent" contenteditable="false">' +
 			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true"></p>' +
 			'</div>]' );
 	} );
 
 	it( 'nested text element with content', () => {
 		setModelData( model, '<ck__nested><ck__nested__child0>F[o]o</ck__nested__child0></ck__nested>' );
-		expect( getViewData( view ) ).to.equal( '<div ck-icon="configurator" ck-label="Nested" ck-name="nested" class="ck-widget parent" contenteditable="false">' +
+		expect( getViewData( view ) ).to.equal( '<div ck-icon="configurator" ck-label="Nested" ck-name="nested"' +
+			' class="ck-widget parent" contenteditable="false">' +
 			'<p class="ck-editor__editable ck-editor__nested-editable simple" contenteditable="true">F{o}o</p>' +
 			'</div>' );
 	} );
@@ -208,14 +211,17 @@ describe( 'TextElement', () => {
 		'</ck__page>' );
 
 		expect( getViewData( view ) ).to.equal(
-			'[<ck-container ck-contains="sectiona sectionb" ck-icon="configurator" ck-label="Page" ck-name="page" class="ck-widget ck-widget_selected page" contenteditable="false">' +
+			'[<ck-container ck-contains="sectiona sectionb" ck-icon="configurator" ck-label="Page" ck-name="page"' +
+			' class="ck-widget ck-widget_selected page" contenteditable="false">' +
 				'<div ck-icon="configurator" ck-label="Section A" ck-name="sectiona" class="ck-widget sectiona" contenteditable="false">' +
-					'<div class="ck-editor__editable ck-editor__nested-editable container-with-text-a" contenteditable="true" data-placeholder="Text">' +
+					'<div class="ck-editor__editable ck-editor__nested-editable container-with-text-a"' +
+					' contenteditable="true" data-placeholder="Text">' +
 						'<ul><li>a</li><li>b</li></ul>' +
 					'</div>' +
 				'</div>' +
 				'<div ck-icon="configurator" ck-label="Section B" ck-name="sectionb" class="ck-widget sectionb" contenteditable="false">' +
-					'<div class="ck-editor__editable ck-editor__nested-editable container-with-text-b" contenteditable="true" data-placeholder="Text">' +
+					'<div class="ck-editor__editable ck-editor__nested-editable container-with-text-b"' +
+					' contenteditable="true" data-placeholder="Text">' +
 						'<p>B</p>' +
 					'</div>' +
 				'</div>' +

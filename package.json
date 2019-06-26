@@ -1,6 +1,6 @@
 {
   "name": "@amazee/ckeditor5-template",
-  "version": "0.0.28",
+  "version": "0.0.27",
   "description": "Template feature for CKEditor 5.",
   "keywords": [
     "ckeditor",
@@ -14,7 +14,9 @@
     "@ckeditor/ckeditor5-engine": "^13.1.0",
     "@ckeditor/ckeditor5-ui": "^12.0.0",
     "@ckeditor/ckeditor5-utils": "^12.1.0",
-    "@ckeditor/ckeditor5-widget": "^11.0.1"
+    "@ckeditor/ckeditor5-widget": "^11.0.1",
+    "@ckeditor/ckeditor5-table": "^12.0.1",
+    "lodash-es": "^4.17.10"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-basic-styles": "^11.1.0",
@@ -27,6 +29,7 @@
     "@ckeditor/ckeditor5-theme-lark": "^13.0.0",
     "@ckeditor/ckeditor5-typing": "^12.0.1",
     "@ckeditor/ckeditor5-undo": "^11.0.1",
+    "@ckeditor/ckeditor5-list": "^12.0.1",
     "eslint": "^5.5.0",
     "eslint-config-ckeditor5": "^1.0.11",
     "husky": "^1.3.1",
