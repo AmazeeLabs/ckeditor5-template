@@ -149,6 +149,18 @@ export default class TextElement extends Plugin {
 			) {
 				const paragraph = modelWriter.createElement( 'paragraph' );
 				modelWriter.insert( paragraph, modelElement, 'end' );
+
+				// This is hacky, however, I couldn't find any other way of detecting
+				// a deletion. Without this block deleting text and then pasting it back
+				// resulted in appending the text to the placeholder. On the other hand,
+				// setting the selection uncoditionally prevented the placeholder from
+				// showing up at the time of inserting a section.
+				if ( !modelElement.hasAttribute( 'model-element-existing' ) ) {
+					modelWriter.setAttribute( 'model-element-existing', 'true', modelElement );
+				} else {
+					modelWriter.setSelection( paragraph, 'in' );
+				}
+
 				return true;
 			}
 		} );
