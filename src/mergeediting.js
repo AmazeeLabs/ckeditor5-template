@@ -67,6 +67,11 @@ export default class MergeEditing extends Plugin {
 			view: 'label',
 		} );
 
+		this.editor.conversion.attributeToAttribute( {
+			model: 'slot',
+			view: 'slot',
+		} );
+
 		// Register the text-conflict elements.
 		const textElements = this.editor.templates.findElementInfo( info => info.type === 'text' );
 		textElements.forEach( info => {
@@ -151,6 +156,7 @@ export default class MergeEditing extends Plugin {
 
 			this.editor.model.schema.register( wrapper, {
 				allowIn: info.parent.name,
+				allowAttributes: [ 'slot' ]
 			} );
 
 			this.editor.model.schema.register( option, {
