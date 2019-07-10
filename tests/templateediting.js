@@ -86,7 +86,8 @@ describe( 'TemplateEditing', () => {
 
 	it( 'properly editing downcasts elements with multiple classes', () => {
 		setModelData( model, '<ck__classes></ck__classes>' );
-		expect( getViewData( view ) ).to.equal( '[<div ck-icon="configurator" ck-label="Classes" ck-name="classes" class="a b ck-widget ck-widget_selected" contenteditable="false"></div>]' );
+		expect( getViewData( view ) ).to.equal( '[<div ck-icon="configurator" ck-label="Classes" ck-name="classes"' +
+			' class="a b ck-widget ck-widget_selected" contenteditable="false"></div>]' );
 	} );
 
 	it( 'ignores unknown elements ', () => {
@@ -143,7 +144,8 @@ describe( 'TemplateEditing', () => {
 	it( 'downcasts attributes to editing', () => {
 		setModelData( model, '<ck__attribute data-foo="bar"></ck__attribute>' );
 		expect( getViewData( view ) ).to.equal(
-			'[<div ck-icon="configurator" ck-label="Simple" ck-name="attribute" class="attribute ck-widget ck-widget_selected" contenteditable="false" data-foo="bar"></div>]'
+			'[<div ck-icon="configurator" ck-label="Simple" ck-name="attribute"' +
+			' class="attribute ck-widget ck-widget_selected" contenteditable="false" data-foo="bar"></div>]'
 		);
 	} );
 
@@ -180,13 +182,15 @@ describe( 'TemplateEditing', () => {
 
 	it( 'renders templates as widgets', () => {
 		setModelData( model, '<ck__simple></ck__simple>' );
-		expect( getViewData( view ) ).to.equal( '[<div ck-icon="configurator" ck-label="Simple" ck-name="simple" class="ck-widget ck-widget_selected simple" contenteditable="false"></div>]' );
+		expect( getViewData( view ) ).to.equal( '[<div ck-icon="configurator" ck-label="Simple" ck-name="simple"' +
+			' class="ck-widget ck-widget_selected simple" contenteditable="false"></div>]' );
 	} );
 
 	it( 'renders only outer elements widgets', () => {
 		setModelData( model, '<ck__nested><ck__nested__child0></ck__nested__child0></ck__nested>' );
 		expect( getViewData( view ) ).to.equal(
-			'[<div ck-icon="configurator" ck-label="Nested" ck-name="nested" class="ck-widget ck-widget_selected parent" contenteditable="false">' +
+			'[<div ck-icon="configurator" ck-label="Nested" ck-name="nested"' +
+			' class="ck-widget ck-widget_selected parent" contenteditable="false">' +
 			'<div class="nested"></div>' +
 			'</div>]'
 		);
